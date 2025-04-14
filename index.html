@@ -108,7 +108,9 @@
     .tag-select-container {
       position: relative;
       display: inline-block;
-      width: 150px;
+      min-width: 150px;
+      max-width: 400px;
+      width: auto;
       margin-bottom: 20px;
     }
 
@@ -122,6 +124,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      white-space: nowrap;
+      overflow: visible;
     }
 
     .tag-select-header:hover {
@@ -132,7 +136,7 @@
       position: absolute;
       top: 100%;
       left: 0;
-      width: 100%;
+      min-width: 100%;
       background-color: white;
       border: 1px solid #ddd;
       border-radius: 4px;
@@ -345,7 +349,7 @@
         } else if (selectedTags.length === 1) {
           tagSelectHeader.textContent = selectedTags[0];
         } else {
-          tagSelectHeader.textContent = `${selectedTags.length} tags`;
+          tagSelectHeader.textContent = selectedTags.join(', ');
         }
         
         // Make sure dropdown indicator is shown
@@ -541,7 +545,7 @@
           } else {
             return false;
           }
-          return selectedTags.some(tag => moduleTags.includes(tag));
+          return selectedTags.every(tag => moduleTags.includes(tag));
         });
       }
 
