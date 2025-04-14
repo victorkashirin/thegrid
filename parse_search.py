@@ -28,8 +28,14 @@ def parse_plugin_json_to_list(path: Path) -> list:
             return []
         plugin_name = data.get("name")
         plugin_slug = data.get("slug")
+
+        if plugin_slug in ["KRTPluginA"]:
+            return []
+
+
         modules = data.get("modules", [])
         output_list = []
+        
         for module in modules:
             if module.get("hidden") == True:
                 continue

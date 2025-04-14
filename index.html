@@ -35,7 +35,7 @@
     }
 
     #search-input {
-      width: 100%;
+      width: calc(100% - 340px); /* Adjusted width to accommodate other elements */
       padding: 10px;
       margin-bottom: 20px;
       border: 1px solid #ddd;
@@ -43,12 +43,64 @@
       font-size: 16px;
       box-sizing: border-box;
       font-family: 'Inter', sans-serif;
+      display: inline-block;
     }
 
-    #search-input:focus {
+    #size-input {
+      width: 70px; /* Reduced width */
+      padding: 10px;
+      margin-bottom: 20px;
+      margin-left: 8px; /* Slightly reduced margin */
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+      display: inline-block;
+    }
+
+    #size-comparison {
+      width: 90px; /* Reduced width */
+      padding: 10px;
+      margin-bottom: 20px;
+      margin-left: 8px; /* Slightly reduced margin */
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+      display: inline-block;
+      background-color: white;
+    }
+
+    #size-input:focus, #size-comparison:focus {
       outline: none;
       border-color: #4CAF50;
-      /* Green */
+      box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+    }
+
+    #reset-button {
+      padding: 10px 15px; /* Reduced padding */
+      margin-bottom: 20px;
+      margin-left: 8px; /* Slightly reduced margin */
+      border: 1px solid #4CAF50;
+      border-radius: 4px;
+      font-size: 16px;
+      font-family: 'Inter', sans-serif;
+      background-color: white;
+      color: #4CAF50;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      white-space: nowrap; /* Prevent button text from wrapping */
+    }
+
+    #reset-button:hover {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    #reset-button:focus {
+      outline: none;
       box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
     }
 
@@ -87,7 +139,7 @@
       margin-bottom: 10px;
       height: auto;
       /* Maintain aspect ratio */
-      max-height: 200px;
+      max-height: 250px;
       /* Limit image height */
       object-fit: contain;
       /* Ensure image fits within container */
@@ -133,7 +185,16 @@
 <body>
   <div class="container">
     <h1>VCV Rack Module Search</h1>
-    <input type="text" id="search-input" placeholder="Search for modules...">
+    <div>
+      <input type="text" id="search-input" placeholder="Search for modules...">
+      <input type="number" id="size-input" placeholder="Size" min="1">
+      <select id="size-comparison">
+        <option value="max">Max</option>
+        <option value="min">Min</option>
+        <option value="exact">Exact</option>
+      </select>
+      <button id="reset-button">Reset</button>
+    </div>
     <div id="status-message" class="status-message">Loading modules...</div>
     <div id="results-container"></div>
     <div id="load-more-trigger"></div> <!-- Element to observe for scrolling -->
@@ -154,6 +215,11 @@
       let numDisplayedResults = 0;// Counter for currently displayed items
       let isLoading = false;      // Flag to prevent multiple simultaneous loads
       let observer;               // IntersectionObserver instance
+      let lastSearchQuery = '';   // Store the last search query
+      let lastSizeFilter = {      // Store the last size filter
+        size: '',
+        comparison: 'min'
+      };
 
       // --- Utility Functions ---
 
@@ -290,20 +356,76 @@
 
       // --- Search Logic ---
 
+      function filterBySize(modules) {
+        const sizeInput = document.getElementById('size-input');
+        const sizeComparison = document.getElementById('size-comparison');
+        const size = sizeInput.value.trim();
+        const comparison = sizeComparison.value;
+
+        if (!size) return modules; // If no size specified, return all modules
+
+        const sizeNum = parseInt(size);
+        return modules.filter(module => {
+          const moduleSize = parseInt(module.size) || 0;
+          switch (comparison) {
+            case 'min':
+              return moduleSize >= sizeNum;
+            case 'max':
+              return moduleSize <= sizeNum;
+            case 'exact':
+              return moduleSize === sizeNum;
+            default:
+              return true;
+          }
+        });
+      }
+
       function performSearch(query) {
         if (!fuse) {
           showStatus('Module data is still loading...', true);
-          return; // Don't search if Fuse isn't ready
+          return;
         }
+
+        // Store current filter values
+        lastSearchQuery = query;
+        lastSizeFilter = {
+          size: document.getElementById('size-input').value.trim(),
+          comparison: document.getElementById('size-comparison').value
+        };
+
+        // First apply size filter to all modules
+        let filteredModules = filterBySize(allModules);
+
         if (query === '') {
-          // If query is empty, show initial batch of all modules
-          resetAndDisplayFirstBatch(allModules);
+          // If query is empty, show size-filtered modules
+          resetAndDisplayFirstBatch(filteredModules);
         } else {
-          const results = fuse.search(query);
-          // Fuse results are objects { item: T, refIndex: number, score: number }
-          // We need to pass the items to the display function
+          // Create new Fuse instance with filtered modules
+          const filteredFuse = new Fuse(filteredModules, fuseOptions);
+          const results = filteredFuse.search(query);
           resetAndDisplayFirstBatch(results);
         }
+      }
+
+      function resetFilters() {
+        // Clear search input
+        searchInput.value = '';
+        
+        // Clear size input
+        document.getElementById('size-input').value = '';
+        
+        // Reset comparison to default
+        document.getElementById('size-comparison').value = 'max';
+        
+        // Reset stored values
+        lastSearchQuery = '';
+        lastSizeFilter = {
+          size: '',
+          comparison: 'max'
+        };
+        
+        // Show all modules
+        resetAndDisplayFirstBatch(allModules);
       }
 
       // --- Intersection Observer Logic ---
@@ -376,15 +498,28 @@
 
         }); // No .finally here, status handled within functions
 
-      // Event listener for search input (with debounce)
+      // Event listeners for search and filter inputs
       let debounceTimer;
       searchInput.addEventListener('input', function () {
         clearTimeout(debounceTimer);
-        const query = this.value.trim();
         debounceTimer = setTimeout(() => {
-          performSearch(query);
-        }, 250); // Add a small delay (250ms) to avoid searching on every keystroke
+          performSearch(this.value.trim());
+        }, 250);
       });
+
+      document.getElementById('size-input').addEventListener('input', function() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          performSearch(searchInput.value.trim());
+        }, 250);
+      });
+
+      document.getElementById('size-comparison').addEventListener('change', function() {
+        performSearch(searchInput.value.trim());
+      });
+
+      // Add reset button event listener
+      document.getElementById('reset-button').addEventListener('click', resetFilters);
 
     });
   </script>

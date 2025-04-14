@@ -1,5 +1,4 @@
 import json
-from datetime import datetime
 from PIL import Image
 import os
 import math
