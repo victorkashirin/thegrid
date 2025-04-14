@@ -406,7 +406,7 @@
         let filteredModules = filterBySize(allModules);
 
         if (query === '') {
-          // If query is empty, show size-filtered modules
+          // If query is empty, show size-filtered modules (already sorted by timestamp)
           resetAndDisplayFirstBatch(filteredModules);
         } else {
           // Create new Fuse instance with filtered modules
@@ -492,6 +492,14 @@
           if (!jsonData) return; // Stop if fetching failed
 
           allModules = jsonData;
+
+          // Sort all modules by timestamp in descending order once after loading
+          allModules.sort((a, b) => {
+            // Handle missing timestamps by treating them as oldest
+            const timestampA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
+            const timestampB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+            return timestampB - timestampA; // Descending order
+          });
 
           if (allModules.length === 0) {
             showStatus('No modules found in the data source.', true);
