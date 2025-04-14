@@ -30,7 +30,7 @@
     h1 {
       text-align: center;
       margin-bottom: 20px;
-      color: #4CAF50;
+      color: #6070d8;
       /* Green */
     }
 
@@ -195,6 +195,7 @@
       </select>
       <button id="reset-button">Reset</button>
     </div>
+    <div id="results-count" style="margin-top: 10px; margin-bottom: 10px; font-size: 14px;"></div>
     <div id="status-message" class="status-message">Loading modules...</div>
     <div id="results-container"></div>
     <div id="load-more-trigger"></div> <!-- Element to observe for scrolling -->
@@ -343,6 +344,10 @@
         resultsContainer.innerHTML = ''; // Clear previous results
         numDisplayedResults = 0;
         hideStatus(); // Clear status message initially
+
+        // Update results count
+        const resultsCount = document.getElementById('results-count');
+        resultsCount.textContent = `Found ${resultSet.length} module${resultSet.length !== 1 ? 's' : ''}`;
 
         if (observer) {
           observer.disconnect(); // Disconnect previous observer if exists
