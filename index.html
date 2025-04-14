@@ -104,6 +104,70 @@
       box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
     }
 
+    /* Tag dropdown styles */
+    .tag-select-container {
+      position: relative;
+      display: inline-block;
+      width: 150px;
+      margin-bottom: 20px;
+    }
+
+    .tag-select-header {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      background-color: white;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .tag-select-header:hover {
+      border-color: #4CAF50;
+    }
+
+    .tag-select-options {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-top: 4px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 10;
+      display: none;
+    }
+
+    .tag-option {
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .tag-option:hover {
+      background-color: #f5f5f5;
+    }
+
+    .tag-option input {
+      margin-right: 8px;
+    }
+
+    .tag-select-header::after {
+      content: '▼';
+      font-size: 12px;
+    }
+    
+    .tag-select-header.active::after {
+      content: '▲';
+    }
+
     #results-container {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -195,6 +259,22 @@
       </select>
       <button id="reset-button">Reset</button>
     </div>
+    <div style="margin-top: 10px; margin-bottom: 10px;">
+      <div class="tag-select-container">
+        <div class="tag-select-header">Filter by Tags</div>
+        <div class="tag-select-options">
+          <label class="tag-option">
+            <input type="checkbox" value="Oscillator"> Oscillator
+          </label>
+          <label class="tag-option">
+            <input type="checkbox" value="Sequencer"> Sequencer
+          </label>
+          <label class="tag-option">
+            <input type="checkbox" value="Utility"> Utility
+          </label>
+        </div>
+      </div>
+    </div>
     <div id="results-count" style="margin-top: 10px; margin-bottom: 10px; font-size: 14px;"></div>
     <div id="status-message" class="status-message">Loading modules...</div>
     <div id="results-container"></div>
@@ -207,6 +287,9 @@
       const resultsContainer = document.getElementById('results-container');
       const statusMessage = document.getElementById('status-message');
       const loadMoreTrigger = document.getElementById('load-more-trigger');
+      const tagSelectHeader = document.querySelector('.tag-select-header');
+      const tagSelectOptions = document.querySelector('.tag-select-options');
+      const tagCheckboxes = document.querySelectorAll('.tag-option input');
 
       const RESULTS_BATCH_SIZE = 30; // Number of results to load initially and per scroll
 
@@ -221,6 +304,55 @@
         size: '',
         comparison: 'min'
       };
+      let selectedTags = [];      // Store selected tags
+
+      // --- Tag Dropdown Logic ---
+      
+      // Toggle dropdown visibility
+      tagSelectHeader.addEventListener('click', function() {
+        const isOpen = tagSelectOptions.style.display === 'block';
+        tagSelectOptions.style.display = isOpen ? 'none' : 'block';
+        tagSelectHeader.classList.toggle('active', !isOpen);
+      });
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.tag-select-container')) {
+          tagSelectOptions.style.display = 'none';
+          tagSelectHeader.classList.remove('active');
+        }
+      });
+      
+      // Handle tag checkbox changes
+      tagCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+          updateSelectedTags();
+          performSearch(searchInput.value.trim());
+        });
+      });
+      
+      function updateSelectedTags() {
+        selectedTags = [];
+        tagCheckboxes.forEach(checkbox => {
+          if (checkbox.checked) {
+            selectedTags.push(checkbox.value);
+          }
+        });
+        
+        // Update the header text based on selection
+        if (selectedTags.length === 0) {
+          tagSelectHeader.textContent = 'Filter by Tags';
+        } else if (selectedTags.length === 1) {
+          tagSelectHeader.textContent = selectedTags[0];
+        } else {
+          tagSelectHeader.textContent = `${selectedTags.length} tags`;
+        }
+        
+        // Make sure dropdown indicator is shown
+        if (!tagSelectHeader.textContent.includes('▼') && !tagSelectHeader.textContent.includes('▲')) {
+          tagSelectHeader.classList.add('has-indicator');
+        }
+      }
 
       // --- Utility Functions ---
 
@@ -394,6 +526,25 @@
         });
       }
 
+      function filterByTags(modules) {
+        if (selectedTags.length === 0) return modules; // If no tags selected, return all modules
+        
+        return modules.filter(module => {
+          if (!module.tags) return false;
+          
+          // Check if module has any of the selected tags
+          let moduleTags;
+          if (Array.isArray(module.tags)) {
+            moduleTags = module.tags.map(tag => tag.trim());
+          } else if (typeof module.tags === 'string') {
+            moduleTags = module.tags.split(',').map(tag => tag.trim());
+          } else {
+            return false;
+          }
+          return selectedTags.some(tag => moduleTags.includes(tag));
+        });
+      }
+
       function performSearch(query) {
         if (!fuse) {
           showStatus('Module data is still loading...', true);
@@ -409,9 +560,12 @@
 
         // First apply size filter to all modules
         let filteredModules = filterBySize(allModules);
+        
+        // Then apply tag filter
+        filteredModules = filterByTags(filteredModules);
 
         if (query === '') {
-          // If query is empty, show size-filtered modules (already sorted by timestamp)
+          // If query is empty, show filtered modules (already sorted by timestamp)
           resetAndDisplayFirstBatch(filteredModules);
         } else {
           // Create new Fuse instance with filtered modules
@@ -431,12 +585,19 @@
         // Reset comparison to default
         document.getElementById('size-comparison').value = 'max';
         
+        // Uncheck all tag checkboxes
+        tagCheckboxes.forEach(checkbox => {
+          checkbox.checked = false;
+        });
+        updateSelectedTags();
+        
         // Reset stored values
         lastSearchQuery = '';
         lastSizeFilter = {
           size: '',
           comparison: 'max'
         };
+        selectedTags = [];
         
         // Show all modules
         resetAndDisplayFirstBatch(allModules);
