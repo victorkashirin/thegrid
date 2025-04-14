@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VCV Rack Module Search</title>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #4CAF50;
+      /* Green */
+    }
+
+    #search-input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    #search-input:focus {
+      outline: none;
+      border-color: #4CAF50;
+      /* Green */
+      box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+    }
+
+    #results-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+      min-height: 100px;
+      /* Give it some initial height */
+    }
+
+    .result-card {
+      background-color: #f9f9f9;
+      padding: 15px;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      display: flex;
+      /* Use flexbox for vertical alignment */
+      flex-direction: column;
+      align-items: center;
+      /* Center items horizontally */
+      text-align: center;
+    }
+
+    .result-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .result-card img {
+      width: 100%;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      height: auto;
+      /* Maintain aspect ratio */
+      max-height: 200px;
+      /* Limit image height */
+      object-fit: contain;
+      /* Ensure image fits within container */
+    }
+
+    .result-card h3 {
+      margin: 0 0 5px 0;
+      color: #4CAF50;
+      /* Green */
+      font-size: 1.2em;
+      font-weight: 600;
+    }
+
+    .result-card p {
+      margin: 0 0 5px 0;
+      color: #555;
+      font-size: 0.9em;
+    }
+
+    .status-message {
+      /* Combined no-results and loading */
+      text-align: center;
+      padding: 15px;
+      background-color: #fff;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      margin-top: 20px;
+      display: none;
+      /* Hidden by default */
+    }
+
+    #load-more-trigger {
+      height: 40px;
+      /* Increased height for better trigger */
+      margin-top: 20px;
+      width: 100%;
+      /* background-color: rgba(0, 0, 255, 0.1); */
+      /* Optional: For debugging */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>VCV Rack Module Search</h1>
+    <input type="text" id="search-input" placeholder="Search for modules...">
+    <div id="status-message" class="status-message">Loading modules...</div>
+    <div id="results-container"></div>
+    <div id="load-more-trigger"></div> <!-- Element to observe for scrolling -->
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const searchInput = document.getElementById('search-input');
+      const resultsContainer = document.getElementById('results-container');
+      const statusMessage = document.getElementById('status-message');
+      const loadMoreTrigger = document.getElementById('load-more-trigger');
+
+      const RESULTS_BATCH_SIZE = 30; // Number of results to load initially and per scroll
+
+      let allModules = [];        // Stores all modules from JSON
+      let currentResultSet = [];  // Stores the current list being displayed (all or search results)
+      let fuse;                   // Fuse.js instance
+      let numDisplayedResults = 0;// Counter for currently displayed items
+      let isLoading = false;      // Flag to prevent multiple simultaneous loads
+      let observer;               // IntersectionObserver instance
+
+      // --- Utility Functions ---
+
+      function showStatus(message, isError = false) {
+        statusMessage.textContent = message;
+        statusMessage.style.color = isError ? 'red' : '#555';
+        statusMessage.style.display = 'block';
+      }
+
+      function hideStatus() {
+        statusMessage.style.display = 'none';
+      }
+
+      // --- Data Fetching ---
+
+      function fetchJsonData(filePath) {
+        isLoading = true;
+        showStatus('Loading modules...');
+        hideLoadMoreTrigger(); // Hide trigger while loading initial data
+        return fetch(filePath)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then(jsonData => {
+            // Transform the new format into the expected list of dictionaries
+            if (jsonData.headers && Array.isArray(jsonData.data)) {
+              // New format detected - transform it
+              return jsonData.data.map(row => {
+                const obj = {};
+                jsonData.headers.forEach((key, index) => {
+                  obj[key] = row[index];
+                });
+                return obj;
+              });
+            }
+            // If it's already in the old format (array of objects), return as is
+            return jsonData;
+          })
+          .catch(error => {
+            console.error('Error fetching JSON:', error);
+            showStatus('Failed to load module data. Please try refreshing.', true);
+            return null; // Indicate failure
+          })
+          .finally(() => {
+            isLoading = false;
+            // Status will be updated by the calling function
+          });
+      }
+
+      // --- Display Logic ---
+
+      function createResultCard(item) {
+        const card = document.createElement('div');
+        card.className = 'result-card';
+        // Use item.item for Fuse results, item directly for initial load
+        const moduleData = item.item ? item.item : item;
+        const imageUrl = `images/${moduleData.plugin_slug}/${moduleData.module_slug}.webp`;
+        card.innerHTML = `
+                    <img src="${imageUrl}" alt="${moduleData.module_name}" loading="lazy">
+                    <h3>${moduleData.module_name}</h3>
+                    <p>Plugin: ${moduleData.plugin_name}</p>
+                    <p>${moduleData.description || ''}</p>
+                `;
+        // Handle missing images gracefully
+        const img = card.querySelector('img');
+        img.onerror = () => {
+          img.style.display = 'none'; // Hide broken image icon
+          // Optionally add a placeholder or text
+          const placeholder = document.createElement('p');
+          placeholder.textContent = '[No Image]';
+          placeholder.style.marginTop = '10px';
+          card.insertBefore(placeholder, card.querySelector('h3'));
+        };
+        return card;
+      }
+
+      function displayBatch() {
+        if (isLoading) return; // Don't load if already loading
+        isLoading = true;
+
+        const fragment = document.createDocumentFragment();
+        const nextBatchEnd = Math.min(numDisplayedResults + RESULTS_BATCH_SIZE, currentResultSet.length);
+
+        for (let i = numDisplayedResults; i < nextBatchEnd; i++) {
+          fragment.appendChild(createResultCard(currentResultSet[i]));
+        }
+
+        resultsContainer.appendChild(fragment);
+        numDisplayedResults = nextBatchEnd;
+
+        // Hide trigger and disconnect observer if all items are displayed
+        if (numDisplayedResults >= currentResultSet.length) {
+          hideLoadMoreTrigger();
+          if (observer) {
+            observer.disconnect();
+          }
+        } else {
+          showLoadMoreTrigger(); // Ensure trigger is visible if more items exist
+        }
+
+        // Short delay to allow rendering before allowing next load
+        setTimeout(() => {
+          isLoading = false;
+        }, 100);
+      }
+
+      function resetAndDisplayFirstBatch(resultSet) {
+        currentResultSet = resultSet;
+        resultsContainer.innerHTML = ''; // Clear previous results
+        numDisplayedResults = 0;
+        hideStatus(); // Clear status message initially
+
+        if (observer) {
+          observer.disconnect(); // Disconnect previous observer if exists
+        }
+
+        if (currentResultSet.length === 0) {
+          showStatus('No matching modules found.');
+          hideLoadMoreTrigger();
+        } else {
+          displayBatch(); // Display the first batch
+          // Only setup observer if there are more results to load
+          if (numDisplayedResults < currentResultSet.length) {
+            setupIntersectionObserver();
+            showLoadMoreTrigger();
+          } else {
+            hideLoadMoreTrigger();
+          }
+        }
+      }
+
+      // --- Search Logic ---
+
+      function performSearch(query) {
+        if (!fuse) {
+          showStatus('Module data is still loading...', true);
+          return; // Don't search if Fuse isn't ready
+        }
+        if (query === '') {
+          // If query is empty, show initial batch of all modules
+          resetAndDisplayFirstBatch(allModules);
+        } else {
+          const results = fuse.search(query);
+          // Fuse results are objects { item: T, refIndex: number, score: number }
+          // We need to pass the items to the display function
+          resetAndDisplayFirstBatch(results);
+        }
+      }
+
+      // --- Intersection Observer Logic ---
+
+      function hideLoadMoreTrigger() {
+        loadMoreTrigger.style.display = 'none';
+      }
+      function showLoadMoreTrigger() {
+        loadMoreTrigger.style.display = 'block';
+      }
+
+      function handleIntersection(entries) {
+        // Use entries[0] as we observe only one element
+        if (entries[0].isIntersecting && !isLoading && numDisplayedResults < currentResultSet.length) {
+          // console.log('Loading more...'); // For debugging
+          displayBatch(); // Load the next batch of results
+        }
+      }
+
+      function setupIntersectionObserver() {
+        // Ensure previous observer is disconnected before creating a new one
+        if (observer) {
+          observer.disconnect();
+        }
+
+        const options = {
+          root: null, // Use the viewport as the root
+          rootMargin: '0px',
+          threshold: 0.1 // Trigger when 10% of the target is visible
+        };
+        observer = new IntersectionObserver(handleIntersection, options);
+        observer.observe(loadMoreTrigger); // Start observing the trigger element
+      }
+
+      // --- Initialization ---
+
+      // Fuse.js options
+      const fuseOptions = {
+        keys: [
+          { name: 'module_name', weight: 0.6 }, // Boost module name slightly
+          { name: 'plugin_name', weight: 0.3 },
+          'description',
+          'tags'
+        ],
+        includeScore: true, // Needed for thresholding, but not strictly necessary for display
+        shouldSort: true,
+        threshold: 0.4, // Adjust based on desired fuzziness (lower is stricter)
+        minMatchCharLength: 2, // Require at least 2 characters to match
+      };
+
+      // Load data and initialize
+      fetchJsonData('search_file.json') // Updated to use the new file
+        .then(jsonData => {
+          if (!jsonData) return; // Stop if fetching failed
+
+          allModules = jsonData;
+
+          if (allModules.length === 0) {
+            showStatus('No modules found in the data source.', true);
+            hideLoadMoreTrigger();
+            return;
+          }
+
+          // Initialize Fuse.js
+          fuse = new Fuse(allModules, fuseOptions);
+
+          // Initial display (first batch of all modules)
+          resetAndDisplayFirstBatch(allModules);
+          // Status is hidden within resetAndDisplayFirstBatch if successful
+
+        }); // No .finally here, status handled within functions
+
+      // Event listener for search input (with debounce)
+      let debounceTimer;
+      searchInput.addEventListener('input', function () {
+        clearTimeout(debounceTimer);
+        const query = this.value.trim();
+        debounceTimer = setTimeout(() => {
+          performSearch(query);
+        }, 250); // Add a small delay (250ms) to avoid searching on every keystroke
+      });
+
+    });
+  </script>
+</body>
+
+</html>
