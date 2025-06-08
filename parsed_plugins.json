@@ -2976,6 +2976,18 @@
     {
         "plugin_name": "NANO Modules",
         "plugin_slug": "NANOModules",
+        "module_name": "OCTA",
+        "module_slug": "OCTA",
+        "description": "Analog drums",
+        "tags": [
+            "Drum",
+            "Quad",
+            "Hardware clone"
+        ]
+    },
+    {
+        "plugin_name": "NANO Modules",
+        "plugin_slug": "NANOModules",
         "module_name": "BLANK 12Hp",
         "module_slug": "BLANK12Hp",
         "description": "Boast & protect your VCV rack",
@@ -4261,6 +4273,17 @@
     {
         "plugin_name": "Venom",
         "plugin_slug": "Venom",
+        "module_name": "Cross Fade 3D",
+        "module_slug": "CrossFade3D",
+        "description": "Cross fade 8 inputs to 1 output using X, Y, and Z axes",
+        "tags": [
+            "Mixer",
+            "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "Venom",
+        "plugin_slug": "Venom",
         "module_name": "HQ - Harmonic Quantizer",
         "module_slug": "HQ",
         "description": "Computes a selected harmonic or subharmonic partial relative to a root V/Oct, or quantizes input V/Oct to the nearest partial relative to the root",
@@ -4408,6 +4431,7 @@
             "Attenuator",
             "Expander",
             "Mixer",
+            "Panning",
             "Polyphonic",
             "Utility"
         ]
@@ -4489,9 +4513,20 @@
         "plugin_slug": "Venom",
         "module_name": "NORSIQ Chord To Scale",
         "module_slug": "NORSIQChord2Scale",
-        "description": "Convert a polyphonic chord into CV to generate a scale for the Non-Octave_Repeating Scale Intervallic Quantizer",
+        "description": "Convert a polyphonic chord into CV to generate a scale for the Non-Octave-Repeating Scale Intervallic Quantizer",
         "tags": [
             "Quantizer",
+            "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "Venom",
+        "plugin_slug": "Venom",
+        "module_name": "Pan 3D",
+        "module_slug": "Pan3D",
+        "description": "Pan 1 input to 8 outputs using X, Y, and Z axes",
+        "tags": [
+            "Panning",
             "Polyphonic"
         ]
     },
@@ -4515,6 +4550,7 @@
         "tags": [
             "Envelope Generator",
             "Low-frequency oscillator",
+            "Mixer",
             "Polyphonic",
             "Sequencer",
             "Switch"
@@ -4665,6 +4701,17 @@
     {
         "plugin_name": "Venom",
         "plugin_slug": "Venom",
+        "module_name": "Sphere To XYZ",
+        "module_slug": "SphereToXYZ",
+        "description": "Convert spherical coordinates r,theta, phi to cartesian coordinates x, y, z",
+        "tags": [
+            "Polyphonic",
+            "Utility"
+        ]
+    },
+    {
+        "plugin_name": "Venom",
+        "plugin_slug": "Venom",
         "module_name": "Thru",
         "module_slug": "Thru",
         "description": "5 polyphonic input/output pairs suitable for stacked input unity mixes and/or introduction of sample delays",
@@ -4748,6 +4795,20 @@
         "module_slug": "WaveFolder",
         "description": "A polyphonic configurable wave folder",
         "tags": [
+            "Polyphonic",
+            "Ring modulator",
+            "Voltage-controlled amplifier",
+            "Waveshaper"
+        ]
+    },
+    {
+        "plugin_name": "Venom",
+        "plugin_slug": "Venom",
+        "module_name": "Wave Multiplier",
+        "module_slug": "WaveMultiplier",
+        "description": "A polyphonic wave shaper inspired by the Doepfer Wave Multiplier 2 with built in LFO modulation",
+        "tags": [
+            "Low-frequency oscillator",
             "Polyphonic",
             "Ring modulator",
             "Voltage-controlled amplifier",
@@ -5350,6 +5411,17 @@
         "module_name": "LADR",
         "module_slug": "LADR",
         "description": "4-pole Ladder Filter",
+        "tags": [
+            "Filter",
+            "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "kocmoc",
+        "plugin_slug": "kocmoc",
+        "module_name": "DIOD",
+        "module_slug": "DIOD",
+        "description": "4-pole Diode Ladder Filter",
         "tags": [
             "Filter",
             "Polyphonic"
@@ -7563,7 +7635,7 @@
         ]
     },
     {
-        "plugin_name": "Sanguine Modules",
+        "plugin_name": "Sanguine Monsters",
         "plugin_slug": "SanguineMonsters",
         "module_name": "Hydra",
         "module_slug": "Sanguine-SuperSwitch81",
@@ -7576,7 +7648,7 @@
         ]
     },
     {
-        "plugin_name": "Sanguine Modules",
+        "plugin_name": "Sanguine Monsters",
         "plugin_slug": "SanguineMonsters",
         "module_name": "Gegenees",
         "module_slug": "Sanguine-SuperSwitch18",
@@ -7589,7 +7661,7 @@
         ]
     },
     {
-        "plugin_name": "Sanguine Modules",
+        "plugin_name": "Sanguine Monsters",
         "plugin_slug": "SanguineMonsters",
         "module_name": "Sanguine Monsters Blank",
         "module_slug": "Sanguine-Monsters-Blank",
@@ -7600,7 +7672,7 @@
         ]
     },
     {
-        "plugin_name": "Sanguine Modules",
+        "plugin_name": "Sanguine Monsters",
         "plugin_slug": "SanguineMonsters",
         "module_name": "Dolly-X",
         "module_slug": "Sanguine-Monsters-Dolly-X",
@@ -7612,7 +7684,7 @@
         ]
     },
     {
-        "plugin_name": "Sanguine Modules",
+        "plugin_name": "Sanguine Monsters",
         "plugin_slug": "SanguineMonsters",
         "module_name": "Oraculus",
         "module_slug": "Sanguine-Monsters-Oraculus",
@@ -7624,7 +7696,7 @@
         ]
     },
     {
-        "plugin_name": "Sanguine Modules",
+        "plugin_name": "Sanguine Monsters",
         "plugin_slug": "SanguineMonsters",
         "module_name": "Raiju",
         "module_slug": "Sanguine-Monsters-Raiju",
@@ -7635,7 +7707,7 @@
         ]
     },
     {
-        "plugin_name": "Sanguine Modules",
+        "plugin_name": "Sanguine Monsters",
         "plugin_slug": "SanguineMonsters",
         "module_name": "Sphinx",
         "module_slug": "Sanguine-Monsters-Sphinx",
@@ -7645,7 +7717,7 @@
         ]
     },
     {
-        "plugin_name": "Sanguine Modules",
+        "plugin_name": "Sanguine Monsters",
         "plugin_slug": "SanguineMonsters",
         "module_name": "Brainz",
         "module_slug": "Sanguine-Monsters-Brainz",
@@ -7657,7 +7729,7 @@
         ]
     },
     {
-        "plugin_name": "Sanguine Modules",
+        "plugin_name": "Sanguine Monsters",
         "plugin_slug": "SanguineMonsters",
         "module_name": "Bukavac",
         "module_slug": "Sanguine-Monsters-Bukavac",
@@ -7667,7 +7739,7 @@
         ]
     },
     {
-        "plugin_name": "Sanguine Modules",
+        "plugin_name": "Sanguine Monsters",
         "plugin_slug": "SanguineMonsters",
         "module_name": "Dungeon",
         "module_slug": "Sanguine-Monsters-Dungeon",
@@ -7679,7 +7751,7 @@
         ]
     },
     {
-        "plugin_name": "Sanguine Modules",
+        "plugin_name": "Sanguine Monsters",
         "plugin_slug": "SanguineMonsters",
         "module_name": "Kitsune",
         "module_slug": "Sanguine-Kitsune",
@@ -7691,7 +7763,7 @@
         ]
     },
     {
-        "plugin_name": "Sanguine Modules",
+        "plugin_name": "Sanguine Monsters",
         "plugin_slug": "SanguineMonsters",
         "module_name": "Oubliette",
         "module_slug": "Sanguine-Oubliette",
@@ -7701,7 +7773,7 @@
         ]
     },
     {
-        "plugin_name": "Sanguine Modules",
+        "plugin_name": "Sanguine Monsters",
         "plugin_slug": "SanguineMonsters",
         "module_name": "Medusa",
         "module_slug": "Sanguine-Medusa",
@@ -7712,7 +7784,7 @@
         ]
     },
     {
-        "plugin_name": "Sanguine Modules",
+        "plugin_name": "Sanguine Monsters",
         "plugin_slug": "SanguineMonsters",
         "module_name": "Aion",
         "module_slug": "Sanguine-Aion",
@@ -7724,7 +7796,7 @@
         ]
     },
     {
-        "plugin_name": "Sanguine Modules",
+        "plugin_name": "Sanguine Monsters",
         "plugin_slug": "SanguineMonsters",
         "module_name": "Werewolf",
         "module_slug": "Sanguine-Werewolf",
@@ -7735,7 +7807,7 @@
         ]
     },
     {
-        "plugin_name": "Sanguine Modules",
+        "plugin_name": "Sanguine Monsters",
         "plugin_slug": "SanguineMonsters",
         "module_name": "Alchemist",
         "module_slug": "Sanguine-Alchemist",
@@ -7746,7 +7818,7 @@
         ]
     },
     {
-        "plugin_name": "Sanguine Modules",
+        "plugin_name": "Sanguine Monsters",
         "plugin_slug": "SanguineMonsters",
         "module_name": "Alembic",
         "module_slug": "Sanguine-Alembic",
@@ -7840,6 +7912,17 @@
         "tags": [
             "Distortion",
             "Effect"
+        ]
+    },
+    {
+        "plugin_name": "Sonus Modular",
+        "plugin_slug": "SonusModular",
+        "module_name": "Fluidmix",
+        "module_slug": "Fluidmix",
+        "description": "Continuous Input Selector",
+        "tags": [
+            "Mixer",
+            "Utility"
         ]
     },
     {
@@ -9369,6 +9452,19 @@
         "tags": [
             "Granular",
             "Reverb",
+            "Hardware clone"
+        ]
+    },
+    {
+        "plugin_name": "Grayscale",
+        "plugin_slug": "Grayscale",
+        "module_name": "Nexus",
+        "module_slug": "Nexus",
+        "description": "12-channel macro controller",
+        "tags": [
+            "Panning",
+            "Mixer",
+            "Polyphonic",
             "Hardware clone"
         ]
     },
@@ -11410,6 +11506,16 @@
         ]
     },
     {
+        "plugin_name": "HardSeqs",
+        "plugin_slug": "HardSeqs",
+        "module_name": "HardSeqs",
+        "module_slug": "HardSeqs",
+        "description": "Hard Sequencer",
+        "tags": [
+            "Sequencer"
+        ]
+    },
+    {
         "plugin_name": "Sapphire",
         "plugin_slug": "CosineKitty-Sapphire",
         "module_name": "Chaops",
@@ -11803,6 +11909,18 @@
         "tags": [
             "Oscillator",
             "Synth voice"
+        ]
+    },
+    {
+        "plugin_name": "Word Generator",
+        "plugin_slug": "WordGenerator",
+        "module_name": "Word Generator",
+        "module_slug": "WordGenerator",
+        "description": "Digital sequencer inspired by the HP 8006A Word Generator",
+        "tags": [
+            "Sequencer",
+            "Digital",
+            "Clock Modulator"
         ]
     },
     {
@@ -14758,6 +14876,64 @@
             "LFO",
             "Random",
             "Slew limiter"
+        ]
+    },
+    {
+        "plugin_name": "Cella",
+        "plugin_slug": "Cella",
+        "module_name": "Cognitive Shift",
+        "module_slug": "CognitiveShift",
+        "description": "Advanced 8-bit digital shift register with clock, gates or trigger outputs, 4 DAC-based CV generators and various self-patching capabilities",
+        "tags": [
+            "Sequencer",
+            "Sample and hold",
+            "Clock modulator",
+            "Logic"
+        ]
+    },
+    {
+        "plugin_name": "Cella",
+        "plugin_slug": "Cella",
+        "module_name": "Loudness Meter",
+        "module_slug": "LoudnessMeter",
+        "description": "Loudness meter based on EBU R128 standard",
+        "tags": [
+            "Utility",
+            "Visual"
+        ]
+    },
+    {
+        "plugin_name": "Cella",
+        "plugin_slug": "Cella",
+        "module_name": "Loud",
+        "module_slug": "Loud",
+        "description": "Loudness meter based on EBU R128 standard, narrow version",
+        "tags": [
+            "Utility",
+            "Visual"
+        ]
+    },
+    {
+        "plugin_name": "Cella",
+        "plugin_slug": "Cella",
+        "module_name": "Integral",
+        "module_slug": "Integral",
+        "description": "Signal integrator, essential for feedback, chaotic and cybernetic patches",
+        "tags": [
+            "Utility",
+            "Sample and hold"
+        ]
+    },
+    {
+        "plugin_name": "Cella",
+        "plugin_slug": "Cella",
+        "module_name": "2State",
+        "module_slug": "2State",
+        "description": "Combination of dual constant CV generator and a voltage-controlled switch",
+        "tags": [
+            "Utility",
+            "Switch",
+            "Sequencer"
         ]
     },
     {
@@ -19928,6 +20104,62 @@
         ]
     },
     {
+        "plugin_name": "LogicalAudio",
+        "plugin_slug": "LogicalAudio",
+        "module_name": "L-Carrier",
+        "module_slug": "L-Carrier",
+        "description": "Logic gate audio carrier.",
+        "tags": [
+            "Utility",
+            "Logic"
+        ]
+    },
+    {
+        "plugin_name": "LogicalAudio",
+        "plugin_slug": "LogicalAudio",
+        "module_name": "L-Random",
+        "module_slug": "L-Random",
+        "description": "Random voltage generator.",
+        "tags": [
+            "Random",
+            "Multiple",
+            "Logic"
+        ]
+    },
+    {
+        "plugin_name": "LogicalAudio",
+        "plugin_slug": "LogicalAudio",
+        "module_name": "L-Panel",
+        "module_slug": "L-Panel",
+        "description": "Just a cool panel.",
+        "tags": [
+            "Visual",
+            "Logic"
+        ]
+    },
+    {
+        "plugin_name": "LogicalAudio",
+        "plugin_slug": "LogicalAudio",
+        "module_name": "L-Rantics",
+        "module_slug": "L-Rantics",
+        "description": "Dual-channel random voltage generator controlled by clock (tic) inputs.",
+        "tags": [
+            "Random",
+            "Logic"
+        ]
+    },
+    {
+        "plugin_name": "LogicalAudio",
+        "plugin_slug": "LogicalAudio",
+        "module_name": "L-Noises",
+        "module_slug": "L-Noises",
+        "description": "Dual logic-gated stereo noise generator.",
+        "tags": [
+            "Noise",
+            "Logic"
+        ]
+    },
+    {
         "plugin_name": "FLAG Oppressor Pro",
         "plugin_slug": "FLAG-Oppressor-Pro",
         "module_name": "Oppressor Pro",
@@ -22679,6 +22911,19 @@
         ]
     },
     {
+        "plugin_name": "Okay Synthesizer",
+        "plugin_slug": "OkaySynthesizer",
+        "module_name": "lowstepper",
+        "module_slug": "lowstepper",
+        "description": "Dual phase maniuplation LFO",
+        "tags": [
+            "Low-frequency Oscillator",
+            "dual",
+            "multiple",
+            "clock generator"
+        ]
+    },
+    {
         "plugin_name": "Autodafe - DrumKit",
         "plugin_slug": "Autodafe-DrumKit",
         "module_name": "Drums - Kick",
@@ -23576,6 +23821,19 @@
     {
         "plugin_name": "HetrickCV",
         "plugin_slug": "HetrickCV",
+        "module_name": "Clock to Phasor",
+        "module_slug": "ClockToPhasor",
+        "description": "Generates a phasor from a series of gates.",
+        "tags": [
+            "Oscillator",
+            "Clock Modulator",
+            "Low-frequency Oscillator",
+            "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "HetrickCV",
+        "plugin_slug": "HetrickCV",
         "module_name": "Comparator",
         "module_slug": "Comparator",
         "description": "Determine whether a signal is above or below a threshold.",
@@ -23772,6 +24030,17 @@
         "module_name": "Min-Max",
         "module_slug": "MinMax",
         "description": "Outputs the greatest and least voltages from up to 4 inputs.",
+        "tags": [
+            "Utility",
+            "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "HetrickCV",
+        "plugin_slug": "HetrickCV",
+        "module_name": "Normals",
+        "module_slug": "Normals",
+        "description": "Connects an input to an output, unless a plug is inserted into the middle jack.",
         "tags": [
             "Utility",
             "Polyphonic"
@@ -24138,12 +24407,34 @@
     {
         "plugin_name": "HetrickCV",
         "plugin_slug": "HetrickCV",
+        "module_name": "Phasor to Random",
+        "module_slug": "PhasorToRandom",
+        "description": "Generates random values for each step of a phasor input.",
+        "tags": [
+            "Random",
+            "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "HetrickCV",
+        "plugin_slug": "HetrickCV",
         "module_name": "Phasor to Waveforms",
         "module_slug": "PhasorToWaveforms",
         "description": "Shapes incoming phasor signals to useful, static LFO waveshapes. These waveforms are not anti-aliased, hence the LFO designation.",
         "tags": [
             "Waveshaper",
             "Low-frequency Oscillator",
+            "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "HetrickCV",
+        "plugin_slug": "HetrickCV",
+        "module_name": "Polymetric Phasors",
+        "module_slug": "PolymetricPhasors",
+        "description": "Processes a phasor signal with a known number of steps, then produces output phasors at polymetric multiples.",
+        "tags": [
+            "Clock Modulator",
             "Polyphonic"
         ]
     },
@@ -27546,6 +27837,7 @@
         "description": "8-channel mixer",
         "tags": [
             "Mixer",
+            "Switch",
             "Polyphonic"
         ]
     },
@@ -27568,6 +27860,7 @@
         "description": "4x4 matrix mixer",
         "tags": [
             "Mixer",
+            "Switch",
             "Polyphonic"
         ]
     },
@@ -27579,6 +27872,7 @@
         "description": "8x8 matrix mixer",
         "tags": [
             "Mixer",
+            "Switch",
             "Polyphonic"
         ]
     },
@@ -27590,6 +27884,7 @@
         "description": "16x16 matrix mixer",
         "tags": [
             "Mixer",
+            "Switch",
             "Polyphonic"
         ]
     },
@@ -28599,6 +28894,26 @@
         "tags": [
             "Mixer",
             "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "dbRackSequencer",
+        "plugin_slug": "dbRackSequencer",
+        "module_name": "G32",
+        "module_slug": "G32",
+        "description": "Deterministic Gate Provider",
+        "tags": [
+            "Sequencer"
+        ]
+    },
+    {
+        "plugin_name": "dbRackSequencer",
+        "plugin_slug": "dbRackSequencer",
+        "module_name": "\u00b5TD4",
+        "module_slug": "MTD4",
+        "description": "Mini TD4",
+        "tags": [
+            "Sequencer"
         ]
     },
     {
@@ -29623,6 +29938,41 @@
         ]
     },
     {
+        "plugin_name": "V's World",
+        "plugin_slug": "VsWorld",
+        "module_name": "X-Limit JI Autotuner",
+        "module_slug": "XLimitJIAutotuner",
+        "description": "Dynamic just intonation tuner",
+        "tags": [
+            "Polyphonic",
+            "Tuner",
+            "Quantizer"
+        ]
+    },
+    {
+        "plugin_name": "V's World",
+        "plugin_slug": "VsWorld",
+        "module_name": "X-Limit JI Autotuner II",
+        "module_slug": "XLimitJIAutotuner2",
+        "description": "Complex dynamic just intonation tuner",
+        "tags": [
+            "Polyphonic",
+            "Quantizer",
+            "Tuner"
+        ]
+    },
+    {
+        "plugin_name": "V's World",
+        "plugin_slug": "VsWorld",
+        "module_name": "X-Limit JI VCO",
+        "module_slug": "XLimitJIVCO",
+        "description": "Wavetable VCO for Autotuner modules",
+        "tags": [
+            "Polyphonic",
+            "VCO"
+        ]
+    },
+    {
         "plugin_name": "Sha#Bang! Modules",
         "plugin_slug": "Sha-Bang-Modules",
         "module_name": "Absorption Spectrum",
@@ -30271,6 +30621,16 @@
         "description": "blank panel",
         "tags": [
             "Blank"
+        ]
+    },
+    {
+        "plugin_name": "HawthornLabs",
+        "plugin_slug": "HawthornLabs",
+        "module_name": "Planetary LFOs",
+        "module_slug": "PlanetaryLFOs",
+        "description": "LFOs from the movement of the solar system",
+        "tags": [
+            "Low-Frequency Oscillator"
         ]
     },
     {
@@ -31011,6 +31371,19 @@
         ]
     },
     {
+        "plugin_name": "Julio's Chaotic Oscillators",
+        "plugin_slug": "JulioChaos",
+        "module_name": "Chua's Oscillator",
+        "module_slug": "JulioChua",
+        "description": "Chaotic oscillator based on Chua's circuit",
+        "tags": [
+            "Function generator",
+            "Low-frequency oscillator",
+            "Noise",
+            "Oscillator"
+        ]
+    },
+    {
         "plugin_name": "Stellare Link",
         "plugin_slug": "StellareModular-Link",
         "module_name": "Link",
@@ -31271,7 +31644,8 @@
         "module_slug": "solim",
         "description": "Limiter and sorter of (note) voltages",
         "tags": [
-            "Utility"
+            "Utility",
+            "Polyphonic"
         ]
     },
     {
@@ -31282,7 +31656,8 @@
         "description": "Input expander for Solim",
         "tags": [
             "Utility",
-            "Expander"
+            "Expander",
+            "Polyphonic"
         ]
     },
     {
@@ -31293,7 +31668,8 @@
         "description": "Input Octaver expander for Solim",
         "tags": [
             "Utility",
-            "Expander"
+            "Expander",
+            "Polyphonic"
         ]
     },
     {
@@ -31304,7 +31680,8 @@
         "description": "Output expander for Solim",
         "tags": [
             "Utility",
-            "Expander"
+            "Expander",
+            "Polyphonic"
         ]
     },
     {
@@ -31315,7 +31692,8 @@
         "description": "Output Octaver expander for Solim",
         "tags": [
             "Utility",
-            "Expander"
+            "Expander",
+            "Polyphonic"
         ]
     },
     {
@@ -31327,7 +31705,8 @@
         "tags": [
             "Utility",
             "Expander",
-            "Random"
+            "Random",
+            "Polyphonic"
         ]
     },
     {
@@ -31360,6 +31739,18 @@
         "description": "Polyphonic Same and Different",
         "tags": [
             "Utility",
+            "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "not-things",
+        "plugin_slug": "not-things",
+        "module_name": "TimeSeq",
+        "module_slug": "timeseq",
+        "description": "Time Based Sequencer",
+        "tags": [
+            "Utility",
+            "Sequencer",
             "Polyphonic"
         ]
     },
@@ -31948,6 +32339,18 @@
     {
         "plugin_name": "SickoCV",
         "plugin_slug": "SickoCV",
+        "module_name": "ad mini",
+        "module_slug": "AdMini",
+        "description": "Ad function generator with VCA",
+        "tags": [
+            "Function generator",
+            "Voltage-controlled amplifier",
+            "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "SickoCV",
+        "plugin_slug": "SickoCV",
         "module_name": "adder8",
         "module_slug": "Adder8",
         "description": "8 adder and subtractor",
@@ -32093,7 +32496,7 @@
         "plugin_slug": "SickoCV",
         "module_name": "drummer",
         "module_slug": "Drummer",
-        "description": "Accent and choke utility for drum modules lacking these features",
+        "description": "Accent and choke utility for drum modules lacking these features (dr)",
         "tags": [
             "Utility",
             "Drum",
@@ -32105,7 +32508,7 @@
         "plugin_slug": "SickoCV",
         "module_name": "drummer4",
         "module_slug": "Drummer4",
-        "description": "4 channel accent and choke utility for drum modules lacking this feature",
+        "description": "4 channel accent and choke utility for drum modules lacking this feature (d4)",
         "tags": [
             "Utility",
             "Drum",
@@ -32117,7 +32520,7 @@
         "plugin_slug": "SickoCV",
         "module_name": "drummer4+",
         "module_slug": "Drummer4Plus",
-        "description": "4 channel accent and choke utility for drum modules lacking this feature",
+        "description": "4 channel accent and choke utility for drum modules lacking this feature (d4p)",
         "tags": [
             "Utility",
             "Drum",
@@ -32129,7 +32532,19 @@
         "plugin_slug": "SickoCV",
         "module_name": "drumPlayer",
         "module_slug": "DrumPlayer",
-        "description": "Drum Sample Player",
+        "description": "Drum Sample Player (dp)",
+        "tags": [
+            "Sampler",
+            "Drum",
+            "Quad"
+        ]
+    },
+    {
+        "plugin_name": "SickoCV",
+        "plugin_slug": "SickoCV",
+        "module_name": "drumPlayer mk2",
+        "module_slug": "DrumPlayerMk2",
+        "description": "Drum Sample Player (dp2)",
         "tags": [
             "Sampler",
             "Drum",
@@ -32141,7 +32556,7 @@
         "plugin_slug": "SickoCV",
         "module_name": "drumPlayer+",
         "module_slug": "DrumPlayerPlus",
-        "description": "Drum Sample Player",
+        "description": "Drum Sample Player (dpp)",
         "tags": [
             "Sampler",
             "Drum",
@@ -32153,11 +32568,21 @@
         "plugin_slug": "SickoCV",
         "module_name": "drumPlayerXtra",
         "module_slug": "DrumPlayerXtra",
-        "description": "Drum Sample Player",
+        "description": "Drum Sample Player (dpx)",
         "tags": [
             "Sampler",
             "Drum",
             "Quad"
+        ]
+    },
+    {
+        "plugin_name": "SickoCV",
+        "plugin_slug": "SickoCV",
+        "module_name": "drumPlayer mini",
+        "module_slug": "DrumPlayerMini",
+        "description": "Drum Sample Player (dp)",
+        "tags": [
+            "Sampler"
         ]
     },
     {
@@ -32170,6 +32595,31 @@
             "Envelope generator",
             "Voltage-controlled amplifier",
             "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "SickoCV",
+        "plugin_slug": "SickoCV",
+        "module_name": "enver mini",
+        "module_slug": "EnverMini",
+        "description": "Envelope generator with VCA",
+        "tags": [
+            "Envelope generator",
+            "Voltage-controlled amplifier",
+            "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "SickoCV",
+        "plugin_slug": "SickoCV",
+        "module_name": "enver mini expander",
+        "module_slug": "EnverMiniX",
+        "description": "Expander for enver mini and ad mini",
+        "tags": [
+            "Envelope generator",
+            "Voltage-controlled amplifier",
+            "Polyphonic",
+            "Expander"
         ]
     },
     {
@@ -32224,7 +32674,7 @@
         "plugin_slug": "SickoCV",
         "module_name": "modulator",
         "module_slug": "Modulator",
-        "description": "triangle/ramp LFOs with sync feature",
+        "description": "triangle/ramp LFOs with sync feature (mod)",
         "tags": [
             "Low-frequency oscillator"
         ]
@@ -32234,7 +32684,7 @@
         "plugin_slug": "SickoCV",
         "module_name": "modulator7",
         "module_slug": "Modulator7",
-        "description": "7 triangle/ramp LFOs with sync feature",
+        "description": "7 triangle/ramp LFOs with sync feature (mod7)",
         "tags": [
             "Low-frequency oscillator",
             "Polyphonic"
@@ -32245,7 +32695,7 @@
         "plugin_slug": "SickoCV",
         "module_name": "modulator7 Compact",
         "module_slug": "Modulator7Compact",
-        "description": "7 unipolar triangle LFOs",
+        "description": "7 unipolar triangle LFOs (mod7)",
         "tags": [
             "Low-frequency oscillator"
         ]
@@ -32328,6 +32778,16 @@
         "module_name": "randLoops",
         "module_slug": "RandLoops",
         "description": "random voltage/trigger sequencer inspired by Turing Machine",
+        "tags": [
+            "Sequencer"
+        ]
+    },
+    {
+        "plugin_name": "SickoCV",
+        "plugin_slug": "SickoCV",
+        "module_name": "randLoops mini",
+        "module_slug": "RandLoopsMini",
+        "description": "random voltage/trigger sequencer inspired by Turing Machine (rl)",
         "tags": [
             "Sequencer"
         ]
@@ -32507,6 +32967,18 @@
     {
         "plugin_name": "SickoCV",
         "plugin_slug": "SickoCV",
+        "module_name": "slewer mini",
+        "module_slug": "SlewerMini",
+        "description": "Slew Limiter",
+        "tags": [
+            "Slew limiter",
+            "Low-frequency oscillator",
+            "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "SickoCV",
+        "plugin_slug": "SickoCV",
         "module_name": "stepSeq",
         "module_slug": "StepSeq",
         "description": "16 step sequencer with direction (ss16)",
@@ -32520,6 +32992,16 @@
         "module_name": "stepSeq+",
         "module_slug": "StepSeqPlus",
         "description": "16 step sequencer with direction and presets (ss16+)",
+        "tags": [
+            "Sequencer"
+        ]
+    },
+    {
+        "plugin_name": "SickoCV",
+        "plugin_slug": "SickoCV",
+        "module_name": "stepSeq8x",
+        "module_slug": "StepSeq8x",
+        "description": "8 track / 16 step sequencer with direction and presets (ss8x)",
         "tags": [
             "Sequencer"
         ]
@@ -32787,7 +33269,7 @@
         "plugin_slug": "DarkProcessIndustries",
         "module_name": "WAVE",
         "module_slug": "Wave",
-        "description": "WAVE is a simple voltage-controlled oscillator with triangle, sawtooth, and sine wave outputs.",
+        "description": "WAVE is a voltage-controlled oscillator.",
         "tags": [
             "Oscillator"
         ]
@@ -32797,7 +33279,7 @@
         "plugin_slug": "DarkProcessIndustries",
         "module_name": "ORBIT",
         "module_slug": "Orbit",
-        "description": "ORBIT is a humble LFO that can be clocked to an external clock.",
+        "description": "ORBIT is six low freqency oscillators.",
         "tags": [
             "Low-frequency oscillator"
         ]
@@ -32807,7 +33289,7 @@
         "plugin_slug": "DarkProcessIndustries",
         "module_name": "STONES",
         "module_slug": "Stones",
-        "description": "STONES is an envelope generator with a few fun tricks.",
+        "description": "STONES is an envelope and function generator",
         "tags": [
             "Envelope generator"
         ]
@@ -32831,6 +33313,56 @@
         "description": "MAELSTROM is a random voltage generator.",
         "tags": [
             "Random"
+        ]
+    },
+    {
+        "plugin_name": "Dark Process Industries",
+        "plugin_slug": "DarkProcessIndustries",
+        "module_name": "Taurus",
+        "module_slug": "Taurus",
+        "description": "TAURUS is an 8 step CV sequencer.",
+        "tags": [
+            "Sequencer"
+        ]
+    },
+    {
+        "plugin_name": "Dark Process Industries",
+        "plugin_slug": "DarkProcessIndustries",
+        "module_name": "Libra",
+        "module_slug": "Libra",
+        "description": "LIBRA is a state variable filter.",
+        "tags": [
+            "Filter"
+        ]
+    },
+    {
+        "plugin_name": "Dark Process Industries",
+        "plugin_slug": "DarkProcessIndustries",
+        "module_name": "Scorpio",
+        "module_slug": "Scorpio",
+        "description": "SCORPIO is a complex oscillator.",
+        "tags": [
+            "Oscillator"
+        ]
+    },
+    {
+        "plugin_name": "Dark Process Industries",
+        "plugin_slug": "DarkProcessIndustries",
+        "module_name": "Leo",
+        "module_slug": "Leo",
+        "description": "LEO is a trigger sequencer.",
+        "tags": [
+            "Sequencer"
+        ]
+    },
+    {
+        "plugin_name": "Dark Process Industries",
+        "plugin_slug": "DarkProcessIndustries",
+        "module_name": "Lyra",
+        "module_slug": "Lyra",
+        "description": "LYRA is a low-pass gate.",
+        "tags": [
+            "Low-pass gate"
         ]
     },
     {
@@ -34640,6 +35172,126 @@
         ]
     },
     {
+        "plugin_name": "xOx Drums",
+        "plugin_slug": "4ms-XOXDrums",
+        "module_name": "Clave",
+        "module_slug": "Clave",
+        "description": "Clave inspired by XOX style.",
+        "tags": [
+            "Drum"
+        ]
+    },
+    {
+        "plugin_name": "xOx Drums",
+        "plugin_slug": "4ms-XOXDrums",
+        "module_name": "Cowbell",
+        "module_slug": "Cowbell",
+        "description": "Cowbell inspired by XOX style.",
+        "tags": [
+            "Drum"
+        ]
+    },
+    {
+        "plugin_name": "xOx Drums",
+        "plugin_slug": "4ms-XOXDrums",
+        "module_name": "Accent",
+        "module_slug": "Accent",
+        "description": "A drum utility for adding dynamics to drums.",
+        "tags": [
+            "Dynamics"
+        ]
+    },
+    {
+        "plugin_name": "xOx Drums",
+        "plugin_slug": "4ms-XOXDrums",
+        "module_name": "Clap",
+        "module_slug": "Clap",
+        "description": "Clap inspired by XOX style.",
+        "tags": [
+            "Drum"
+        ]
+    },
+    {
+        "plugin_name": "xOx Drums",
+        "plugin_slug": "4ms-XOXDrums",
+        "module_name": "Congabongo",
+        "module_slug": "Congabongo",
+        "description": "Conga/Bongo inspired by XOX style with added slap inputs",
+        "tags": [
+            "Drum"
+        ]
+    },
+    {
+        "plugin_name": "xOx Drums",
+        "plugin_slug": "4ms-XOXDrums",
+        "module_name": "HiHat",
+        "module_slug": "HiHat",
+        "description": "Hi-hat inspired by XOX style",
+        "tags": [
+            "Drum"
+        ]
+    },
+    {
+        "plugin_name": "xOx Drums",
+        "plugin_slug": "4ms-XOXDrums",
+        "module_name": "Maraca",
+        "module_slug": "Maraca",
+        "description": "Maraca inspired by XOX style",
+        "tags": [
+            "Drum"
+        ]
+    },
+    {
+        "plugin_name": "xOx Drums",
+        "plugin_slug": "4ms-XOXDrums",
+        "module_name": "Rimshot",
+        "module_slug": "Rimshot",
+        "description": "Rimshot inspired by XOX style",
+        "tags": [
+            "Drum"
+        ]
+    },
+    {
+        "plugin_name": "xOx Drums",
+        "plugin_slug": "4ms-XOXDrums",
+        "module_name": "Kick",
+        "module_slug": "Kick",
+        "description": "Kick inspired by XOX style",
+        "tags": [
+            "Drum"
+        ]
+    },
+    {
+        "plugin_name": "xOx Drums",
+        "plugin_slug": "4ms-XOXDrums",
+        "module_name": "Snare",
+        "module_slug": "Snare",
+        "description": "Snare inspired by XOX style",
+        "tags": [
+            "Drum"
+        ]
+    },
+    {
+        "plugin_name": "xOx Drums",
+        "plugin_slug": "4ms-XOXDrums",
+        "module_name": "Tom",
+        "module_slug": "Tom",
+        "description": "Tom inspired by XOX style",
+        "tags": [
+            "Drum"
+        ]
+    },
+    {
+        "plugin_name": "xOx Drums",
+        "plugin_slug": "4ms-XOXDrums",
+        "module_name": "Duck",
+        "module_slug": "Duck",
+        "description": "A ducking module for sidechain effect",
+        "tags": [
+            "Dynamics"
+        ]
+    },
+    {
         "plugin_name": "dBiz",
         "plugin_slug": "dBiz",
         "module_name": "NavControl",
@@ -35487,11 +36139,10 @@
     {
         "plugin_name": "PitchGrid Rack",
         "plugin_slug": "PitchGrid",
-        "module_name": "Microtonal Hammond",
-        "module_slug": "MicroHammond",
-        "description": "Microtonally adjusted Hammond frequencies",
+        "module_name": "Microtonal VOCT Mapper",
+        "module_slug": "MicroVOctMapper",
+        "description": "Microtonally maps V/OCT to MV/OCT",
         "tags": [
-            "VCO",
             "Tuner",
             "Polyphonic"
         ]
@@ -35499,13 +36150,12 @@
     {
         "plugin_name": "PitchGrid Rack",
         "plugin_slug": "PitchGrid",
-        "module_name": "Microtonal V/OCT Mapper",
-        "module_slug": "MicroVOctMapper",
-        "description": "Microtonally map V/OCT to MV/OCT",
+        "module_name": "Microtonal Hammond",
+        "module_slug": "MicroHammond",
+        "description": "Microtonally adjusted Hammond frequencies",
         "tags": [
-            "Quantizer",
+            "VCO",
             "Tuner",
-            "Utility",
             "Polyphonic"
         ]
     },
@@ -37491,7 +38141,8 @@
         "description": "Random CV generator",
         "tags": [
             "Random",
-            "Sample and hold"
+            "Sample and hold",
+            "Polyphonic"
         ]
     },
     {
@@ -37558,6 +38209,8 @@
         "module_slug": "Process",
         "description": "CV processor",
         "tags": [
+            "Sample and hold",
+            "Slew limiter",
             "Polyphonic"
         ]
     },
@@ -37615,6 +38268,21 @@
         "description": "8 channel sample & hold combined with a shift register",
         "tags": [
             "Sample and hold"
+        ]
+    },
+    {
+        "plugin_name": "Sulamith",
+        "plugin_slug": "Sulamith",
+        "module_name": "Button - Complex Trigger Utility",
+        "module_slug": "ButtonA",
+        "description": "Swiss Army Knife: Button, Bernoulli Gate, Trigger, Gate with Length, Toggle, Const. Volt., Random CV, Slew, Retrig",
+        "tags": [
+            "Utility",
+            "Random",
+            "Sequencer",
+            "Clock modulator",
+            "Logic",
+            "Controller"
         ]
     },
     {
@@ -38113,6 +38781,32 @@
         "description": null,
         "tags": [
             "Utility",
+            "Poly"
+        ]
+    },
+    {
+        "plugin_name": "JW-Modules",
+        "plugin_slug": "JW-Modules",
+        "module_name": "Arrange",
+        "module_slug": "Arrange",
+        "description": null,
+        "tags": [
+            "Sequencer",
+            "Utility",
+            "Switch",
+            "Poly"
+        ]
+    },
+    {
+        "plugin_name": "JW-Modules",
+        "plugin_slug": "JW-Modules",
+        "module_name": "Arrange16",
+        "module_slug": "Arrange16",
+        "description": null,
+        "tags": [
+            "Sequencer",
+            "Utility",
+            "Switch",
             "Poly"
         ]
     },
@@ -38771,6 +39465,61 @@
         ]
     },
     {
+        "plugin_name": "Ondas",
+        "plugin_slug": "Ondas",
+        "module_name": "Klok",
+        "module_slug": "Klok",
+        "description": "Clock generator with modulo outputs",
+        "tags": [
+            "Clock generator",
+            "Clock modulator"
+        ]
+    },
+    {
+        "plugin_name": "Ondas",
+        "plugin_slug": "Ondas",
+        "module_name": "Secu",
+        "module_slug": "Secu",
+        "description": "Step sequencer with probability & randomization",
+        "tags": [
+            "Sequencer",
+            "Clock modulator"
+        ]
+    },
+    {
+        "plugin_name": "Ondas",
+        "plugin_slug": "Ondas",
+        "module_name": "BaBum",
+        "module_slug": "BaBum",
+        "description": "Drum synthesizer",
+        "tags": [
+            "Drum"
+        ]
+    },
+    {
+        "plugin_name": "Ondas",
+        "plugin_slug": "Ondas",
+        "module_name": "Scener",
+        "module_slug": "Scener",
+        "description": "Scene-based channel mixer",
+        "tags": [
+            "Sequencer",
+            "Utility"
+        ]
+    },
+    {
+        "plugin_name": "Ondas",
+        "plugin_slug": "Ondas",
+        "module_name": "Distroi",
+        "module_slug": "Distroi",
+        "description": "Signal corruption effects",
+        "tags": [
+            "Effect",
+            "Distortion",
+            "Digital"
+        ]
+    },
+    {
         "plugin_name": "MSM",
         "plugin_slug": "MSM",
         "module_name": "ADSR",
@@ -39187,6 +39936,42 @@
         "tags": [
             "Oscillator",
             "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "van Ties",
+        "plugin_slug": "vanTies",
+        "module_name": "Sjoegele",
+        "module_slug": "Sjoegele",
+        "description": "double pendulum simulator",
+        "tags": [
+            "Random",
+            "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "RSBATech Modules",
+        "plugin_slug": "RSBATechModules",
+        "module_name": "Orestes One",
+        "module_slug": "OrestesOne",
+        "description": "Module control from Electra One Controller",
+        "tags": [
+            "External",
+            "Utility",
+            "MIDI",
+            "Controller"
+        ]
+    },
+    {
+        "plugin_name": "RSBATech Modules",
+        "plugin_slug": "RSBATechModules",
+        "module_name": "Pylades",
+        "module_slug": "Pylades",
+        "description": "Module control from TouchOSC",
+        "tags": [
+            "External",
+            "Utility",
+            "Controller"
         ]
     },
     {

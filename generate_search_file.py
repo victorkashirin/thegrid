@@ -3,7 +3,7 @@ from PIL import Image
 import os
 import math
 
-MANIFESTS_CACHE = "/Users/victorkashirin/code/Rack/vcv-rack-library/manifests-cache.json"
+MANIFESTS_CACHE = "./library/manifests-cache.json"
 
 def get_module_size(plugin_slug, module_slug):
     try:

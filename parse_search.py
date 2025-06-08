@@ -4,7 +4,7 @@ import os
 import requests
 import time
 
-folder = "/Users/victorkashirin/code/Rack/vcv-rack-library/manifests"
+folder = "./library/manifests"
 
 
 def parse_plugin_json_to_list(path: Path) -> list:
@@ -109,4 +109,4 @@ def download_images():
 if __name__ == "__main__":
     with open('parsed_plugins.json', 'w') as f:
         json.dump(parse_all_plugins(folder), f, indent=4)
-    # download_images()
+    download_images()
