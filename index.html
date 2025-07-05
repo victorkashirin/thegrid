@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VCV Rack Module Search</title>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            'inter': ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom styles for specific interactions that need CSS */
+    .tag-select-header::after {
+      content: '▼';
+      font-size: 12px;
+    }
+    
+    .tag-select-header.active::after {
+      content: '▲';
+    }
+  </style>
+</head>
+
+<body class="font-inter m-0 p-0 bg-gray-100 text-gray-800">
+  <div class="max-w-4xl mx-auto my-5 px-5 py-5 bg-white rounded-lg shadow-md">
+    <h1 class="text-center mb-5 text-indigo-600 text-2xl font-semibold">VCV Rack Module Search</h1>
+    <div class="flex flex-wrap items-center gap-2 mb-5">
+      <input type="text" id="search-input" placeholder="Search for modules..." 
+             class="flex-1 min-w-0 p-2.5 border border-gray-300 rounded text-base font-inter focus:outline-none focus:border-gray-500 focus:ring-2 focus:ring-gray-200">
+      <input type="number" id="size-input" placeholder="Size" min="1" 
+             class="w-20 p-2.5 border border-gray-300 rounded text-base font-inter focus:outline-none focus:border-gray-500 focus:ring-2 focus:ring-gray-200">
+      <select id="size-comparison" 
+              class="w-24 p-2.5 border border-gray-300 rounded text-base font-inter bg-white focus:outline-none focus:border-gray-500 focus:ring-2 focus:ring-gray-200">
+        <option value="max">Max</option>
+        <option value="min">Min</option>
+        <option value="exact">Exact</option>
+      </select>
+      <button id="reset-button" 
+              class="px-4 py-2.5 border border-gray-500 rounded text-base font-inter bg-white text-gray-900 cursor-pointer transition-all duration-200 ease-in-out hover:bg-gray-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-200 whitespace-nowrap">
+        Reset
+      </button>
+    </div>
+    <div class="mt-2.5 mb-2.5">
+      <div class="tag-select-container relative inline-block min-w-[150px] max-w-sm w-auto mb-5">
+        <div class="tag-select-header p-2.5 border border-gray-300 rounded text-base bg-white cursor-pointer flex justify-between items-center whitespace-nowrap hover:border-gray-500">
+          Filter by Tags
+        </div>
+        <div class="tag-select-options absolute top-full left-0 min-w-full bg-white border border-gray-300 rounded mt-1 shadow-lg max-h-48 overflow-y-auto z-10 hidden">
+          <label class="tag-option p-2 flex items-center cursor-pointer hover:bg-gray-100">
+            <input type="checkbox" value="Oscillator" class="mr-2"> Oscillator
+          </label>
+          <label class="tag-option p-2 flex items-center cursor-pointer hover:bg-gray-100">
+            <input type="checkbox" value="Sequencer" class="mr-2"> Sequencer
+          </label>
+          <label class="tag-option p-2 flex items-center cursor-pointer hover:bg-gray-100">
+            <input type="checkbox" value="Utility" class="mr-2"> Utility
+          </label>
+        </div>
+      </div>
+    </div>
+    <div id="results-count" class="mt-2.5 mb-2.5 text-sm"></div>
+    <div id="status-message" class="text-center p-4 bg-white rounded border border-gray-300 mt-5 hidden">Loading modules...</div>
+    <div id="results-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-5 min-h-[100px]"></div>
+    <div id="load-more-trigger" class="h-10 mt-5 w-full"></div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const searchInput = document.getElementById('search-input');
+      const resultsContainer = document.getElementById('results-container');
+      const statusMessage = document.getElementById('status-message');
+      const loadMoreTrigger = document.getElementById('load-more-trigger');
+      const tagSelectHeader = document.querySelector('.tag-select-header');
+      const tagSelectOptions = document.querySelector('.tag-select-options');
+      const tagCheckboxes = document.querySelectorAll('.tag-option input');
+
+      const RESULTS_BATCH_SIZE = 30; // Number of results to load initially and per scroll
+
+      let allModules = [];        // Stores all modules from JSON
+      let currentResultSet = [];  // Stores the current list being displayed (all or search results)
+      let fuse;                   // Fuse.js instance
+      let numDisplayedResults = 0;// Counter for currently displayed items
+      let isLoading = false;      // Flag to prevent multiple simultaneous loads
+      let observer;               // IntersectionObserver instance
+      let lastSearchQuery = '';   // Store the last search query
+      let lastSizeFilter = {      // Store the last size filter
+        size: '',
+        comparison: 'min'
+      };
+      let selectedTags = [];      // Store selected tags
+
+      // --- Tag Dropdown Logic ---
+      
+      // Toggle dropdown visibility
+      tagSelectHeader.addEventListener('click', function() {
+        const isOpen = tagSelectOptions.style.display === 'block';
+        tagSelectOptions.style.display = isOpen ? 'none' : 'block';
+        tagSelectHeader.classList.toggle('active', !isOpen);
+      });
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.tag-select-container')) {
+          tagSelectOptions.style.display = 'none';
+          tagSelectHeader.classList.remove('active');
+        }
+      });
+      
+      // Handle tag checkbox changes
+      tagCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+          updateSelectedTags();
+          performSearch(searchInput.value.trim());
+        });
+      });
+      
+      function updateSelectedTags() {
+        selectedTags = [];
+        tagCheckboxes.forEach(checkbox => {
+          if (checkbox.checked) {
+            selectedTags.push(checkbox.value);
+          }
+        });
+        
+        // Update the header text based on selection
+        if (selectedTags.length === 0) {
+          tagSelectHeader.textContent = 'Filter by Tags';
+        } else if (selectedTags.length === 1) {
+          tagSelectHeader.textContent = selectedTags[0];
+        } else {
+          tagSelectHeader.textContent = selectedTags.join(', ');
+        }
+        
+        // Make sure dropdown indicator is shown
+        if (!tagSelectHeader.textContent.includes('▼') && !tagSelectHeader.textContent.includes('▲')) {
+          tagSelectHeader.classList.add('has-indicator');
+        }
+      }
+
+      // --- Utility Functions ---
+
+      function showStatus(message, isError = false) {
+        statusMessage.textContent = message;
+        statusMessage.className = `text-center p-4 bg-white rounded border border-gray-300 mt-5 block ${isError ? 'text-red-500' : 'text-gray-600'}`;
+      }
+
+      function hideStatus() {
+        statusMessage.className = 'text-center p-4 bg-white rounded border border-gray-300 mt-5 hidden';
+      }
+
+      // --- Data Fetching ---
+
+      function fetchJsonData(filePath) {
+        isLoading = true;
+        showStatus('Loading modules...');
+        hideLoadMoreTrigger(); // Hide trigger while loading initial data
+        return fetch(filePath)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then(jsonData => {
+            // Transform the new format into the expected list of dictionaries
+            if (jsonData.headers && Array.isArray(jsonData.data)) {
+              // New format detected - transform it
+              return jsonData.data.map(row => {
+                const obj = {};
+                jsonData.headers.forEach((key, index) => {
+                  obj[key] = row[index];
+                });
+                return obj;
+              });
+            }
+            // If it's already in the old format (array of objects), return as is
+            return jsonData;
+          })
+          .catch(error => {
+            console.error('Error fetching JSON:', error);
+            showStatus('Failed to load module data. Please try refreshing.', true);
+            return null; // Indicate failure
+          })
+          .finally(() => {
+            isLoading = false;
+            // Status will be updated by the calling function
+          });
+      }
+
+      // --- Display Logic ---
+
+      function createResultCard(item) {
+        const card = document.createElement('div');
+        card.className = 'bg-gray-50 p-4 border border-gray-200 rounded-lg shadow-sm transition-all duration-200 ease-in-out hover:shadow-md flex flex-col items-center text-center';
+        // Use item.item for Fuse results, item directly for initial load
+        const moduleData = item.item ? item.item : item;
+        const score = item.score; // Get the score if it exists (from Fuse result)
+        const imageUrl = `images/${moduleData.plugin_slug}/${moduleData.module_slug}.webp`;
+
+        let scoreHtml = '';
+        if (score !== undefined) {
+          // Format score to 3 decimal places
+          scoreHtml = `<p class="text-xs text-gray-500 m-0 mb-1">Score: ${score.toFixed(8)}</p>`;
+        }
+
+        card.innerHTML = `
+                    <img src="${imageUrl}" alt="${moduleData.module_name}" loading="lazy" class="w-full rounded max-h-64 object-contain mb-2.5">
+                    <h3 class="m-0 mb-1 text-gray-900 text-lg font-semibold">${moduleData.module_name}</h3>
+                    <p class="m-0 mb-1 text-gray-600 text-sm">Plugin: ${moduleData.plugin_name}</p>
+                    ${scoreHtml}
+                    <p class="m-0 mb-1 text-gray-600 text-sm">${moduleData.description || ''}</p>
+                `;
+        // Handle missing images gracefully
+        const img = card.querySelector('img');
+        img.onerror = () => {
+          img.style.display = 'none'; // Hide broken image icon
+          // Optionally add a placeholder or text
+          const placeholder = document.createElement('p');
+          placeholder.textContent = '[No Image]';
+          placeholder.className = 'mt-2.5 text-gray-500';
+          card.insertBefore(placeholder, card.querySelector('h3'));
+        };
+        return card;
+      }
+
+      function displayBatch() {
+        if (isLoading) return; // Don't load if already loading
+        isLoading = true;
+
+        const fragment = document.createDocumentFragment();
+        const nextBatchEnd = Math.min(numDisplayedResults + RESULTS_BATCH_SIZE, currentResultSet.length);
+
+        for (let i = numDisplayedResults; i < nextBatchEnd; i++) {
+          fragment.appendChild(createResultCard(currentResultSet[i]));
+        }
+
+        resultsContainer.appendChild(fragment);
+        numDisplayedResults = nextBatchEnd;
+
+        // Hide trigger and disconnect observer if all items are displayed
+        if (numDisplayedResults >= currentResultSet.length) {
+          hideLoadMoreTrigger();
+          if (observer) {
+            observer.disconnect();
+          }
+        } else {
+          showLoadMoreTrigger(); // Ensure trigger is visible if more items exist
+        }
+
+        // Short delay to allow rendering before allowing next load
+        setTimeout(() => {
+          isLoading = false;
+        }, 100);
+      }
+
+      function resetAndDisplayFirstBatch(resultSet) {
+        currentResultSet = resultSet;
+        resultsContainer.innerHTML = ''; // Clear previous results
+        numDisplayedResults = 0;
+        hideStatus(); // Clear status message initially
+
+        // Update results count
+        const resultsCount = document.getElementById('results-count');
+        resultsCount.textContent = `Found ${resultSet.length} module${resultSet.length !== 1 ? 's' : ''}`;
+
+        if (observer) {
+          observer.disconnect(); // Disconnect previous observer if exists
+        }
+
+        if (currentResultSet.length === 0) {
+          showStatus('No matching modules found.');
+          hideLoadMoreTrigger();
+        } else {
+          displayBatch(); // Display the first batch
+          // Only setup observer if there are more results to load
+          if (numDisplayedResults < currentResultSet.length) {
+            setupIntersectionObserver();
+            showLoadMoreTrigger();
+          } else {
+            hideLoadMoreTrigger();
+          }
+        }
+      }
+
+      // --- Search Logic ---
+
+      function filterBySize(modules) {
+        const sizeInput = document.getElementById('size-input');
+        const sizeComparison = document.getElementById('size-comparison');
+        const size = sizeInput.value.trim();
+        const comparison = sizeComparison.value;
+
+        if (!size) return modules; // If no size specified, return all modules
+
+        const sizeNum = parseInt(size);
+        return modules.filter(module => {
+          const moduleSize = parseInt(module.size) || 0;
+          switch (comparison) {
+            case 'min':
+              return moduleSize >= sizeNum;
+            case 'max':
+              return moduleSize <= sizeNum;
+            case 'exact':
+              return moduleSize === sizeNum;
+            default:
+              return true;
+          }
+        });
+      }
+
+      function filterByTags(modules) {
+        if (selectedTags.length === 0) return modules; // If no tags selected, return all modules
+        
+        return modules.filter(module => {
+          if (!module.tags) return false;
+          
+          // Check if module has any of the selected tags
+          let moduleTags;
+          if (Array.isArray(module.tags)) {
+            moduleTags = module.tags.map(tag => tag.trim());
+          } else if (typeof module.tags === 'string') {
+            moduleTags = module.tags.split(',').map(tag => tag.trim());
+          } else {
+            return false;
+          }
+          return selectedTags.every(tag => moduleTags.includes(tag));
+        });
+      }
+
+      function performSearch(query) {
+        if (!fuse) {
+          showStatus('Module data is still loading...', true);
+          return;
+        }
+
+        // Store current filter values
+        lastSearchQuery = query;
+        lastSizeFilter = {
+          size: document.getElementById('size-input').value.trim(),
+          comparison: document.getElementById('size-comparison').value
+        };
+
+        // First apply size filter to all modules
+        let filteredModules = filterBySize(allModules);
+        
+        // Then apply tag filter
+        filteredModules = filterByTags(filteredModules);
+
+        if (query === '') {
+          // If query is empty, show filtered modules (already sorted by timestamp)
+          resetAndDisplayFirstBatch(filteredModules);
+        } else {
+          // Create new Fuse instance with filtered modules
+          const filteredFuse = new Fuse(filteredModules, fuseOptions);
+          const results = filteredFuse.search(query);
+          resetAndDisplayFirstBatch(results);
+        }
+      }
+
+      function resetFilters() {
+        // Clear search input
+        searchInput.value = '';
+        
+        // Clear size input
+        document.getElementById('size-input').value = '';
+        
+        // Reset comparison to default
+        document.getElementById('size-comparison').value = 'max';
+        
+        // Uncheck all tag checkboxes
+        tagCheckboxes.forEach(checkbox => {
+          checkbox.checked = false;
+        });
+        updateSelectedTags();
+        
+        // Reset stored values
+        lastSearchQuery = '';
+        lastSizeFilter = {
+          size: '',
+          comparison: 'max'
+        };
+        selectedTags = [];
+        
+        // Show all modules
+        resetAndDisplayFirstBatch(allModules);
+      }
+
+      // --- Intersection Observer Logic ---
+
+      function hideLoadMoreTrigger() {
+        loadMoreTrigger.style.display = 'none';
+      }
+      function showLoadMoreTrigger() {
+        loadMoreTrigger.style.display = 'block';
+      }
+
+      function handleIntersection(entries) {
+        // Use entries[0] as we observe only one element
+        if (entries[0].isIntersecting && !isLoading && numDisplayedResults < currentResultSet.length) {
+          // console.log('Loading more...'); // For debugging
+          displayBatch(); // Load the next batch of results
+        }
+      }
+
+      function setupIntersectionObserver() {
+        // Ensure previous observer is disconnected before creating a new one
+        if (observer) {
+          observer.disconnect();
+        }
+
+        const options = {
+          root: null, // Use the viewport as the root
+          rootMargin: '0px',
+          threshold: 0.1 // Trigger when 10% of the target is visible
+        };
+        observer = new IntersectionObserver(handleIntersection, options);
+        observer.observe(loadMoreTrigger); // Start observing the trigger element
+      }
+
+      // --- Initialization ---
+
+      // Fuse.js options
+      const fuseOptions = {
+        keys: [
+          { name: 'module_name', weight: 7.0 }, // Prioritize module name even more
+          { name: 'plugin_name', weight: 3.0 }, // Slightly less boost for plugin name
+          { name: 'description', weight: 0.5 }, // Keep description weight low
+          { name: 'tags', weight: 0.5 }        // Keep tags weight low
+        ],
+        includeScore: true,
+        shouldSort: true,
+        threshold: 0.5, // Make threshold even stricter
+        minMatchCharLength: 3,
+        distance: 3, // Reduce fuzzy search distance significantly
+      };
+
+      // Load data and initialize
+      fetchJsonData('search_file.json') // Updated to use the new file
+        .then(jsonData => {
+          if (!jsonData) return; // Stop if fetching failed
+
+          allModules = jsonData;
+
+          // Sort all modules by timestamp in descending order once after loading
+          allModules.sort((a, b) => {
+            // Handle missing timestamps by treating them as oldest
+            const timestampA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
+            const timestampB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+            return timestampB - timestampA; // Descending order
+          });
+
+          if (allModules.length === 0) {
+            showStatus('No modules found in the data source.', true);
+            hideLoadMoreTrigger();
+            return;
+          }
+
+          // Initialize Fuse.js
+          fuse = new Fuse(allModules, fuseOptions);
+
+          // Initial display (first batch of all modules)
+          resetAndDisplayFirstBatch(allModules);
+          // Status is hidden within resetAndDisplayFirstBatch if successful
+
+        }); // No .finally here, status handled within functions
+
+      // Event listeners for search and filter inputs
+      let debounceTimer;
+      searchInput.addEventListener('input', function () {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          performSearch(this.value.trim());
+        }, 250);
+      });
+
+      document.getElementById('size-input').addEventListener('input', function() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          performSearch(searchInput.value.trim());
+        }, 250);
+      });
+
+      document.getElementById('size-comparison').addEventListener('change', function() {
+        performSearch(searchInput.value.trim());
+      });
+
+      // Add reset button event listener
+      document.getElementById('reset-button').addEventListener('click', resetFilters);
+
+    });
+  </script>
+</body>
+
+</html>
