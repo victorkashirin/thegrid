@@ -167,7 +167,19 @@
         isLoading = true;
         showStatus('Loading modules...');
         hideLoadMoreTrigger(); // Hide trigger while loading initial data
-        return fetch(filePath)
+        
+        // Add cache-busting parameter to prevent caching
+        const timestamp = new Date().getTime();
+        const urlWithCacheBuster = `${filePath}?t=${timestamp}`;
+        
+        return fetch(urlWithCacheBuster, {
+          method: 'GET',
+          headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+          }
+        })
           .then(response => {
             if (!response.ok) {
               throw new Error(`HTTP error! Status: ${response.status}`);

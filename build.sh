@@ -39,4 +39,4 @@ echo "Done!"
 mkdir -p site/images
 cp index.html site/
 mv search_file.json site/
-cp -r cache/ site/images/
+cp -r cache/. site/images/
