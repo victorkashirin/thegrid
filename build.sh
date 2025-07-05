@@ -38,5 +38,5 @@ echo "Done!"
 
 mkdir -p site/images
 cp index.html site/
-cp search_file.json site/
+mv search_file.json site/
 cp -r images/ site/images/
