@@ -34,3 +34,9 @@ echo "Generating search file..."
 python3 generate_search_file.py
 
 echo "Done!"
+
+
+mkdir -p site/images
+cp index.html site/
+cp search_file.json site/
+cp -r images/ site/images/
