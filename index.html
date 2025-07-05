@@ -29,16 +29,16 @@
       color: #6b7280;
       transition: transform 0.2s ease;
     }
-    
+
     .tag-select-header.active::after {
       content: '▲';
       transform: rotate(180deg);
     }
-    
+
     .tag-select-header:hover::after {
       color: #374151;
     }
-    
+
     .tag-badge {
       display: inline-flex;
       align-items: center;
@@ -54,7 +54,7 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    
+
     .tag-remove {
       margin-left: 0.5rem;
       cursor: pointer;
@@ -62,11 +62,11 @@
       color: #6366f1;
       transition: color 0.2s ease;
     }
-    
+
     .tag-remove:hover {
       color: #dc2626;
     }
-    
+
     .tag-counter {
       background-color: #6366f1;
       color: white;
@@ -80,62 +80,63 @@
       font-weight: 600;
       margin-left: 0.5rem;
     }
-    
+
     .checkbox-custom {
       accent-color: #6366f1;
       width: 1rem;
       height: 1rem;
     }
-    
+
     .tag-select-options {
       scrollbar-width: thin;
       scrollbar-color: #d1d5db #f9fafb;
     }
-    
+
     .tag-select-options::-webkit-scrollbar {
       width: 6px;
     }
-    
+
     .tag-select-options::-webkit-scrollbar-track {
       background: #f9fafb;
       border-radius: 3px;
     }
-    
+
     .tag-select-options::-webkit-scrollbar-thumb {
       background: #d1d5db;
       border-radius: 3px;
     }
-    
+
     .tag-select-options::-webkit-scrollbar-thumb:hover {
       background: #9ca3af;
     }
-    
+
     /* Enhanced input styling */
     .search-input-container {
       position: relative;
     }
-    
+
     .size-filter-group {
       background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
       border: 1px solid #e2e8f0;
     }
-    
+
     .size-filter-group:hover {
       background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
     }
-    
+
     /* Input focus effects */
-    input:focus, select:focus {
+    input:focus,
+    select:focus {
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
     }
-    
+
     /* Button hover effects */
     #reset-button:hover {
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
-    
+
     /* Responsive adjustments */
     @media (max-width: 768px) {
       .size-filter-group {
@@ -143,7 +144,7 @@
         gap: 0.5rem;
         align-items: stretch;
       }
-      
+
       .size-filter-group input,
       .size-filter-group select {
         width: 100%;
@@ -157,60 +158,67 @@
     <h1 class="text-center mb-5 text-indigo-600 text-2xl font-semibold">VCV Rack Module Search</h1>
     <div class="flex flex-wrap items-center gap-3 mb-6">
       <div class="flex-1 min-w-0 relative">
-        <input type="text" id="search-input" placeholder="Search for modules..." 
-               class="w-full p-3 pl-10 border border-gray-300 rounded-lg text-base font-inter bg-white shadow-sm transition-all duration-200 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 focus:shadow-md hover:border-gray-400">
+        <input type="text" id="search-input" placeholder="Search for modules..."
+          class="w-full p-3 pl-10 border border-gray-300 rounded-lg text-base font-inter bg-white shadow-sm transition-all duration-200 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 focus:shadow-md hover:border-gray-400">
         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </div>
       </div>
       <div class="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg p-2 shadow-sm size-filter-group">
         <label class="text-sm font-medium text-gray-700 whitespace-nowrap">Module Size:</label>
-        <input type="number" id="size-input" placeholder="HP" min="1" 
-               class="w-16 p-2 border border-gray-300 rounded-md text-sm font-inter bg-white shadow-sm transition-all duration-200 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200 hover:border-gray-400">
-        <select id="size-comparison" 
-                class="p-2 border border-gray-300 rounded-md text-sm font-inter bg-white shadow-sm transition-all duration-200 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200 hover:border-gray-400">
+        <input type="number" id="size-input" placeholder="HP" min="1"
+          class="w-16 p-2 border border-gray-300 rounded-md text-sm font-inter bg-white shadow-sm transition-all duration-200 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200 hover:border-gray-400">
+        <select id="size-comparison"
+          class="p-2 border border-gray-300 rounded-md text-sm font-inter bg-white shadow-sm transition-all duration-200 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200 hover:border-gray-400">
           <option value="max">Max</option>
           <option value="min">Min</option>
           <option value="exact">Exact</option>
         </select>
       </div>
-      <button id="reset-button" 
-              class="px-4 py-2.5 border border-gray-300 rounded-lg text-base font-inter bg-white text-gray-700 cursor-pointer transition-all duration-200 ease-in-out hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 whitespace-nowrap shadow-sm font-medium">
+      <button id="reset-button"
+        class="px-4 py-2.5 border border-gray-300 rounded-lg text-base font-inter bg-white text-gray-700 cursor-pointer transition-all duration-200 ease-in-out hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 whitespace-nowrap shadow-sm font-medium">
         Reset Filters
       </button>
     </div>
     <div class="mt-2.5 mb-5">
       <div class="tag-select-container relative inline-block min-w-[200px] max-w-md w-auto">
-        <div class="tag-select-header p-3 border border-gray-300 rounded-lg text-base bg-white cursor-pointer flex justify-between items-center shadow-sm transition-all duration-200 hover:border-indigo-400 hover:shadow-md focus-within:ring-2 focus-within:ring-indigo-200">
+        <div
+          class="tag-select-header p-3 border border-gray-300 rounded-lg text-base bg-white cursor-pointer flex justify-between items-center shadow-sm transition-all duration-200 hover:border-indigo-400 hover:shadow-md focus-within:ring-2 focus-within:ring-indigo-200">
           <div class="flex items-center flex-wrap gap-1 flex-1 min-w-0">
             <span class="tag-select-text text-gray-700 font-medium">Filter by Tags</span>
             <div class="selected-tags-container hidden flex-wrap gap-1"></div>
           </div>
         </div>
-        <div class="tag-select-options absolute top-full left-0 min-w-full bg-white border border-gray-300 rounded-lg mt-2 shadow-xl max-h-60 overflow-y-auto z-20 hidden">
+        <div
+          class="tag-select-options absolute top-full left-0 min-w-full bg-white border border-gray-300 rounded-lg mt-2 shadow-xl max-h-60 overflow-y-auto z-20 hidden">
           <div class="p-2 border-b border-gray-100 bg-gray-50">
             <p class="text-sm font-medium text-gray-700 mb-1">Select Tags</p>
             <p class="text-xs text-gray-500">Choose one or more tags to filter modules</p>
           </div>
-          <label class="tag-option p-3 flex items-center cursor-pointer hover:bg-indigo-50 transition-colors duration-150">
-            <input type="checkbox" value="Oscillator" class="checkbox-custom mr-3"> 
+          <label
+            class="tag-option p-3 flex items-center cursor-pointer hover:bg-indigo-50 transition-colors duration-150">
+            <input type="checkbox" value="Oscillator" class="checkbox-custom mr-3">
             <span class="text-gray-700 font-medium">Oscillator</span>
           </label>
-          <label class="tag-option p-3 flex items-center cursor-pointer hover:bg-indigo-50 transition-colors duration-150">
-            <input type="checkbox" value="Sequencer" class="checkbox-custom mr-3"> 
+          <label
+            class="tag-option p-3 flex items-center cursor-pointer hover:bg-indigo-50 transition-colors duration-150">
+            <input type="checkbox" value="Sequencer" class="checkbox-custom mr-3">
             <span class="text-gray-700 font-medium">Sequencer</span>
           </label>
-          <label class="tag-option p-3 flex items-center cursor-pointer hover:bg-indigo-50 transition-colors duration-150">
-            <input type="checkbox" value="Utility" class="checkbox-custom mr-3"> 
+          <label
+            class="tag-option p-3 flex items-center cursor-pointer hover:bg-indigo-50 transition-colors duration-150">
+            <input type="checkbox" value="Utility" class="checkbox-custom mr-3">
             <span class="text-gray-700 font-medium">Utility</span>
           </label>
         </div>
       </div>
     </div>
     <div id="results-count" class="mt-2.5 mb-2.5 text-sm"></div>
-    <div id="status-message" class="text-center p-4 bg-white rounded border border-gray-300 mt-5 hidden">Loading modules...</div>
+    <div id="status-message" class="text-center p-4 bg-white rounded border border-gray-300 mt-5 hidden">Loading
+      modules...</div>
     <div id="results-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-5 min-h-[100px]"></div>
     <div id="load-more-trigger" class="h-10 mt-5 w-full"></div>
   </div>
@@ -241,30 +249,30 @@
       let selectedTags = [];      // Store selected tags
 
       // --- Tag Dropdown Logic ---
-      
+
       // Toggle dropdown visibility
-      tagSelectHeader.addEventListener('click', function() {
+      tagSelectHeader.addEventListener('click', function () {
         const isOpen = tagSelectOptions.style.display === 'block';
         tagSelectOptions.style.display = isOpen ? 'none' : 'block';
         tagSelectHeader.classList.toggle('active', !isOpen);
       });
-      
+
       // Close dropdown when clicking outside
-      document.addEventListener('click', function(e) {
+      document.addEventListener('click', function (e) {
         if (!e.target.closest('.tag-select-container')) {
           tagSelectOptions.style.display = 'none';
           tagSelectHeader.classList.remove('active');
         }
       });
-      
+
       // Handle tag checkbox changes
       tagCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
+        checkbox.addEventListener('change', function () {
           updateSelectedTags();
           performSearch(searchInput.value.trim());
         });
       });
-      
+
       function updateSelectedTags() {
         selectedTags = [];
         tagCheckboxes.forEach(checkbox => {
@@ -272,10 +280,10 @@
             selectedTags.push(checkbox.value);
           }
         });
-        
+
         const tagSelectText = document.querySelector('.tag-select-text');
         const selectedTagsContainer = document.querySelector('.selected-tags-container');
-        
+
         // Update the header display based on selection
         if (selectedTags.length === 0) {
           tagSelectText.textContent = 'Filter by Tags';
@@ -284,7 +292,7 @@
         } else {
           tagSelectText.textContent = selectedTags.length === 1 ? '1 tag selected' : `${selectedTags.length} tags selected`;
           selectedTagsContainer.classList.remove('hidden');
-          
+
           // Create tag badges
           selectedTagsContainer.innerHTML = selectedTags.map(tag => `
             <span class="tag-badge">
@@ -292,10 +300,10 @@
               <span class="tag-remove" data-tag="${tag}">×</span>
             </span>
           `).join('');
-          
+
           // Add click handlers to remove buttons
           selectedTagsContainer.querySelectorAll('.tag-remove').forEach(removeBtn => {
-            removeBtn.addEventListener('click', function(e) {
+            removeBtn.addEventListener('click', function (e) {
               e.stopPropagation();
               const tagToRemove = this.getAttribute('data-tag');
               const checkbox = Array.from(tagCheckboxes).find(cb => cb.value === tagToRemove);
@@ -326,11 +334,11 @@
         isLoading = true;
         showStatus('Loading modules...');
         hideLoadMoreTrigger(); // Hide trigger while loading initial data
-        
+
         // Add cache-busting parameter to prevent caching
         const timestamp = new Date().getTime();
         const urlWithCacheBuster = `${filePath}?t=${timestamp}`;
-        
+
         return fetch(urlWithCacheBuster, {
           method: 'GET',
           headers: {
@@ -493,10 +501,10 @@
 
       function filterByTags(modules) {
         if (selectedTags.length === 0) return modules; // If no tags selected, return all modules
-        
+
         return modules.filter(module => {
           if (!module.tags) return false;
-          
+
           // Check if module has any of the selected tags
           let moduleTags;
           if (Array.isArray(module.tags)) {
@@ -508,6 +516,46 @@
           }
           return selectedTags.every(tag => moduleTags.includes(tag));
         });
+      }
+
+      // Helper functions for efficient filtering of search results
+      function matchesSizeFilter(module) {
+        const sizeInput = document.getElementById('size-input');
+        const sizeComparison = document.getElementById('size-comparison');
+        const size = sizeInput.value.trim();
+        const comparison = sizeComparison.value;
+
+        if (!size) return true; // If no size specified, matches all
+
+        const sizeNum = parseInt(size);
+        const moduleSize = parseInt(module.size) || 0;
+
+        switch (comparison) {
+          case 'min':
+            return moduleSize >= sizeNum;
+          case 'max':
+            return moduleSize <= sizeNum;
+          case 'exact':
+            return moduleSize === sizeNum;
+          default:
+            return true;
+        }
+      }
+
+      function matchesTagFilter(module) {
+        if (selectedTags.length === 0) return true; // If no tags selected, matches all
+
+        if (!module.tags) return false;
+
+        let moduleTags;
+        if (Array.isArray(module.tags)) {
+          moduleTags = module.tags.map(tag => tag.trim());
+        } else if (typeof module.tags === 'string') {
+          moduleTags = module.tags.split(',').map(tag => tag.trim());
+        } else {
+          return false;
+        }
+        return selectedTags.every(tag => moduleTags.includes(tag));
       }
 
       function performSearch(query) {
@@ -523,39 +571,41 @@
           comparison: document.getElementById('size-comparison').value
         };
 
-        // First apply size filter to all modules
-        let filteredModules = filterBySize(allModules);
-        
-        // Then apply tag filter
-        filteredModules = filterByTags(filteredModules);
-
         if (query === '') {
-          // If query is empty, show filtered modules (already sorted by timestamp)
+          // If query is empty, apply filters directly and show results
+          let filteredModules = filterBySize(allModules);
+          filteredModules = filterByTags(filteredModules);
           resetAndDisplayFirstBatch(filteredModules);
         } else {
-          // Create new Fuse instance with filtered modules
-          const filteredFuse = new Fuse(filteredModules, fuseOptions);
-          const results = filteredFuse.search(query);
-          resetAndDisplayFirstBatch(results);
+          // Use main Fuse instance for search, then filter results
+          const searchResults = fuse.search(query);
+
+          // Apply size and tag filters to search results
+          let filteredResults = searchResults.filter(result => {
+            const module = result.item;
+            return matchesSizeFilter(module) && matchesTagFilter(module);
+          });
+
+          resetAndDisplayFirstBatch(filteredResults);
         }
       }
 
       function resetFilters() {
         // Clear search input
         searchInput.value = '';
-        
+
         // Clear size input
         document.getElementById('size-input').value = '';
-        
+
         // Reset comparison to default
         document.getElementById('size-comparison').value = 'max';
-        
+
         // Uncheck all tag checkboxes
         tagCheckboxes.forEach(checkbox => {
           checkbox.checked = false;
         });
         updateSelectedTags();
-        
+
         // Reset stored values
         lastSearchQuery = '';
         lastSizeFilter = {
@@ -563,7 +613,7 @@
           comparison: 'max'
         };
         selectedTags = [];
-        
+
         // Show all modules
         resetAndDisplayFirstBatch(allModules);
       }
@@ -607,13 +657,15 @@
         keys: [
           { name: 'module_name', weight: 7.0 }, // Prioritize module name even more
           { name: 'plugin_name', weight: 3.0 }, // Slightly less boost for plugin name
-          { name: 'description', weight: 0.5 }, // Keep description weight low
+          { name: 'description', weight: 0.8 }, // Keep description weight low
           { name: 'tags', weight: 0.5 }        // Keep tags weight low
         ],
         includeScore: true,
         shouldSort: true,
-        threshold: 0.5, // Make threshold even stricter
-        minMatchCharLength: 3,
+        threshold: 0.4, // Make threshold even stricter
+        minMatchCharLength: 2,
+        ignoreLocation: true,
+        findAllMatches: true,
         distance: 3, // Reduce fuzzy search distance significantly
       };
 
@@ -656,14 +708,14 @@
         }, 250);
       });
 
-      document.getElementById('size-input').addEventListener('input', function() {
+      document.getElementById('size-input').addEventListener('input', function () {
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => {
           performSearch(searchInput.value.trim());
         }, 250);
       });
 
-      document.getElementById('size-comparison').addEventListener('change', function() {
+      document.getElementById('size-comparison').addEventListener('change', function () {
         performSearch(searchInput.value.trim());
       });
 
