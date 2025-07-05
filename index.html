@@ -196,7 +196,6 @@
           class="tag-select-options absolute top-full left-0 min-w-full bg-white border border-gray-300 rounded-lg mt-2 shadow-xl max-h-60 overflow-y-auto z-20 hidden">
           <div class="p-2 border-b border-gray-100 bg-gray-50">
             <p class="text-sm font-medium text-gray-700 mb-1">Select Tags</p>
-            <p class="text-xs text-gray-500">Choose one or more tags to filter modules</p>
           </div>
           <label
             class="tag-option p-3 flex items-center cursor-pointer hover:bg-indigo-50 transition-colors duration-150">
@@ -290,7 +289,8 @@
           selectedTagsContainer.classList.add('hidden');
           selectedTagsContainer.innerHTML = '';
         } else {
-          tagSelectText.textContent = selectedTags.length === 1 ? '1 tag selected' : `${selectedTags.length} tags selected`;
+          // tagSelectText.textContent = selectedTags.length === 1 ? '1 tag selected' : `${selectedTags.length} tags selected`;
+          tagSelectText.textContent = '';
           selectedTagsContainer.classList.remove('hidden');
 
           // Create tag badges
@@ -382,10 +382,14 @@
       // --- Display Logic ---
 
       function createResultCard(item) {
-        const card = document.createElement('div');
-        card.className = 'bg-gray-50 p-4 border border-gray-200 rounded-lg shadow-sm transition-all duration-200 ease-in-out hover:shadow-md flex flex-col items-center text-center';
-        // Use item.item for Fuse results, item directly for initial load
         const moduleData = item.item ? item.item : item;
+        const card = document.createElement('a');
+        card.href = `https://library.vcvrack.com/${moduleData.plugin_slug}/${moduleData.module_slug}`;
+        card.target = '_blank';
+        card.rel = 'noopener noreferrer';
+        card.className = 'bg-gray-50 p-4 border border-gray-200 rounded-lg shadow-sm transition-all duration-200 ease-in-out hover:shadow-md flex flex-col items-center text-center no-underline text-inherit hover:bg-gray-100';
+        // Use item.item for Fuse results, item directly for initial load
+
         const score = item.score; // Get the score if it exists (from Fuse result)
         const imageUrl = `images/${moduleData.plugin_slug}/${moduleData.module_slug}.webp`;
 
