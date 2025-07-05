@@ -1492,6 +1492,60 @@
         ]
     },
     {
+        "plugin_name": "GPrackmodules",
+        "plugin_slug": "GP",
+        "module_name": "AB4",
+        "module_slug": "AB4",
+        "description": "4 Channel A/B Switcher",
+        "tags": [
+            "Switch",
+            "Switch",
+            "Utility",
+            "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "GPrackmodules",
+        "plugin_slug": "GP",
+        "module_name": "Chained Mixer Channel",
+        "module_slug": "ChainMixerChannel",
+        "description": "Channel Strip for Chained Mixer",
+        "tags": [
+            "Mixer"
+        ]
+    },
+    {
+        "plugin_name": "GPrackmodules",
+        "plugin_slug": "GP",
+        "module_name": "Chained Mixer Master Section",
+        "module_slug": "ChainMixerMaster",
+        "description": "Master section for Chained Mixer",
+        "tags": [
+            "Mixer"
+        ]
+    },
+    {
+        "plugin_name": "GPrackmodules",
+        "plugin_slug": "GP",
+        "module_name": "Chained Mixer Aux Section",
+        "module_slug": "ChainMixerAux",
+        "description": "Aux section for Chained Mixer",
+        "tags": [
+            "Mixer"
+        ]
+    },
+    {
+        "plugin_name": "GPrackmodules",
+        "plugin_slug": "GP",
+        "module_name": "Stereo Chorus",
+        "module_slug": "StereoChorus",
+        "description": "Stereo Chorus with up to four voices",
+        "tags": [
+            "Chorus",
+            "Effect"
+        ]
+    },
+    {
         "plugin_name": "Hugelton Instruments",
         "plugin_slug": "Hugelton",
         "module_name": "K102 Digital Complex Oscillator",
@@ -2387,6 +2441,7 @@
             "Attenuator",
             "Function Generator",
             "Logic",
+            "Polyphonic",
             "Sequencer",
             "Sample and hold",
             "Utility"
@@ -2409,7 +2464,7 @@
         "plugin_slug": "StochasticTelegraph",
         "module_name": "Fermata",
         "module_slug": "Fermata",
-        "description": "Write much longer text notes, and various sizes of labels. Fermata is resizable, scrolls, has font and color choices, and more.",
+        "description": "Write much longer text notes, and various sizes of labels. Fermata is resizable, scrolls, has font, font size, and color choices, and more.",
         "tags": [
             "Blank",
             "Utility",
@@ -2433,7 +2488,7 @@
         "plugin_slug": "StochasticTelegraph",
         "module_name": "TTY",
         "module_slug": "TTY",
-        "description": "Logs values from cables and/or text messages from Tipsy text sources (e.g., BASICally, Memory). Makes monitoring of values or logging far easier. TTY is resizable, scrolls, has font and color choices, and more.",
+        "description": "Logs values from cables and/or text messages from Tipsy text sources (e.g., BASICally, Memory). Makes monitoring of values or logging far easier. TTY is resizable, scrolls, has font, font size, and color choices, and more.",
         "tags": [
             "Recording",
             "Utility",
@@ -7639,7 +7694,7 @@
         "plugin_slug": "SanguineMonsters",
         "module_name": "Hydra",
         "module_slug": "Sanguine-SuperSwitch81",
-        "description": "An 8 to 1 switch/sequencer that can avoid consecutive random repeated values; can be one shot, and can be reset to either no step value or the first step.",
+        "description": "8 to 1 switch/sequencer that can avoid consecutive random repeated values; can be one shot, and can be reset to either no step value or the first step",
         "tags": [
             "Switch",
             "Random",
@@ -7652,7 +7707,7 @@
         "plugin_slug": "SanguineMonsters",
         "module_name": "Gegenees",
         "module_slug": "Sanguine-SuperSwitch18",
-        "description": "A 1 to 8 switch/sequencer that can avoid consecutive random repeated values; can be one shot, and can be reset to either no step value or the first step.",
+        "description": "1 to 8 switch/sequencer that can avoid consecutive random repeated values; can be one shot, and can be reset to either no step value or the first step",
         "tags": [
             "Switch",
             "Random",
@@ -7688,7 +7743,7 @@
         "plugin_slug": "SanguineMonsters",
         "module_name": "Oraculus",
         "module_slug": "Sanguine-Monsters-Oraculus",
-        "description": "n to 1 switch/sequencer that takes a polyphonic cable input.",
+        "description": "n to 1 switch/sequencer that can select its output from a polyphonic cable input",
         "tags": [
             "Utility",
             "Polyphonic",
@@ -7700,7 +7755,7 @@
         "plugin_slug": "SanguineMonsters",
         "module_name": "Raiju",
         "module_slug": "Sanguine-Monsters-Raiju",
-        "description": "A flexible, fixed voltage source that can clone its output up to 16 channels and has one channel with a single copy of every selected voltage.",
+        "description": "Flexible, fixed voltage source that can clone its output up to 16 channels and has one channel with a single copy of every selected voltage",
         "tags": [
             "Utility",
             "Polyphonic"
@@ -7711,7 +7766,7 @@
         "plugin_slug": "SanguineMonsters",
         "module_name": "Sphinx",
         "module_slug": "Sanguine-Monsters-Sphinx",
-        "description": "An euclidean sequencer with different modes.",
+        "description": "Euclidean sequencer with different modes",
         "tags": [
             "Sequencer"
         ]
@@ -7721,7 +7776,7 @@
         "plugin_slug": "SanguineMonsters",
         "module_name": "Brainz",
         "module_slug": "Sanguine-Monsters-Brainz",
-        "description": "A master control center intended to make synchronizing audio and video files from different recorders easier.",
+        "description": "Master control center intended to make synchronizing audio and video files from different recorders easier",
         "tags": [
             "Sequencer",
             "Utility",
@@ -7733,7 +7788,7 @@
         "plugin_slug": "SanguineMonsters",
         "module_name": "Bukavac",
         "module_slug": "Sanguine-Monsters-Bukavac",
-        "description": "A noise generator with a plethora of colors... and Perlin",
+        "description": "Noise generator with a plethora of colors... and Perlin",
         "tags": [
             "Noise"
         ]
@@ -7743,7 +7798,7 @@
         "plugin_slug": "SanguineMonsters",
         "module_name": "Dungeon",
         "module_slug": "Sanguine-Monsters-Dungeon",
-        "description": "A sample and hold, track and hold, hold and track and white noise source.",
+        "description": "Sample and hold, track and hold, hold and track and white noise source with light up faceplate",
         "tags": [
             "Noise",
             "Sample and hold",
@@ -7755,7 +7810,7 @@
         "plugin_slug": "SanguineMonsters",
         "module_name": "Kitsune",
         "module_slug": "Sanguine-Kitsune",
-        "description": "Attenuate; invert, and offset up to 4 voltages",
+        "description": "Four polyphonic attenuverters, offsetters and inverters with user selectable smart input normalling.",
         "tags": [
             "Attenuator",
             "Quad",
@@ -7767,7 +7822,7 @@
         "plugin_slug": "SanguineMonsters",
         "module_name": "Oubliette",
         "module_slug": "Sanguine-Oubliette",
-        "description": "A null sink and cable holder for your input and output wires. Also works as a null voltage source.",
+        "description": "Null sink and cable holder for input and output wires... doubles as a null voltage source",
         "tags": [
             "Utility"
         ]
@@ -7777,7 +7832,7 @@
         "plugin_slug": "SanguineMonsters",
         "module_name": "Medusa",
         "module_slug": "Sanguine-Medusa",
-        "description": "A normalled, polyphonic mega multiple with 32 inputs and outputs",
+        "description": "Normalled, polyphonic smart mega multiple with 32 inputs and outputs",
         "tags": [
             "Multiple",
             "Polyphonic"
@@ -7822,9 +7877,67 @@
         "plugin_slug": "SanguineMonsters",
         "module_name": "Alembic",
         "module_slug": "Sanguine-Alembic",
-        "description": "An expander for Alchemist providing gain CV control for every channel and individual post-fader channel outputs",
+        "description": "Expander for Alchemist that provides gain CV control for every channel and individual post-fader channel outputs",
         "tags": [
             "Expander"
+        ]
+    },
+    {
+        "plugin_name": "Sanguine Monsters",
+        "plugin_slug": "SanguineMonsters",
+        "module_name": "Denki",
+        "module_slug": "Sanguine-Denki",
+        "description": "Expander for Kitsune providing gain and offset CV control for every channel",
+        "tags": [
+            "Expander",
+            "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "Sanguine Monsters",
+        "plugin_slug": "SanguineMonsters",
+        "module_name": "Chronos",
+        "module_slug": "Sanguine-Monsters-Chronos",
+        "description": "Four polyphonic low-frequency oscillators",
+        "tags": [
+            "Low-frequency oscillator",
+            "Polyphonic",
+            "Quad"
+        ]
+    },
+    {
+        "plugin_name": "Sanguine Monsters",
+        "plugin_slug": "SanguineMonsters",
+        "module_name": "Fortuna",
+        "module_slug": "Sanguine-Fortuna",
+        "description": "Pair of polyphonic Bernoulli-like random signal routers with integrated crossfader",
+        "tags": [
+            "Dual",
+            "Polyphonic",
+            "Random"
+        ]
+    },
+    {
+        "plugin_name": "Sanguine Monsters",
+        "plugin_slug": "SanguineMonsters",
+        "module_name": "Manus",
+        "module_slug": "Sanguine-Manus",
+        "description": "Expander for Gegeenes and Hydra that provides CV trigger step selection",
+        "tags": [
+            "Expander",
+            "Switch",
+            "Utility"
+        ]
+    },
+    {
+        "plugin_name": "Sanguine Monsters",
+        "plugin_slug": "SanguineMonsters",
+        "module_name": "Crucible",
+        "module_slug": "Sanguine-Crucible",
+        "description": "Expander for Alchemist: adds global and per channel CV and manual  Mute control; Mute exclusive mode; global and per channel CV and manual Solo control, and Solo exclusive mode",
+        "tags": [
+            "Expander",
+            "Polyphonic"
         ]
     },
     {
@@ -9095,7 +9208,7 @@
         "plugin_slug": "OuroborosModules",
         "module_name": "Meta",
         "module_slug": "MetaModule",
-        "description": "Adds features to VCV Rack",
+        "description": "Adds meta features to VCV Rack (Cable sounds, startup pre-muter; Full list in the manual)",
         "tags": [
             "Utility"
         ]
@@ -9143,6 +9256,33 @@
         "tags": [
             "Logic",
             "Waveshaper",
+            "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "OuroborosModules",
+        "plugin_slug": "OuroborosModules",
+        "module_name": "Junction",
+        "module_slug": "Junction",
+        "description": "A switched mult with 8 inputs and 2 outputs. Counterpart to Branch",
+        "tags": [
+            "Switch",
+            "Multiple",
+            "Utility",
+            "Mixer",
+            "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "OuroborosModules",
+        "plugin_slug": "OuroborosModules",
+        "module_name": "Branch",
+        "module_slug": "Branch",
+        "description": "A switched mult/router with 2 inputs and 8 outputs. Counterpart to Junction",
+        "tags": [
+            "Switch",
+            "Multiple",
+            "Utility",
             "Polyphonic"
         ]
     },
@@ -11523,6 +11663,17 @@
         "description": "Left-expander to add extra controls to chaos modules Frolic, Glee, Lark.",
         "tags": [
             "Expander"
+        ]
+    },
+    {
+        "plugin_name": "Sapphire",
+        "plugin_slug": "CosineKitty-Sapphire",
+        "module_name": "Echo",
+        "module_slug": "Echo",
+        "description": "A multi-layer stereo/polyphonic delay looper.",
+        "tags": [
+            "Delay",
+            "Polyphonic"
         ]
     },
     {
@@ -19159,30 +19310,19 @@
     {
         "plugin_name": "PackOne",
         "plugin_slug": "Stoermelder-P1",
-        "module_name": "8FACE",
-        "module_slug": "EightFace",
-        "description": "Universal expander for sequencing up to eight presets of any module",
-        "tags": [
-            "Utility",
-            "Sequencer"
-        ]
-    },
-    {
-        "plugin_name": "PackOne",
-        "plugin_slug": "Stoermelder-P1",
-        "module_name": "8FACEx2",
-        "module_slug": "EightFaceX2",
-        "description": "Universal expander for sequencing up to sixteen presets of any module",
-        "tags": [
-            "Utility",
-            "Sequencer"
-        ]
-    },
-    {
-        "plugin_name": "PackOne",
-        "plugin_slug": "Stoermelder-P1",
         "module_name": "MIDI-CAT",
         "module_slug": "MidiCat",
+        "description": "Mapping module for MIDI CCs and notes to parameters of any module, similar to VCV MIDI-MAP",
+        "tags": [
+            "Utility",
+            "MIDI"
+        ]
+    },
+    {
+        "plugin_name": "PackOne",
+        "plugin_slug": "Stoermelder-P1",
+        "module_name": "MIDI-CAT XL",
+        "module_slug": "MidiCatXl",
         "description": "Mapping module for MIDI CCs and notes to parameters of any module, similar to VCV MIDI-MAP",
         "tags": [
             "Utility",
@@ -19529,27 +19669,6 @@
     {
         "plugin_name": "PackOne",
         "plugin_slug": "Stoermelder-P1",
-        "module_name": "8FACE mk2",
-        "module_slug": "EightFaceMk2",
-        "description": "Universal expander for sequencing up to eight presets of multiple modules",
-        "tags": [
-            "Utility",
-            "Sequencer"
-        ]
-    },
-    {
-        "plugin_name": "PackOne",
-        "plugin_slug": "Stoermelder-P1",
-        "module_name": "+8",
-        "module_slug": "EightFaceMk2Ex",
-        "description": "Expander for 8FACE mk2",
-        "tags": [
-            "Expander"
-        ]
-    },
-    {
-        "plugin_name": "PackOne",
-        "plugin_slug": "Stoermelder-P1",
         "module_name": "MIDI-PLUG",
         "module_slug": "MidiPlug",
         "description": "Virtual MIDI merger and splitter",
@@ -19587,6 +19706,49 @@
         "description": "Sends CV and audio to/from an audio device",
         "tags": [
             "External"
+        ]
+    },
+    {
+        "plugin_name": "PackOne",
+        "plugin_slug": "Stoermelder-P1",
+        "module_name": "8FACE",
+        "module_slug": "EightFace",
+        "description": "Universal expander for sequencing up to eight presets of any module (experimental)",
+        "tags": [
+            "Utility",
+            "Sequencer"
+        ]
+    },
+    {
+        "plugin_name": "PackOne",
+        "plugin_slug": "Stoermelder-P1",
+        "module_name": "8FACEx2",
+        "module_slug": "EightFaceX2",
+        "description": "Universal expander for sequencing up to sixteen presets of any module (experimental)",
+        "tags": [
+            "Utility",
+            "Sequencer"
+        ]
+    },
+    {
+        "plugin_name": "PackOne",
+        "plugin_slug": "Stoermelder-P1",
+        "module_name": "8FACE mk2",
+        "module_slug": "EightFaceMk2",
+        "description": "Universal expander for sequencing up to eight presets of multiple modules (experimental)",
+        "tags": [
+            "Utility",
+            "Sequencer"
+        ]
+    },
+    {
+        "plugin_name": "PackOne",
+        "plugin_slug": "Stoermelder-P1",
+        "module_name": "+8",
+        "module_slug": "EightFaceMk2Ex",
+        "description": "Expander for 8FACE mk2 (experimental)",
+        "tags": [
+            "Expander"
         ]
     },
     {
@@ -23298,6 +23460,49 @@
         ]
     },
     {
+        "plugin_name": "AmbushedCat",
+        "plugin_slug": "AmbushedCat",
+        "module_name": "TuringMaschineRythm",
+        "module_slug": "TuringMaschine",
+        "description": "A probabilistic CV sequencer inspired by the original Music Thing Turing Machine. Generates semi-random looping sequences with adjustable probability and loop length.",
+        "tags": [
+            "Sequencer"
+        ]
+    },
+    {
+        "plugin_name": "AmbushedCat",
+        "plugin_slug": "AmbushedCat",
+        "module_name": "TuringGates",
+        "module_slug": "TuringGateExpander",
+        "description": "An expander for the TuringMaschine module that outputs rhythmic gate patterns derived from the current sequence state. Useful for triggering drums, envelopes, or other events.",
+        "tags": [
+            "Expander"
+        ]
+    },
+    {
+        "plugin_name": "AmbushedCat",
+        "plugin_slug": "AmbushedCat",
+        "module_name": "TuringFlow",
+        "module_slug": "TuringVoltsExpander",
+        "description": "An expander for the TuringMaschine that provides additional CV outputs based on bits of the sequence. Allows complex modulation and control signals derived from the main sequence.",
+        "tags": [
+            "Expander"
+        ]
+    },
+    {
+        "plugin_name": "AmbushedCat",
+        "plugin_slug": "AmbushedCat",
+        "module_name": "Tape Machine",
+        "module_slug": "Tape",
+        "description": "A detailed tape emulation module offering saturation, wow & flutter, bias shaping, and vintage tape coloration. Perfect for adding analog warmth and character to your sound.",
+        "tags": [
+            "Effect",
+            "Dynamics",
+            "Physical modeling",
+            "Distortion"
+        ]
+    },
+    {
         "plugin_name": "Surge for Rack",
         "plugin_slug": "SurgeRack",
         "module_name": "SurgeUpgradeToXT",
@@ -23685,7 +23890,8 @@
         "description": "Multimode audio and modulation chaos generator.",
         "tags": [
             "Noise",
-            "Random"
+            "Random",
+            "Polyphonic"
         ]
     },
     {
@@ -23696,7 +23902,8 @@
         "description": "Multimode audio and modulation chaos generator.",
         "tags": [
             "Noise",
-            "Random"
+            "Random",
+            "Polyphonic"
         ]
     },
     {
@@ -23707,7 +23914,22 @@
         "description": "Multimode audio and modulation chaos generator.",
         "tags": [
             "Noise",
-            "Random"
+            "Random",
+            "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "HetrickCV",
+        "plugin_slug": "HetrickCV",
+        "module_name": "Amplitude Shaper",
+        "module_slug": "AmplitudeShaper",
+        "description": "Bipolar amplitude shaper.",
+        "tags": [
+            "Waveshaper",
+            "Distortion",
+            "Effect",
+            "Utility",
+            "Polyphonic"
         ]
     },
     {
@@ -23717,7 +23939,8 @@
         "module_slug": "ASR",
         "description": "Analog shift register. Multi-stage sample and hold",
         "tags": [
-            "Sequencer"
+            "Sequencer",
+            "Polyphonic"
         ]
     },
     {
@@ -23749,7 +23972,8 @@
         "module_slug": "BinaryGate",
         "description": "Manually turn a gate on or off, or toggle its current state.",
         "tags": [
-            "Logic"
+            "Logic",
+            "Polyphonic"
         ]
     },
     {
@@ -23760,7 +23984,8 @@
         "description": "Generates a random gate or square wave signal.",
         "tags": [
             "Noise",
-            "Random"
+            "Random",
+            "Polyphonic"
         ]
     },
     {
@@ -23793,7 +24018,8 @@
         "module_slug": "Boolean3",
         "description": "Six way boolean logic processor",
         "tags": [
-            "Logic"
+            "Logic",
+            "Polyphonic"
         ]
     },
     {
@@ -23804,7 +24030,8 @@
         "description": "Multimode audio and modulation chaos generator.",
         "tags": [
             "Noise",
-            "Random"
+            "Random",
+            "Polyphonic"
         ]
     },
     {
@@ -23815,7 +24042,8 @@
         "description": "Multimode audio and modulation noise generator.",
         "tags": [
             "Noise",
-            "Random"
+            "Random",
+            "Polyphonic"
         ]
     },
     {
@@ -23839,7 +24067,8 @@
         "description": "Determine whether a signal is above or below a threshold.",
         "tags": [
             "Logic",
-            "Utility"
+            "Utility",
+            "Polyphonic"
         ]
     },
     {
@@ -23861,7 +24090,8 @@
         "module_slug": "Crackle",
         "description": "Vinyl-like noise generator ported from SuperCollider.",
         "tags": [
-            "Noise"
+            "Noise",
+            "Polyphonic"
         ]
     },
     {
@@ -23884,7 +24114,8 @@
         "description": "Determine which direction a signal is heading.",
         "tags": [
             "Logic",
-            "Utility"
+            "Utility",
+            "Polyphonic"
         ]
     },
     {
@@ -23906,7 +24137,8 @@
         "description": "Random impulse and noise generator ported from SuperCollider",
         "tags": [
             "Noise",
-            "Granular"
+            "Granular",
+            "Polyphonic"
         ]
     },
     {
@@ -23930,7 +24162,8 @@
             "Noise",
             "Oscillator",
             "Low-frequency Oscillator",
-            "Random"
+            "Random",
+            "Polyphonic"
         ]
     },
     {
@@ -23940,7 +24173,8 @@
         "module_slug": "FlipFlop",
         "description": "A flexible toggle switch",
         "tags": [
-            "Logic"
+            "Logic",
+            "Polyphonic"
         ]
     },
     {
@@ -23999,7 +24233,8 @@
         "description": "Self-modulating audio and modulation chaos generator.",
         "tags": [
             "Noise",
-            "Random"
+            "Random",
+            "Polyphonic"
         ]
     },
     {
@@ -24456,7 +24691,8 @@
         "module_slug": "RandomGates",
         "description": "Generates up to eight random gates.",
         "tags": [
-            "Random"
+            "Random",
+            "Polyphonic"
         ]
     },
     {
@@ -24466,7 +24702,8 @@
         "module_slug": "Rotator",
         "description": "Eight-way channel rotation.",
         "tags": [
-            "Switch"
+            "Switch",
+            "Polyphonic"
         ]
     },
     {
@@ -24477,7 +24714,8 @@
         "description": "8-Bit Shift Register and Comparator with stepped signal output via bits 6, 7, and 8.",
         "tags": [
             "Sequencer",
-            "Random"
+            "Random",
+            "Polyphonic"
         ]
     },
     {
@@ -24488,7 +24726,8 @@
         "description": "8-channel signal crossfader, mixer, scanner, and router.",
         "tags": [
             "Mixer",
-            "Switch"
+            "Switch",
+            "Polyphonic"
         ]
     },
     {
@@ -28917,6 +29156,27 @@
         ]
     },
     {
+        "plugin_name": "dbRackSequencer",
+        "plugin_slug": "dbRackSequencer",
+        "module_name": "PMKV",
+        "module_slug": "PMKV",
+        "description": "Markov Chain for address CV",
+        "tags": [
+            "Sequencer"
+        ]
+    },
+    {
+        "plugin_name": "dbRackSequencer",
+        "plugin_slug": "dbRackSequencer",
+        "module_name": "MC1",
+        "module_slug": "MC1",
+        "description": "Recordable Mouse Controller",
+        "tags": [
+            "Controller",
+            "Envelope Generator"
+        ]
+    },
+    {
         "plugin_name": "SynthKit",
         "plugin_slug": "SynthKit",
         "module_name": "1x8 Splitter",
@@ -29234,6 +29494,18 @@
         "tags": [
             "Effect",
             "Delay"
+        ]
+    },
+    {
+        "plugin_name": "MUM M8",
+        "plugin_slug": "ALM018",
+        "module_name": "MUM M8",
+        "module_slug": "ALM018",
+        "description": null,
+        "tags": [
+            "Filter",
+            "Utility",
+            "Hardware Clone"
         ]
     },
     {
@@ -31373,9 +31645,35 @@
     {
         "plugin_name": "Julio's Chaotic Oscillators",
         "plugin_slug": "JulioChaos",
+        "module_name": "Rossler's Oscillator",
+        "module_slug": "JulioRossler",
+        "description": "Chaotic oscillator based on Rossler's attractor",
+        "tags": [
+            "Function generator",
+            "Low-frequency oscillator",
+            "Noise",
+            "Oscillator"
+        ]
+    },
+    {
+        "plugin_name": "Julio's Chaotic Oscillators",
+        "plugin_slug": "JulioChaos",
         "module_name": "Chua's Oscillator",
         "module_slug": "JulioChua",
         "description": "Chaotic oscillator based on Chua's circuit",
+        "tags": [
+            "Function generator",
+            "Low-frequency oscillator",
+            "Noise",
+            "Oscillator"
+        ]
+    },
+    {
+        "plugin_name": "Julio's Chaotic Oscillators",
+        "plugin_slug": "JulioChaos",
+        "module_name": "Lorentz84 Oscillator",
+        "module_slug": "JulioLorentz84",
+        "description": "Chaotic oscillator based on the Lorentz84 system",
         "tags": [
             "Function generator",
             "Low-frequency oscillator",
@@ -35914,6 +36212,18 @@
     {
         "plugin_name": "Nonlinear Circuits",
         "plugin_slug": "NonlinearCircuits",
+        "module_name": "Beat Freqs",
+        "module_slug": "BeatFreqs",
+        "description": "Four beat frequency indicators, used to generate 16 gates.",
+        "tags": [
+            "Logic",
+            "Hardware Clone",
+            "Quad"
+        ]
+    },
+    {
+        "plugin_name": "Nonlinear Circuits",
+        "plugin_slug": "NonlinearCircuits",
         "module_name": "BOOLs",
         "module_slug": "BOOLs",
         "description": "Four binary logic jumblers. Panel by Papernoise.",
@@ -35921,6 +36231,17 @@
             "Logic",
             "Hardware Clone",
             "Quad"
+        ]
+    },
+    {
+        "plugin_name": "Nonlinear Circuits",
+        "plugin_slug": "NonlinearCircuits",
+        "module_name": "De-Escalate",
+        "module_slug": "DeEscalate",
+        "description": "Seven simple attenuators.",
+        "tags": [
+            "Attenuator",
+            "Hardware Clone"
         ]
     },
     {
@@ -38273,9 +38594,9 @@
     {
         "plugin_name": "Sulamith",
         "plugin_slug": "Sulamith",
-        "module_name": "Button - Complex Trigger Utility",
+        "module_name": "Button - Trigger/CV Utility",
         "module_slug": "ButtonA",
-        "description": "Swiss Army Knife: Button, Bernoulli Gate, Trigger, Gate with Length, Toggle, Const. Volt., Random CV, Slew, Retrig",
+        "description": "Trigger and Gate utility with two OR-logic inputs. Features probability and custom gate length (0.2-10s). A/B section works as Toggle, Constant Voltage (1-10v), Bi- and Unipolar CV generation with range options. Context menu: Re-Trig can be disabled (i.e. to sync CV generation with custom length gates), Slew can be enabled for custom gates & cv gen.",
         "tags": [
             "Utility",
             "Random",
@@ -38283,6 +38604,62 @@
             "Clock modulator",
             "Logic",
             "Controller"
+        ]
+    },
+    {
+        "plugin_name": "Sulamith",
+        "plugin_slug": "Sulamith",
+        "module_name": "Knobs - Const Voltage Source Sequencer",
+        "module_slug": "KnobX",
+        "description": "8 channels/steps polyphonic voltage source, with range, step/ch control. Clock, button, reset in & 3 playmodes (FWD, BWD, RND) add sequencing options. Plugging a poly cable into reset 'steals' the incoming signal (synced to clock or button input). ",
+        "tags": [
+            "Utility",
+            "Sequencer",
+            "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "Sulamith",
+        "plugin_slug": "Sulamith",
+        "module_name": "Volt Meter",
+        "module_slug": "VoltM",
+        "description": "Simple Polyphonic Volt Meter with 3 inputs that displays and merges up to 16 channels. Output works pitch perfect at audio rates - may be used as a poly merger.",
+        "tags": [
+            "Visual",
+            "Utility",
+            "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "Sulamith",
+        "plugin_slug": "Sulamith",
+        "module_name": "Polyphonic Merge",
+        "module_slug": "Merge",
+        "description": "16 mono inputs can be merged into a polyphonic output.",
+        "tags": [
+            "Utility",
+            "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "Sulamith",
+        "plugin_slug": "Sulamith",
+        "module_name": "Polyphonic Split",
+        "module_slug": "Split",
+        "description": "Splits a polyphonic input into monophonic outputs.",
+        "tags": [
+            "Utility",
+            "Polyphonic"
+        ]
+    },
+    {
+        "plugin_name": "Sulamith",
+        "plugin_slug": "Sulamith",
+        "module_name": "Modular Antifa",
+        "module_slug": "AntifaQ",
+        "description": "Alerta! Alerta! Check out the Antifacist Logo Archive on insta. Hardware Panel is sold by Tangible Waves.",
+        "tags": [
+            "Blank"
         ]
     },
     {
@@ -39896,6 +40273,16 @@
         "description": "Output expander for Phi and Spike. Outputs current step, step phase, and EOC.",
         "tags": [
             "Expander"
+        ]
+    },
+    {
+        "plugin_name": "TeknoLogical",
+        "plugin_slug": "TeknoLogical",
+        "module_name": "TL-Drum5",
+        "module_slug": "TL-Drum5",
+        "description": "Compact 5-voice rhythm engine.",
+        "tags": [
+            "Drum"
         ]
     },
     {

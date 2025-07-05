@@ -12,7 +12,7 @@ if [ -d "$TARGET_DIR" ]; then
     echo "Directory '$TARGET_DIR' already exists."
     echo "Pulling latest changes..."
     cd "$TARGET_DIR"
-    git pull origin main
+    git pull origin 
     cd ..
 else
     echo "Cloning repository into '$TARGET_DIR'..."
@@ -28,7 +28,9 @@ else
 fi
 
 echo "Parsing search and downloading images..."
-python3 parse_search.py
+python3 download_images.py
 
 echo "Generating search file..."
 python3 generate_search_file.py
+
+echo "Done!"

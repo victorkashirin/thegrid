@@ -74,13 +74,11 @@ def parse_all_plugins(folder: str) -> list:
     return all_plugins
 
 
-def download_images():
+def download_images(plugins: list):
       """
       Downloads images for each plugin and module in the parsed plugins list.
       Images are saved in the 'images' folder, organized by plugin slug.
       """
-      with open("parsed_plugins.json", "r") as f:
-        plugins = json.load(f)
 
       images_folder = Path("images")
       images_folder.mkdir(exist_ok=True)
@@ -107,6 +105,7 @@ def download_images():
           print(f"Failed to download {image_url}: {e}")
 
 if __name__ == "__main__":
+    all_plugins = parse_all_plugins(folder)
     with open('parsed_plugins.json', 'w') as f:
-        json.dump(parse_all_plugins(folder), f, indent=4)
-    download_images()
+        json.dump(all_plugins, f, indent=4)
+    download_images(all_plugins)
