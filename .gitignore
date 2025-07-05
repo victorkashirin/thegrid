@@ -4,5 +4,7 @@ library/
 site/
 cache/
 parsed_plugins.json
+search_file.json
 __pycache__
 .claude
+images/
