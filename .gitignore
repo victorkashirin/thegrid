@@ -2,3 +2,5 @@ images/
 .DS_Store
 library/
 site/
+cache/
+parsed_plugins.json

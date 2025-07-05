@@ -12,6 +12,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Restore image cache
+        uses: actions/cache@v4
+        with:
+          path: cache/
+          key: image-cache-main
+          restore-keys: image-cache-
+
       - name: Set up Python 3
         uses: actions/setup-python@v5
         with:

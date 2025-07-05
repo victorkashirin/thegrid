@@ -80,7 +80,7 @@ def download_images(plugins: list):
       Images are saved in the 'images' folder, organized by plugin slug.
       """
 
-      images_folder = Path("images")
+      images_folder = Path("cache")
       images_folder.mkdir(exist_ok=True)
 
       for moduleData in plugins:
