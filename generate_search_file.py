@@ -7,7 +7,7 @@ MANIFESTS_CACHE = "./library/manifests-cache.json"
 
 def get_module_size(plugin_slug, module_slug):
     try:
-        image_path = f"images/{plugin_slug}/{module_slug}.webp"
+        image_path = f"cache/{plugin_slug}/{module_slug}.webp"
         if os.path.exists(image_path):
             with Image.open(image_path) as img:
                 width = img.width
