@@ -4,3 +4,4 @@ library/
 site/
 cache/
 parsed_plugins.json
+__pycache__
