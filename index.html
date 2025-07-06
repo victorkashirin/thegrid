@@ -22,59 +22,315 @@
     }
   </script>
   <style>
+    /* Add custom animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in-up {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    /* Loading pulse animation */
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    .animate-pulse {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    /* Custom scrollbar for the entire page */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    }
+
     /* Custom styles for specific interactions that need CSS */
     .tag-select-header::after {
       content: '▼';
       font-size: 12px;
+      color: #6b7280;
+      transition: transform 0.2s ease;
     }
-    
+
     .tag-select-header.active::after {
       content: '▲';
+      transform: rotate(180deg);
+    }
+
+    .tag-select-header:hover::after {
+      color: #374151;
+    }
+
+    .tag-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.375rem 0.875rem;
+      margin: 0.125rem;
+      background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+      color: #3730a3;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      border: 1px solid #c7d2fe;
+      box-shadow: 0 2px 4px rgba(99, 102, 241, 0.1);
+    }
+
+    .tag-remove {
+      margin-left: 0.5rem;
+      cursor: pointer;
+      font-weight: bold;
+      color: #6366f1;
+      transition: color 0.2s ease;
+    }
+
+    .tag-remove:hover {
+      color: #dc2626;
+    }
+
+    .tag-counter {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: white;
+      border-radius: 50%;
+      width: 1.5rem;
+      height: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-left: 0.5rem;
+      box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
+    }
+
+    .checkbox-custom {
+      accent-color: #6366f1;
+      width: 1.125rem;
+      height: 1.125rem;
+      border-radius: 0.25rem;
+    }
+
+    .tag-select-options {
+      scrollbar-width: thin;
+      scrollbar-color: #d1d5db #f9fafb;
+    }
+
+    .tag-select-options::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .tag-select-options::-webkit-scrollbar-track {
+      background: #f9fafb;
+      border-radius: 3px;
+    }
+
+    .tag-select-options::-webkit-scrollbar-thumb {
+      background: #d1d5db;
+      border-radius: 3px;
+    }
+
+    .tag-select-options::-webkit-scrollbar-thumb:hover {
+      background: #9ca3af;
+    }
+
+    /* Enhanced input styling */
+    .search-input-container {
+      position: relative;
+    }
+
+    .size-filter-group {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border: 2px solid #e2e8f0;
+      transition: all 0.3s ease;
+    }
+
+    .size-filter-group:hover {
+      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Input focus effects */
+    input:focus,
+    select:focus {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(99, 102, 241, 0.15);
+    }
+
+    /* Button hover effects */
+    #reset-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .size-filter-group {
+        flex-direction: column;
+        gap: 0.75rem;
+        align-items: stretch;
+      }
+
+      .size-filter-group input,
+      .size-filter-group select {
+        width: 100%;
+      }
+
+      #results-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .max-w-6xl {
+        margin: 0;
+        padding: 0.5rem;
+      }
+
+      .bg-white.rounded-2xl {
+        border-radius: 1rem;
+        margin: 0.5rem;
+      }
+
+      .bg-gradient-to-r.from-slate-600 {
+        padding: 1.5rem 1rem;
+      }
+
+      .bg-gradient-to-r.from-slate-600 h1 {
+        font-size: 1.5rem;
+      }
+
+      .bg-gradient-to-r.from-slate-600 p {
+        font-size: 0.875rem;
+      }
+
+      .flex.flex-wrap.items-center.gap-4 {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+      }
+
+      .tag-select-container {
+        min-width: 100%;
+      }
     }
   </style>
 </head>
 
-<body class="font-inter m-0 p-0 bg-gray-100 text-gray-800">
-  <div class="max-w-4xl mx-auto my-5 px-5 py-5 bg-white rounded-lg shadow-md">
-    <h1 class="text-center mb-5 text-indigo-600 text-2xl font-semibold">VCV Rack Module Search</h1>
-    <div class="flex flex-wrap items-center gap-2 mb-5">
-      <input type="text" id="search-input" placeholder="Search for modules..." 
-             class="flex-1 min-w-0 p-2.5 border border-gray-300 rounded text-base font-inter focus:outline-none focus:border-gray-500 focus:ring-2 focus:ring-gray-200">
-      <input type="number" id="size-input" placeholder="Size" min="1" 
-             class="w-20 p-2.5 border border-gray-300 rounded text-base font-inter focus:outline-none focus:border-gray-500 focus:ring-2 focus:ring-gray-200">
-      <select id="size-comparison" 
-              class="w-24 p-2.5 border border-gray-300 rounded text-base font-inter bg-white focus:outline-none focus:border-gray-500 focus:ring-2 focus:ring-gray-200">
-        <option value="max">Max</option>
-        <option value="min">Min</option>
-        <option value="exact">Exact</option>
-      </select>
-      <button id="reset-button" 
-              class="px-4 py-2.5 border border-gray-500 rounded text-base font-inter bg-white text-gray-900 cursor-pointer transition-all duration-200 ease-in-out hover:bg-gray-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-200 whitespace-nowrap">
-        Reset
-      </button>
-    </div>
-    <div class="mt-2.5 mb-2.5">
-      <div class="tag-select-container relative inline-block min-w-[150px] max-w-sm w-auto mb-5">
-        <div class="tag-select-header p-2.5 border border-gray-300 rounded text-base bg-white cursor-pointer flex justify-between items-center whitespace-nowrap hover:border-gray-500">
-          Filter by Tags
+<body class="font-inter m-0 p-0 bg-gradient-to-br from-gray-50 to-gray-100 text-gray-800 min-h-screen">
+  <div class="max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+      <div class="bg-gradient-to-r from-slate-600 to-slate-500 px-8 py-6">
+        <h1 class="text-center text-white text-3xl font-bold tracking-tight">VCV Rack Module Search</h1>
+        <p class="text-center text-slate-100 mt-2 text-lg">Discover and explore VCV Rack modules</p>
+      </div>
+      <div class="p-8">
+        <div class="flex flex-wrap items-center gap-4 mb-8">
+          <div class="flex-1 min-w-0 relative">
+            <input type="text" id="search-input" placeholder="Search for modules..."
+              class="w-full p-4 pl-12 border-2 border-gray-200 rounded-xl text-base font-inter bg-gray-50 shadow-sm transition-all duration-300 focus:outline-none focus:border-slate-500 focus:ring-4 focus:ring-slate-100 focus:bg-white hover:border-gray-300 hover:bg-white">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+          </div>
+          <div
+            class="flex items-center gap-3 bg-gradient-to-r from-gray-50 to-gray-100 border-2 border-gray-200 rounded-xl p-3 shadow-sm size-filter-group">
+            <label class="text-sm font-semibold text-gray-700 whitespace-nowrap">Module Size:</label>
+            <input type="number" id="size-input" placeholder="HP" min="1"
+              class="w-20 p-2.5 border-2 border-gray-200 rounded-lg text-sm font-inter bg-white shadow-sm transition-all duration-300 focus:outline-none focus:border-slate-500 focus:ring-2 focus:ring-slate-100 hover:border-gray-300">
+            <select id="size-comparison"
+              class="p-2.5 border-2 border-gray-200 rounded-lg text-sm font-inter bg-white shadow-sm transition-all duration-300 focus:outline-none focus:border-slate-500 focus:ring-2 focus:ring-slate-100 hover:border-gray-300">
+              <option value="max">Max</option>
+              <option value="min">Min</option>
+              <option value="exact">Exact</option>
+            </select>
+          </div>
+          <button id="reset-button"
+            class="px-6 py-3 border-2 border-gray-200 rounded-xl text-base font-inter bg-gradient-to-r from-white to-gray-50 text-gray-700 cursor-pointer transition-all duration-300 ease-in-out hover:from-gray-50 hover:to-gray-100 hover:border-gray-300 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-slate-100 focus:border-slate-500 whitespace-nowrap shadow-sm font-semibold">
+            Reset Filters
+          </button>
         </div>
-        <div class="tag-select-options absolute top-full left-0 min-w-full bg-white border border-gray-300 rounded mt-1 shadow-lg max-h-48 overflow-y-auto z-10 hidden">
-          <label class="tag-option p-2 flex items-center cursor-pointer hover:bg-gray-100">
-            <input type="checkbox" value="Oscillator" class="mr-2"> Oscillator
-          </label>
-          <label class="tag-option p-2 flex items-center cursor-pointer hover:bg-gray-100">
-            <input type="checkbox" value="Sequencer" class="mr-2"> Sequencer
-          </label>
-          <label class="tag-option p-2 flex items-center cursor-pointer hover:bg-gray-100">
-            <input type="checkbox" value="Utility" class="mr-2"> Utility
-          </label>
+        <div class="mt-4 mb-8">
+          <div class="tag-select-container relative inline-block min-w-[250px] max-w-md w-auto">
+            <div
+              class="tag-select-header p-4 border-2 border-gray-200 rounded-xl text-base bg-gradient-to-r from-white to-gray-50 cursor-pointer flex justify-between items-center shadow-sm transition-all duration-300 hover:border-slate-500 hover:shadow-md focus-within:ring-4 focus-within:ring-slate-100">
+              <div class="flex items-center flex-wrap gap-1 flex-1 min-w-0">
+                <span class="tag-select-text text-gray-700 font-semibold">Filter by Tags</span>
+                <div class="selected-tags-container hidden flex-wrap gap-1"></div>
+              </div>
+            </div>
+            <div
+              class="tag-select-options absolute top-full left-0 min-w-full bg-white border-2 border-gray-200 rounded-xl mt-2 shadow-2xl max-h-60 overflow-y-auto z-20 hidden">
+              <div class="p-3 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-gray-100">
+                <p class="text-sm font-semibold text-gray-700 mb-1">Select Tags</p>
+              </div>
+              <label
+                class="tag-option p-3 flex items-center cursor-pointer hover:bg-gradient-to-r hover:from-slate-50 hover:to-purple-50 transition-all duration-200 rounded mx-2">
+                <input type="checkbox" value="Oscillator" class="checkbox-custom mr-3">
+                <span class="text-gray-700 font-medium">Oscillator</span>
+              </label>
+              <label
+                class="tag-option p-3 flex items-center cursor-pointer hover:bg-gradient-to-r hover:from-slate-50 hover:to-purple-50 transition-all duration-200 rounded mx-2">
+                <input type="checkbox" value="Sequencer" class="checkbox-custom mr-3">
+                <span class="text-gray-700 font-medium">Sequencer</span>
+              </label>
+              <label
+                class="tag-option p-3 flex items-center cursor-pointer hover:bg-gradient-to-r hover:from-slate-50 hover:to-purple-50 transition-all duration-200 rounded mx-2">
+                <input type="checkbox" value="Utility" class="checkbox-custom mr-3">
+                <span class="text-gray-700 font-medium">Utility</span>
+              </label>
+            </div>
+          </div>
         </div>
+        <div id="results-count" class="mt-4 mb-6 text-sm font-semibold text-gray-600 px-1"></div>
+        <div id="status-message"
+          class="text-center p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border-2 border-gray-200 mt-6 hidden shadow-sm">
+          Loading modules...
+        </div>
+        <div id="results-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 min-h-[100px]">
+        </div>
+        <div id="load-more-trigger" class="h-10 mt-6 w-full"></div>
       </div>
     </div>
-    <div id="results-count" class="mt-2.5 mb-2.5 text-sm"></div>
-    <div id="status-message" class="text-center p-4 bg-white rounded border border-gray-300 mt-5 hidden">Loading modules...</div>
-    <div id="results-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-5 min-h-[100px]"></div>
-    <div id="load-more-trigger" class="h-10 mt-5 w-full"></div>
   </div>
 
   <script>
@@ -103,30 +359,30 @@
       let selectedTags = [];      // Store selected tags
 
       // --- Tag Dropdown Logic ---
-      
+
       // Toggle dropdown visibility
-      tagSelectHeader.addEventListener('click', function() {
+      tagSelectHeader.addEventListener('click', function () {
         const isOpen = tagSelectOptions.style.display === 'block';
         tagSelectOptions.style.display = isOpen ? 'none' : 'block';
         tagSelectHeader.classList.toggle('active', !isOpen);
       });
-      
+
       // Close dropdown when clicking outside
-      document.addEventListener('click', function(e) {
+      document.addEventListener('click', function (e) {
         if (!e.target.closest('.tag-select-container')) {
           tagSelectOptions.style.display = 'none';
           tagSelectHeader.classList.remove('active');
         }
       });
-      
+
       // Handle tag checkbox changes
       tagCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
+        checkbox.addEventListener('change', function () {
           updateSelectedTags();
           performSearch(searchInput.value.trim());
         });
       });
-      
+
       function updateSelectedTags() {
         selectedTags = [];
         tagCheckboxes.forEach(checkbox => {
@@ -134,31 +390,63 @@
             selectedTags.push(checkbox.value);
           }
         });
-        
-        // Update the header text based on selection
+
+        const tagSelectText = document.querySelector('.tag-select-text');
+        const selectedTagsContainer = document.querySelector('.selected-tags-container');
+
+        // Update the header display based on selection
         if (selectedTags.length === 0) {
-          tagSelectHeader.textContent = 'Filter by Tags';
-        } else if (selectedTags.length === 1) {
-          tagSelectHeader.textContent = selectedTags[0];
+          tagSelectText.textContent = 'Filter by Tags';
+          selectedTagsContainer.classList.add('hidden');
+          selectedTagsContainer.innerHTML = '';
         } else {
-          tagSelectHeader.textContent = selectedTags.join(', ');
-        }
-        
-        // Make sure dropdown indicator is shown
-        if (!tagSelectHeader.textContent.includes('▼') && !tagSelectHeader.textContent.includes('▲')) {
-          tagSelectHeader.classList.add('has-indicator');
+          // tagSelectText.textContent = selectedTags.length === 1 ? '1 tag selected' : `${selectedTags.length} tags selected`;
+          tagSelectText.textContent = '';
+          selectedTagsContainer.classList.remove('hidden');
+
+          // Create tag badges
+          selectedTagsContainer.innerHTML = selectedTags.map(tag => `
+            <span class="tag-badge">
+              ${tag}
+              <span class="tag-remove" data-tag="${tag}">×</span>
+            </span>
+          `).join('');
+
+          // Add click handlers to remove buttons
+          selectedTagsContainer.querySelectorAll('.tag-remove').forEach(removeBtn => {
+            removeBtn.addEventListener('click', function (e) {
+              e.stopPropagation();
+              const tagToRemove = this.getAttribute('data-tag');
+              const checkbox = Array.from(tagCheckboxes).find(cb => cb.value === tagToRemove);
+              if (checkbox) {
+                checkbox.checked = false;
+                updateSelectedTags();
+                performSearch(searchInput.value.trim());
+              }
+            });
+          });
         }
       }
 
       // --- Utility Functions ---
 
       function showStatus(message, isError = false) {
-        statusMessage.textContent = message;
-        statusMessage.className = `text-center p-4 bg-white rounded border border-gray-300 mt-5 block ${isError ? 'text-red-500' : 'text-gray-600'}`;
+        statusMessage.innerHTML = isError ?
+          `<div class="flex items-center justify-center">
+            <svg class="w-5 h-5 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-red-600 font-medium">${message}</span>
+          </div>` :
+          `<div class="flex items-center justify-center">
+            <div class="animate-spin rounded-full h-5 w-5 border-2 border-slate-600 border-t-transparent mr-3"></div>
+            <span class="text-gray-600 font-medium">${message}</span>
+          </div>`;
+        statusMessage.className = `text-center p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border-2 border-gray-200 mt-6 block shadow-sm`;
       }
 
       function hideStatus() {
-        statusMessage.className = 'text-center p-4 bg-white rounded border border-gray-300 mt-5 hidden';
+        statusMessage.className = 'text-center p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border-2 border-gray-200 mt-6 hidden shadow-sm';
       }
 
       // --- Data Fetching ---
@@ -167,11 +455,11 @@
         isLoading = true;
         showStatus('Loading modules...');
         hideLoadMoreTrigger(); // Hide trigger while loading initial data
-        
+
         // Add cache-busting parameter to prevent caching
         const timestamp = new Date().getTime();
         const urlWithCacheBuster = `${filePath}?t=${timestamp}`;
-        
+
         return fetch(urlWithCacheBuster, {
           method: 'GET',
           headers: {
@@ -215,10 +503,14 @@
       // --- Display Logic ---
 
       function createResultCard(item) {
-        const card = document.createElement('div');
-        card.className = 'bg-gray-50 p-4 border border-gray-200 rounded-lg shadow-sm transition-all duration-200 ease-in-out hover:shadow-md flex flex-col items-center text-center';
-        // Use item.item for Fuse results, item directly for initial load
         const moduleData = item.item ? item.item : item;
+        const card = document.createElement('a');
+        card.href = `https://library.vcvrack.com/${moduleData.plugin_slug}/${moduleData.module_slug}`;
+        card.target = '_blank';
+        card.rel = 'noopener noreferrer';
+        card.className = 'bg-white p-6 border-2 border-gray-100 rounded-2xl shadow-md transition-all duration-300 ease-in-out hover:shadow-xl hover:scale-100 flex flex-col items-center text-center no-underline text-inherit hover:border-slate-200 group overflow-hidden animate-fade-in-up';
+        // Use item.item for Fuse results, item directly for initial load
+
         const score = item.score; // Get the score if it exists (from Fuse result)
         const imageUrl = `images/${moduleData.plugin_slug}/${moduleData.module_slug}.webp`;
 
@@ -229,20 +521,36 @@
         }
 
         card.innerHTML = `
-                    <img src="${imageUrl}" alt="${moduleData.module_name}" loading="lazy" class="w-full rounded max-h-64 object-contain mb-2.5">
-                    <h3 class="m-0 mb-1 text-gray-900 text-lg font-semibold">${moduleData.module_name}</h3>
-                    <p class="m-0 mb-1 text-gray-600 text-sm">Plugin: ${moduleData.plugin_name}</p>
-                    <p class="m-0 mb-1 text-gray-600 text-sm">${moduleData.description || ''}</p>
+                    <div class="w-full rounded-xl mb-4 group-hover:from-slate-50 group-hover:to-purple-50 transition-all duration-300">
+                      <img src="${imageUrl}" alt="${moduleData.module_name}" loading="lazy" class="w-full rounded-lg max-h-56 object-contain drop-shadow-sm">
+                    </div>
+                    <div class="flex-1 flex flex-col justify-between">
+                      <div>
+                        <h3 class="m-0 mb-2 text-gray-900 text-lg font-bold group-hover:text-slate-600 transition-colors duration-300">${moduleData.module_name}</h3>
+                        <p class="m-0 mb-2 text-slate-600 text-sm font-semibold px-2 py-1 inline-block">${moduleData.plugin_name}</p>
+                        <p class="m-0 mb-3 text-gray-600 text-sm leading-relaxed">${moduleData.description || ''}</p>
+                      </div>
+                      <div class="mt-auto">
+                        <div class="inline-flex items-center text-slate-600 text-sm font-semibold group-hover:text-slate-700 transition-colors duration-300">
+                          <span>View Module</span>
+                          <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
                 `;
         // Handle missing images gracefully
         const img = card.querySelector('img');
         img.onerror = () => {
           img.style.display = 'none'; // Hide broken image icon
           // Optionally add a placeholder or text
-          const placeholder = document.createElement('p');
-          placeholder.textContent = '[No Image]';
-          placeholder.className = 'mt-2.5 text-gray-500';
-          card.insertBefore(placeholder, card.querySelector('h3'));
+          const placeholder = document.createElement('div');
+          placeholder.innerHTML = '<div class="flex items-center justify-center h-32 bg-gray-100 rounded-lg"><span class="text-gray-400 text-sm font-medium">[No Image]</span></div>';
+          const imageContainer = card.querySelector('.w-full.bg-gradient-to-br');
+          if (imageContainer) {
+            imageContainer.appendChild(placeholder);
+          }
         };
         return card;
       }
@@ -334,10 +642,10 @@
 
       function filterByTags(modules) {
         if (selectedTags.length === 0) return modules; // If no tags selected, return all modules
-        
+
         return modules.filter(module => {
           if (!module.tags) return false;
-          
+
           // Check if module has any of the selected tags
           let moduleTags;
           if (Array.isArray(module.tags)) {
@@ -349,6 +657,46 @@
           }
           return selectedTags.every(tag => moduleTags.includes(tag));
         });
+      }
+
+      // Helper functions for efficient filtering of search results
+      function matchesSizeFilter(module) {
+        const sizeInput = document.getElementById('size-input');
+        const sizeComparison = document.getElementById('size-comparison');
+        const size = sizeInput.value.trim();
+        const comparison = sizeComparison.value;
+
+        if (!size) return true; // If no size specified, matches all
+
+        const sizeNum = parseInt(size);
+        const moduleSize = parseInt(module.size) || 0;
+
+        switch (comparison) {
+          case 'min':
+            return moduleSize >= sizeNum;
+          case 'max':
+            return moduleSize <= sizeNum;
+          case 'exact':
+            return moduleSize === sizeNum;
+          default:
+            return true;
+        }
+      }
+
+      function matchesTagFilter(module) {
+        if (selectedTags.length === 0) return true; // If no tags selected, matches all
+
+        if (!module.tags) return false;
+
+        let moduleTags;
+        if (Array.isArray(module.tags)) {
+          moduleTags = module.tags.map(tag => tag.trim());
+        } else if (typeof module.tags === 'string') {
+          moduleTags = module.tags.split(',').map(tag => tag.trim());
+        } else {
+          return false;
+        }
+        return selectedTags.every(tag => moduleTags.includes(tag));
       }
 
       function performSearch(query) {
@@ -364,39 +712,41 @@
           comparison: document.getElementById('size-comparison').value
         };
 
-        // First apply size filter to all modules
-        let filteredModules = filterBySize(allModules);
-        
-        // Then apply tag filter
-        filteredModules = filterByTags(filteredModules);
-
         if (query === '') {
-          // If query is empty, show filtered modules (already sorted by timestamp)
+          // If query is empty, apply filters directly and show results
+          let filteredModules = filterBySize(allModules);
+          filteredModules = filterByTags(filteredModules);
           resetAndDisplayFirstBatch(filteredModules);
         } else {
-          // Create new Fuse instance with filtered modules
-          const filteredFuse = new Fuse(filteredModules, fuseOptions);
-          const results = filteredFuse.search(query);
-          resetAndDisplayFirstBatch(results);
+          // Use main Fuse instance for search, then filter results
+          const searchResults = fuse.search(query);
+
+          // Apply size and tag filters to search results
+          let filteredResults = searchResults.filter(result => {
+            const module = result.item;
+            return matchesSizeFilter(module) && matchesTagFilter(module);
+          });
+
+          resetAndDisplayFirstBatch(filteredResults);
         }
       }
 
       function resetFilters() {
         // Clear search input
         searchInput.value = '';
-        
+
         // Clear size input
         document.getElementById('size-input').value = '';
-        
+
         // Reset comparison to default
         document.getElementById('size-comparison').value = 'max';
-        
+
         // Uncheck all tag checkboxes
         tagCheckboxes.forEach(checkbox => {
           checkbox.checked = false;
         });
         updateSelectedTags();
-        
+
         // Reset stored values
         lastSearchQuery = '';
         lastSizeFilter = {
@@ -404,7 +754,7 @@
           comparison: 'max'
         };
         selectedTags = [];
-        
+
         // Show all modules
         resetAndDisplayFirstBatch(allModules);
       }
@@ -448,13 +798,15 @@
         keys: [
           { name: 'module_name', weight: 7.0 }, // Prioritize module name even more
           { name: 'plugin_name', weight: 3.0 }, // Slightly less boost for plugin name
-          { name: 'description', weight: 0.5 }, // Keep description weight low
+          { name: 'description', weight: 0.8 }, // Keep description weight low
           { name: 'tags', weight: 0.5 }        // Keep tags weight low
         ],
         includeScore: true,
         shouldSort: true,
-        threshold: 0.5, // Make threshold even stricter
-        minMatchCharLength: 3,
+        threshold: 0.4, // Make threshold even stricter
+        minMatchCharLength: 2,
+        ignoreLocation: true,
+        findAllMatches: true,
         distance: 3, // Reduce fuzzy search distance significantly
       };
 
@@ -497,14 +849,14 @@
         }, 250);
       });
 
-      document.getElementById('size-input').addEventListener('input', function() {
+      document.getElementById('size-input').addEventListener('input', function () {
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => {
           performSearch(searchInput.value.trim());
         }, 250);
       });
 
-      document.getElementById('size-comparison').addEventListener('change', function() {
+      document.getElementById('size-comparison').addEventListener('change', function () {
         performSearch(searchInput.value.trim());
       });
 
