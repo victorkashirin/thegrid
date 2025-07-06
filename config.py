@@ -25,7 +25,6 @@ SITE_INDEX_HTML_FILE = SITE_DIR / "index.html"
 
 # Git repository configuration
 VCV_LIBRARY_REPO_URL = "https://github.com/VCVRack/library.git"
-VCV_LIBRARY_BRANCH = "main"
 
 # Image processing constants
 PIXELS_PER_HP = 15  # 15 pixels = 1HP
@@ -46,7 +45,7 @@ CACHE_EXPIRY_DAYS = 2  # Only re-download images if plugin was updated within th
 # Search file structure
 SEARCH_HEADERS = [
     "plugin_slug",
-    "plugin_name", 
+    "plugin_name",
     "module_name",
     "module_slug",
     "description",

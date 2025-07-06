@@ -5,7 +5,6 @@
 
 # Repository configuration
 REPO_URL="https://github.com/VCVRack/library.git"
-VCV_LIBRARY_BRANCH="main"
 
 # Directory configuration
 TARGET_DIR="library"
