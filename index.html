@@ -58,7 +58,7 @@
       theme: {
         extend: {
           fontFamily: {
-            'inter': ['Inter', 'sans-serif'],
+            'inter': ['system-ui', 'sans-serif'],
           }
         }
       }
@@ -528,7 +528,7 @@
         card.href = `https://library.vcvrack.com/${moduleData.plugin_slug}/${moduleData.module_slug}`;
         card.target = '_blank';
         card.rel = 'noopener noreferrer';
-        card.className = 'bg-white p-6 border-2 border-gray-100 shadow-md hover:border-gray-300 flex flex-col items-center text-center no-underline text-inherit hover:border-slate-200 group overflow-hidden';
+        card.className = 'bg-white border-2 border-gray-900 flex flex-col items-center text-center no-underline text-inherit group overflow-hidden';
         // Use item.item for Fuse results, item directly for initial load
 
         const score = item.score; // Get the score if it exists (from Fuse result)
@@ -541,12 +541,14 @@
         }
 
         card.innerHTML = `
-                    <div class="w-full rounded-xl mb-4 group-hover:from-slate-50 group-hover:to-purple-50">
-                      <img src="${imageUrl}" alt="${moduleData.module_name}" loading="lazy" class="w-full rounded-lg max-h-56 object-contain drop-shadow-sm">
+                    <div class="w-full border-b-2 border-gray-900 text-gray-900 group-hover:text-slate-600 font-bold ">
+                      ${moduleData.module_name}
+                      </div>
+                    <div class="w-full h-64 rounded-xl mt-4 mb-4 flex items-center justify-center group-hover:from-slate-50 group-hover:to-purple-50">
+                      <img src="${imageUrl}" alt="${moduleData.module_name}" loading="lazy" class="max-w-full max-h-full object-contain drop-shadow-sm">
                     </div>
                     <div class="flex-1 flex flex-col justify-between">
                       <div>
-                        <h3 class="m-0 mb-2 text-gray-900 text-lg font-bold group-hover:text-slate-600">${moduleData.module_name}</h3>
                         <p class="m-0 mb-2 text-slate-600 text-sm font-semibold px-2 py-1 inline-block">${moduleData.plugin_name}</p>
                         <p class="m-0 mb-3 text-gray-600 text-sm leading-relaxed">${moduleData.description || ''}</p>
                       </div>
