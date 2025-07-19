@@ -48,8 +48,8 @@
     }
   }
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="fuzzy.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -365,7 +365,6 @@
 
       let allModules = [];        // Stores all modules from JSON
       let currentResultSet = [];  // Stores the current list being displayed (all or search results)
-      let fuse;                   // Fuse.js instance
       let numDisplayedResults = 0;// Counter for currently displayed items
       let isLoading = false;      // Flag to prevent multiple simultaneous loads
       let observer;               // IntersectionObserver instance
@@ -529,9 +528,9 @@
         card.target = '_blank';
         card.rel = 'noopener noreferrer';
         card.className = 'bg-white border-2 border-gray-900 flex flex-col items-center text-center no-underline text-inherit group overflow-hidden -ml-1 mb-2';
-        // Use item.item for Fuse results, item directly for initial load
+        // Use item.item for results, item directly for initial load
 
-        const score = item.score; // Get the score if it exists (from Fuse result)
+        const score = item.score; // Get the score if it exists (from result)
         const imageUrl = `images/${moduleData.plugin_slug}/${moduleData.module_slug}.webp`;
 
         let scoreHtml = '';
@@ -551,6 +550,7 @@
                       <div>
                         <p class="m-0 mb-2 text-slate-700 text-sm font-semibold px-2 py-1 inline-block">${moduleData.plugin_name}</p>
                         <p class="m-0 mb-3 text-gray-700 text-sm leading-relaxed">${moduleData.description || ''}</p>
+                        ${scoreHtml}
                       </div>
                       <div class="mt-auto">
                         <div class="inline-flex items-center opacity-0 group-hover:opacity-100 text-slate-600 text-sm font-semibold group-hover:text-slate-700">
@@ -722,10 +722,6 @@
       }
 
       function performSearch(query) {
-        if (!fuse) {
-          showStatus('Module data is still loading...', true);
-          return;
-        }
 
         // Store current filter values
         lastSearchQuery = query;
@@ -740,8 +736,8 @@
           filteredModules = filterByTags(filteredModules);
           resetAndDisplayFirstBatch(filteredModules);
         } else {
-          // Use main Fuse instance for search, then filter results
-          const searchResults = fuse.search(query);
+          // Use fuzzy search, then filter results
+          const searchResults = fuzzySearch(allModules, query);
 
           // Apply size and tag filters to search results
           let filteredResults = searchResults.filter(result => {
@@ -816,23 +812,6 @@
 
       // --- Initialization ---
 
-      // Fuse.js options
-      const fuseOptions = {
-        keys: [
-          { name: 'module_name', weight: 6.0 },
-          { name: 'plugin_name', weight: 4.0 },
-          { name: 'description', weight: 1.0 },
-          { name: 'tags', weight: 0.5 }
-        ],
-        includeScore: false,
-        shouldSort: true,
-        threshold: 0.4, // Make threshold even stricter
-        minMatchCharLength: 2,
-        ignoreLocation: true,
-        findAllMatches: true,
-        distance: 3, // Reduce fuzzy search distance significantly
-      };
-
       // Load data and initialize
       fetchJsonData('search_file.json') // Updated to use the new file
         .then(jsonData => {
@@ -853,9 +832,6 @@
             hideLoadMoreTrigger();
             return;
           }
-
-          // Initialize Fuse.js
-          fuse = new Fuse(allModules, fuseOptions);
 
           // Initial display (first batch of all modules)
           resetAndDisplayFirstBatch(allModules);
