@@ -108,6 +108,12 @@ deploy_files() {
     fi
     log_info "Copied search_file.json to site/"
 
+    if ! cp fuzzy.js "$SITE_DIR/"; then
+        log_error "Failed to copy fuzzy.js"
+        return 1
+    fi
+    log_info "Copied fuzzy.js to site/"
+
     # Copy cache images to site
     if [ -d "$CACHE_DIR" ]; then
         if ! cp -r "$CACHE_DIR/." "$SITE_DIR/images/"; then
