@@ -10,44 +10,44 @@ source "$(dirname "$0")/build_functions.sh"
 # Main build function
 main() {
     log_info "Starting VCV Rack Module Search build process..."
-    
+
     # Execute build pipeline
     if ! setup_environment; then
         log_error "Environment setup failed"
         exit 1
     fi
-    
+
     if ! clone_or_update_library; then
         log_error "Library repository operation failed"
         exit 1
     fi
-    
+
     if ! run_data_processing; then
         log_error "Data processing failed"
         exit 1
     fi
-    
+
     if ! generate_search_file; then
         log_error "Search file generation failed"
         exit 1
     fi
-    
+
     if ! deploy_files; then
         log_error "File deployment failed"
         exit 1
     fi
-    
+
     if ! validate_build; then
         log_error "Build validation failed"
         exit 1
     fi
-    
+
     # Optional cleanup
-    cleanup_build
-    
+    # cleanup_build
+
     # Display summary
     display_build_summary
-    
+
     log_info "Build process completed successfully!"
 }
 
@@ -100,14 +100,14 @@ parse_arguments() {
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     # Parse arguments
     parse_arguments "$@"
-    
+
     # Handle special modes
     if [[ "${VALIDATE_ONLY:-false}" == "true" ]]; then
         log_info "Running validation only..."
         validate_build
         exit $?
     fi
-    
+
     # Override cleanup if requested
     if [[ "${SKIP_CLEANUP:-false}" == "true" ]]; then
         cleanup_build() {
@@ -115,7 +115,7 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
             return 0
         }
     fi
-    
+
     # Run main build
     main
 fi
