@@ -106,7 +106,7 @@
     .select-wrapper::after {
       content: '▼';
       position: absolute;
-      right: 8px;
+      right: 12px;
       top: 50%;
       transform: translateY(-50%);
       font-size: 12px;
@@ -118,11 +118,12 @@
       color: #374151;
     }
 
-    #size-input, #size-comparison {
+    #size-input,
+    #size-comparison {
       appearance: none;
       -webkit-appearance: none;
       -moz-appearance: none;
-      padding-right: 24px;
+      padding-right: 32px;
     }
 
     .title {
@@ -244,16 +245,17 @@
         padding: 0.5rem;
       }
 
-      .bg-white {
-        margin: 0.5rem;
-      }
-
       .bg-gradient-to-r.from-slate-600 {
         padding: 1.5rem 1rem;
       }
 
       .bg-gradient-to-r.from-slate-600 h1 {
-        font-size: 1.5rem;
+        font-size: 2.5rem;
+        line-height: 1;
+      }
+
+      .title {
+        font-size: 2.5rem !important;
       }
 
       .bg-gradient-to-r.from-slate-600 p {
@@ -269,6 +271,22 @@
       .tag-select-container {
         min-width: 100%;
       }
+
+      .mb-8 {
+        margin-bottom: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .title {
+        font-size: 2rem !important;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .title {
+        font-size: 1.75rem !important;
+      }
     }
   </style>
 </head>
@@ -277,7 +295,14 @@
   <div class="max-w-6xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
     <div class="overflow-hidden">
       <div class="px-8 py-3">
-        <h1 class="text-center text-grey text-7xl font-bold tracking-tight title">VCV Grid</h1>
+        <div class="relative text-center">
+          <a href="https://victorkashirin.github.io/vcvgrid/">
+            <h1 class="text-grey text-7xl font-bold tracking-tight title">VCV Grid
+              <span class="text-sm font-normal tracking-normal">by Cella</span>
+            </h1>
+          </a>
+
+        </div>
       </div>
       <div class="p-2">
         <div class="flex flex-wrap items-center">
