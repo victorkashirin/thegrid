@@ -97,6 +97,35 @@
       color: #374151;
     }
 
+    /* Hide default dropdown arrows and add custom ones matching tags dropdown */
+    .select-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .select-wrapper::after {
+      content: '▼';
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      color: #6b7280;
+      pointer-events: none;
+    }
+
+    .select-wrapper:hover::after {
+      color: #374151;
+    }
+
+    #size-input,
+    #size-comparison {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      padding-right: 32px;
+    }
+
     .title {
       font-family: "Special Gothic Expanded One", sans-serif;
       font-weight: 400;
@@ -145,7 +174,7 @@
     }
 
     body {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23666' opacity='0.4' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E")
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23666' opacity='0.2' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E")
     }
 
     .checkbox-custom {
@@ -216,16 +245,17 @@
         padding: 0.5rem;
       }
 
-      .bg-white {
-        margin: 0.5rem;
-      }
-
       .bg-gradient-to-r.from-slate-600 {
         padding: 1.5rem 1rem;
       }
 
       .bg-gradient-to-r.from-slate-600 h1 {
-        font-size: 1.5rem;
+        font-size: 2.5rem;
+        line-height: 1;
+      }
+
+      .title {
+        font-size: 2.5rem !important;
       }
 
       .bg-gradient-to-r.from-slate-600 p {
@@ -241,6 +271,22 @@
       .tag-select-container {
         min-width: 100%;
       }
+
+      .mb-8 {
+        margin-bottom: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .title {
+        font-size: 2rem !important;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .title {
+        font-size: 1.75rem !important;
+      }
     }
   </style>
 </head>
@@ -249,7 +295,14 @@
   <div class="max-w-6xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
     <div class="overflow-hidden">
       <div class="px-8 py-3">
-        <h1 class="text-center text-grey text-7xl font-bold tracking-tight title">VCV Grid</h1>
+        <div class="relative text-center">
+          <a href="https://victorkashirin.github.io/vcvgrid/">
+            <h1 class="text-grey text-7xl font-bold tracking-tight title">VCV Grid
+              <span class="text-sm font-normal tracking-normal">by Cella</span>
+            </h1>
+          </a>
+
+        </div>
       </div>
       <div class="p-2">
         <div class="flex flex-wrap items-center">
@@ -264,15 +317,19 @@
             </div>
           </div>
           <div class="flex items-center">
-            <select id="size-input"
-              class="h-11 w-20 p-2.5 border-2 border-gray-900 text-sm font-inter bg-white focus:outline-none focus:border-slate-900 hover:border-gray-700 -ml-px">
-            </select>
-            <select id="size-comparison"
-              class="h-11 p-2.5 border-2 border-gray-900 text-sm font-inter bg-white focus:outline-none focus:border-slate-900 hover:border-gray-700 -ml-px">
-              <option value="max">Max</option>
-              <option value="min">Min</option>
-              <option value="exact">Exact</option>
-            </select>
+            <div class="select-wrapper">
+              <select id="size-input"
+                class="h-11 w-20 p-2.5 border-2 border-gray-900 text-sm font-inter bg-white focus:outline-none focus:border-slate-900 hover:border-gray-700 -ml-px">
+              </select>
+            </div>
+            <div class="select-wrapper">
+              <select id="size-comparison"
+                class="h-11 p-2.5 border-2 border-gray-900 text-sm font-inter bg-white focus:outline-none focus:border-slate-900 hover:border-gray-700 -ml-px">
+                <option value="max">Max</option>
+                <option value="min">Min</option>
+                <option value="exact">Exact</option>
+              </select>
+            </div>
           </div>
           <button id="reset-button"
             class="h-11 px-6 py-2 border-2 border-gray-900 text-base font-inter bg-white text-gray-700 cursor-pointer hover:bg-gray-100 hover:border-gray-700 focus:outline-none focus:border-slate-900 whitespace-nowrap font-semibold  -ml-px">
