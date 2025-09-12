@@ -14,6 +14,8 @@ from config import PARSED_PLUGINS_FILE
 from logger import get_logger, log_operation_start, log_operation_complete
 from file_utils import FileUtils
 
+tags = ["Arpeggiator", "Attenuator", "Blank", "Chorus", "Clock generator", "Clock modulator", "Compressor", "Controller", "Delay", "Digital", "Distortion", "Drum", "Dual", "Dynamics", "Effect", "Envelope follower", "Envelope generator", "Equalizer", "Expander", "External", "Filter", "Flanger", "Function generator", "Granular", "Hardware clone", "Limiter", "Logic", "Low-frequency oscillator", "Low-pass gate", "MIDI", "Mixer", "Multiple", "Noise", "Oscillator", "Panning", "Phaser", "Physical modeling", "Polyphonic", "Quad", "Quantizer", "Random", "Recording", "Reverb", "Ring modulator", "Sample and hold", "Sampler", "Sequencer", "Slew limiter", "Switch", "Synth voice", "Tuner", "Utility", "Visual", "Vocoder", "Voltage-controlled amplifier", "Waveshaper"]
+
 
 class TagStatsAnalyzer:
     """Analyzes tag usage statistics across all modules."""
@@ -25,30 +27,30 @@ class TagStatsAnalyzer:
     def analyze_tag_statistics(self) -> None:
         """
         Analyze and display tag usage statistics.
-        
+
         Loads module data, extracts all tags, counts occurrences,
         and displays results sorted by popularity.
         """
         log_operation_start("Analyzing tag statistics", self.logger)
-        
+
         # Load module data
         modules = self._load_module_data()
-        
+
         # Extract all tags
         all_tags = self._extract_all_tags(modules)
-        
+
         # Count and display tag statistics
         self._display_tag_statistics(all_tags)
-        
+
         log_operation_complete("Tag statistics analysis", self.logger)
 
     def _load_module_data(self) -> List[Dict[str, Any]]:
         """
         Load module data from parsed plugins file.
-        
+
         Returns:
             List of module dictionaries
-            
+
         Raises:
             FileProcessingError: If file cannot be loaded
         """
@@ -57,10 +59,10 @@ class TagStatsAnalyzer:
     def _extract_all_tags(self, modules: List[Dict[str, Any]]) -> List[str]:
         """
         Extract all tags from module data.
-        
+
         Args:
             modules: List of module dictionaries
-            
+
         Returns:
             List of all tags found across all modules
         """
@@ -68,40 +70,42 @@ class TagStatsAnalyzer:
         for module in modules:
             if 'tags' in module and module['tags']:
                 all_tags.extend(module['tags'])
-        
+
         self.logger.info(f"Extracted {len(all_tags)} total tags from {len(modules)} modules")
         return all_tags
 
     def _display_tag_statistics(self, all_tags: List[str]) -> None:
         """
         Count tag occurrences and display statistics.
-        
+
         Args:
             all_tags: List of all tags to analyze
         """
         tag_counter = Counter(all_tags)
         unique_tags = len(tag_counter)
-        
+
         self.logger.info(f"Found {unique_tags} unique tags")
-        
+
         # Display results sorted by popularity
         print(f"Tag Statistics ({unique_tags} unique tags):")
         print("-" * 40)
-        
+
         for tag, count in tag_counter.most_common():
+            if tag not in tags:
+                tag = f"{tag}*"
             print(f"{tag}: {count}")
 
     def get_tag_statistics(self) -> Dict[str, int]:
         """
         Get tag statistics as a dictionary.
-        
+
         Returns:
             Dictionary mapping tag names to occurrence counts
         """
         modules = self._load_module_data()
         all_tags = self._extract_all_tags(modules)
         tag_counter = Counter(all_tags)
-        
+
         return dict(tag_counter)
 
 
