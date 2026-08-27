@@ -6,6 +6,9 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: write
+
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
@@ -14,30 +17,75 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Checkout VCV Rack library data
+        uses: actions/checkout@v4
+        with:
+          repository: VCVRack/library
+          ref: v2
+          path: library
+          fetch-depth: 1
+
+      - name: Check for new library data
+        id: data-check
+        shell: bash
+        run: |
+          manifest_tree="$(git -C library rev-parse HEAD:manifests)"
+          manifest_cache="$(git -C library rev-parse HEAD:manifests-cache.json)"
+          revision="${manifest_tree}-${manifest_cache}"
+
+          deployed_revision=""
+          if git fetch origin gh-pages --depth=1; then
+            deployed_revision="$(git show FETCH_HEAD:vcv-library-data-revision.txt 2>/dev/null || true)"
+          fi
+
+          echo "revision=${revision}" >> "$GITHUB_OUTPUT"
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            echo "should_build=true" >> "$GITHUB_OUTPUT"
+            echo "A source commit was pushed. Building the updated site."
+          elif [[ "$revision" == "$deployed_revision" ]]; then
+            echo "should_build=false" >> "$GITHUB_OUTPUT"
+            echo "VCV Rack library data is unchanged. No build or deployment is needed."
+          else
+            echo "should_build=true" >> "$GITHUB_OUTPUT"
+            echo "New VCV Rack library data is available."
+          fi
+
       - name: Restore image cache
+        if: steps.data-check.outputs.should_build == 'true'
         uses: actions/cache@v4
         with:
           path: cache/
-          key: image-cache-main
+          key: image-cache-${{ steps.data-check.outputs.revision }}
           restore-keys: image-cache-
 
       - name: Set up Python 3
+        if: steps.data-check.outputs.should_build == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
       - name: Install Python dependencies
+        if: steps.data-check.outputs.should_build == 'true'
         run: |
           python -m pip install --upgrade pip
           pip install requests Pillow
 
       - name: Make build.sh executable
+        if: steps.data-check.outputs.should_build == 'true'
         run: chmod +x ./build.sh
 
       - name: Run build script
+        if: steps.data-check.outputs.should_build == 'true'
         run: ./build.sh
 
+      - name: Record deployed library data
+        if: steps.data-check.outputs.should_build == 'true'
+        env:
+          LIBRARY_DATA_REVISION: ${{ steps.data-check.outputs.revision }}
+        run: printf '%s\n' "$LIBRARY_DATA_REVISION" > site/vcv-library-data-revision.txt
+
       - name: Deploy to GitHub Pages
+        if: steps.data-check.outputs.should_build == 'true'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

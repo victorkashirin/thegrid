@@ -72,10 +72,13 @@
       --surface-raised: #fafaf7;
       --ink: #171715;
       --muted: #6f7068;
-      --line: #d8d8d0;
-      --line-strong: #b5b6ad;
+      --line: rgba(23, 23, 21, 0.09);
+      --line-strong: rgba(23, 23, 21, 0.18);
       --accent: #d5ff4f;
       --accent-soft: #edffc0;
+      --dropdown-highlight: rgba(23, 23, 21, 0.06);
+      --dropdown-highlight-strong: rgba(23, 23, 21, 0.1);
+      --dropdown-highlight-edge: rgba(23, 23, 21, 0.28);
       --danger: #c53d2f;
       --shadow: 0 18px 48px rgba(27, 28, 24, 0.08);
       --ss-primary-color: var(--ink);
@@ -93,10 +96,13 @@
       --surface-raised: #1d1f1b;
       --ink: #f2f3eb;
       --muted: #9b9d92;
-      --line: #30322d;
-      --line-strong: #4a4c45;
+      --line: rgba(242, 243, 235, 0.09);
+      --line-strong: rgba(242, 243, 235, 0.18);
       --accent: #cfff3e;
       --accent-soft: #2c3917;
+      --dropdown-highlight: rgba(242, 243, 235, 0.08);
+      --dropdown-highlight-strong: rgba(242, 243, 235, 0.13);
+      --dropdown-highlight-edge: rgba(242, 243, 235, 0.28);
       --danger: #ff7668;
       --shadow: 0 22px 54px rgba(0, 0, 0, 0.28);
     }
@@ -184,9 +190,10 @@
     .brand-meta {
       margin-top: 17px;
       color: var(--muted);
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       font-size: 0.72rem;
-      letter-spacing: 0.13em;
+      font-weight: 650;
+      letter-spacing: 0.11em;
       text-transform: uppercase;
     }
 
@@ -409,10 +416,15 @@
       box-shadow: none;
     }
 
+    .tag-control .ss-main .ss-values {
+      flex-wrap: nowrap;
+    }
+
     .tag-control .ss-main .ss-values .ss-value {
+      flex: 0 0 auto;
       border: 1px solid var(--line);
       border-radius: 999px;
-      background: var(--accent-soft);
+      background: var(--dropdown-highlight);
       color: var(--ink);
       font-size: 0.74rem;
     }
@@ -427,6 +439,23 @@
 
     .tag-control .ss-main .ss-values .ss-value .ss-value-delete svg path {
       stroke: var(--ink);
+    }
+
+    .tag-control .ss-main .ss-values .tag-pill-overflow {
+      display: none;
+    }
+
+    .tag-overflow-count {
+      flex: 0 0 auto;
+      padding: 5px 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--dropdown-highlight);
+      color: var(--muted);
+      font-size: 0.74rem;
+      font-weight: 650;
+      line-height: 1;
+      white-space: nowrap;
     }
 
     .ss-content {
@@ -447,13 +476,13 @@
 
     .ss-content .ss-list .ss-option:hover,
     .ss-content .ss-list .ss-option.ss-highlighted {
-      background: var(--accent) !important;
-      color: #151515 !important;
+      background: var(--dropdown-highlight-strong) !important;
+      color: var(--ink) !important;
     }
 
     .ss-content .ss-list .ss-option:not(.ss-disabled).ss-selected {
-      border-left: 5px solid var(--accent) !important;
-      background: var(--accent-soft) !important;
+      border-left: 3px solid var(--dropdown-highlight-edge) !important;
+      background: var(--dropdown-highlight) !important;
       color: var(--ink) !important;
     }
 
@@ -619,8 +648,9 @@
     .plugin-name {
       margin: 0 0 8px;
       color: var(--muted);
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       font-size: 0.67rem;
+      font-weight: 700;
       letter-spacing: 0.07em;
       text-transform: uppercase;
     }
@@ -892,6 +922,8 @@
       let observer;
       let debounceTimer;
       let tagSelect;
+      let tagValueLayoutFrame;
+      let tagValueResizeObserver;
 
       HP_VALUES.forEach((hp) => sizeInput.add(new Option(`${hp} HP`, hp)));
       AVAILABLE_TAGS.forEach((tag) => tagInput.add(new Option(tag, tag)));
@@ -913,6 +945,54 @@
         updateThemeControl();
       });
 
+      function layoutSelectedTagPills() {
+        const valuesContainer = tagInput.parentElement.querySelector('.ss-main .ss-values');
+        if (!valuesContainer) return;
+
+        valuesContainer.querySelector('.tag-overflow-count')?.remove();
+
+        const pills = Array.from(
+          valuesContainer.querySelectorAll('.ss-value:not(.ss-value-out)')
+        );
+        pills.forEach((pill) => pill.classList.remove('tag-pill-overflow'));
+
+        if (pills.length < 2) return;
+
+        const styles = getComputedStyle(valuesContainer);
+        const gap = parseFloat(styles.columnGap) || 0;
+        const pillsWidth = pills.reduce((width, pill) => width + pill.offsetWidth, 0)
+          + gap * (pills.length - 1);
+
+        if (pillsWidth <= valuesContainer.clientWidth + 1) return;
+
+        const overflowCount = document.createElement('span');
+        overflowCount.className = 'tag-overflow-count';
+        overflowCount.textContent = `+${pills.length}`;
+        valuesContainer.appendChild(overflowCount);
+
+        let occupiedWidth = overflowCount.offsetWidth;
+        let visibleCount = 0;
+
+        for (const pill of pills) {
+          const nextWidth = occupiedWidth + gap + pill.offsetWidth;
+          if (nextWidth > valuesContainer.clientWidth) break;
+          occupiedWidth = nextWidth;
+          visibleCount += 1;
+        }
+
+        pills.slice(visibleCount).forEach((pill) => pill.classList.add('tag-pill-overflow'));
+
+        const hiddenCount = pills.length - visibleCount;
+        overflowCount.textContent = `+${hiddenCount}`;
+        overflowCount.title = `${hiddenCount} more selected ${hiddenCount === 1 ? 'tag' : 'tags'}`;
+        overflowCount.setAttribute('aria-label', overflowCount.title);
+      }
+
+      function scheduleTagPillLayout() {
+        cancelAnimationFrame(tagValueLayoutFrame);
+        tagValueLayoutFrame = requestAnimationFrame(layoutSelectedTagPills);
+      }
+
       if (window.SlimSelect) {
         tagSelect = new SlimSelect({
           select: tagInput,
@@ -924,18 +1004,25 @@
             closeOnSelect: false,
             allowDeselect: true,
             hideSelected: false,
-            maxValuesShown: 3,
-            maxValuesMessage: '{number} tags selected',
+            maxValuesShown: AVAILABLE_TAGS.length,
             modal: 'mobile',
             modalTitle: 'Filter by tags'
           },
           events: {
             afterChange: (values) => {
               selectedTags = values.map((option) => option.value);
+              scheduleTagPillLayout();
               performSearch(searchInput.value.trim());
             }
           }
         });
+
+        const tagSelectMain = tagInput.parentElement.querySelector('.ss-main');
+        if (tagSelectMain && 'ResizeObserver' in window) {
+          tagValueResizeObserver = new ResizeObserver(scheduleTagPillLayout);
+          tagValueResizeObserver.observe(tagSelectMain);
+        }
+        scheduleTagPillLayout();
       } else {
         tagInput.addEventListener('change', () => {
           selectedTags = Array.from(tagInput.selectedOptions, (option) => option.value);
