@@ -4,1009 +4,1282 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Grid - Search & Browse VCV Rack Modules</title>
+  <title>The Grid — VCV Rack Module Search</title>
 
   <meta name="description"
-    content="Search and browse VCV Rack modules with advanced filtering. Find oscillators, sequencers, effects, and more. Filter by HP size, tags, and search by name or description.">
+    content="Search and browse VCV Rack modules by name, description, tag, and HP width.">
   <meta name="keywords"
-    content="VCV Rack, modules, eurorack, modular synthesizer, oscillator, sequencer, filter, effects, audio, music production, synthesis">
+    content="VCV Rack, modules, eurorack, modular synthesizer, oscillator, sequencer, filter, effects">
   <meta name="author" content="Victor Kashirin">
   <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#f3f3ee">
+  <meta name="application-name" content="The Grid">
   <link rel="canonical" href="https://victorkashirin.github.io/thegrid/">
 
   <meta property="og:type" content="website">
-  <meta property="og:title" content="The Grid - Search & Browse VCV Rack Modules">
-  <meta property="og:description"
-    content="Search and browse VCV Rack modules with advanced filtering. Find oscillators, sequencers, effects, and more. Filter by HP size, tags, and search by name or description.">
+  <meta property="og:title" content="The Grid — VCV Rack Module Search">
+  <meta property="og:description" content="Find the right VCV Rack module, fast.">
   <meta property="og:url" content="https://victorkashirin.github.io/thegrid/">
   <meta property="og:site_name" content="The Grid">
   <meta property="og:locale" content="en_US">
 
-  <!-- Twitter Card Tags -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="The Grid - Search & Browse VCV Rack Modules">
-  <meta name="twitter:description"
-    content="Search and browse VCV Rack modules with advanced filtering. Find oscillators, sequencers, effects, and more.">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="The Grid — VCV Rack Module Search">
+  <meta name="twitter:description" content="Find the right VCV Rack module, fast.">
 
-  <!-- Additional SEO Tags -->
-  <meta name="theme-color" content="#6366f1">
-  <meta name="application-name" content="The Grid">
-  <meta name="msapplication-TileColor" content="#6366f1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
 
-  <!-- Structured Data -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "The Grid",
-    "description": "Search and browse VCV Rack modules with advanced filtering",
-    "url": "https://victorkashirin.github.io/vcvgrid/",
+    "description": "Search and browse VCV Rack modules by name, description, tag, and HP width.",
+    "url": "https://victorkashirin.github.io/thegrid/",
     "applicationCategory": "MusicApplication",
     "operatingSystem": "Web Browser",
     "creator": {
+      "@type": "Person",
       "name": "Victor Kashirin"
     }
   }
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="fuzzy.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
+
   <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            'inter': ['system-ui', 'sans-serif'],
-          }
-        }
+    (() => {
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
       }
-    }
+    })();
   </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slim-select@4.0.3/dist/slimselect.css"
+    integrity="sha384-VvlUJEprI/aV8xgHbglfxBLdj45R/IBN9om2J23GjiyGFotztCkOIx+di7csqCQ9" crossorigin="anonymous">
+  <script src="fuzzy.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/slim-select@4.0.3/dist/slimselect.js"
+    integrity="sha384-TIzvputUijR9Y1urmKoJnT0hrJPbDpsiU6AvL6h5rOp1n/7QEPoWrsZQ8GaLuuTo"
+    crossorigin="anonymous" defer></script>
+
   <style>
-    /* Custom scrollbar for the entire page */
-    ::-webkit-scrollbar {
-      width: 8px;
+    :root {
+      color-scheme: light;
+      --bg: #f3f3ee;
+      --surface: #ffffff;
+      --surface-raised: #fafaf7;
+      --ink: #171715;
+      --muted: #6f7068;
+      --line: rgba(23, 23, 21, 0.09);
+      --line-strong: rgba(23, 23, 21, 0.18);
+      --accent: #d5ff4f;
+      --accent-soft: #edffc0;
+      --dropdown-highlight: rgba(23, 23, 21, 0.06);
+      --dropdown-highlight-strong: rgba(23, 23, 21, 0.1);
+      --dropdown-highlight-edge: rgba(23, 23, 21, 0.28);
+      --danger: #c53d2f;
+      --shadow: 0 18px 48px rgba(27, 28, 24, 0.08);
+      --ss-primary-color: var(--ink);
+      --ss-bg-color: var(--surface);
+      --ss-font-color: var(--ink);
+      --ss-placeholder-color: var(--muted);
+      --ss-disabled-color: var(--surface-raised);
+      --ss-border-color: var(--line);
     }
 
-    ::-webkit-scrollbar-track {
-      background: #f1f5f9;
+    .dark {
+      color-scheme: dark;
+      --bg: #10110f;
+      --surface: #171816;
+      --surface-raised: #1d1f1b;
+      --ink: #f2f3eb;
+      --muted: #9b9d92;
+      --line: rgba(242, 243, 235, 0.09);
+      --line-strong: rgba(242, 243, 235, 0.18);
+      --accent: #cfff3e;
+      --accent-soft: #2c3917;
+      --dropdown-highlight: rgba(242, 243, 235, 0.08);
+      --dropdown-highlight-strong: rgba(242, 243, 235, 0.13);
+      --dropdown-highlight-edge: rgba(242, 243, 235, 0.28);
+      --danger: #ff7668;
+      --shadow: 0 22px 54px rgba(0, 0, 0, 0.28);
     }
 
-    ::-webkit-scrollbar-thumb {
-      background: #6366f1;
+    * {
+      box-sizing: border-box;
     }
 
-    ::-webkit-scrollbar-thumb:hover {
-      background: #4f46e5;
-    }
-
-    /* Custom styles for specific interactions that need CSS */
-    .tag-select-header::after {
-      content: '▼';
-      font-size: 12px;
-      color: #6b7280;
-    }
-
-    .tag-select-header.active::after {
-      content: '▲';
-    }
-
-    .tag-select-header:hover::after {
-      color: #374151;
-    }
-
-    /* Hide default dropdown arrows and add custom ones matching tags dropdown */
-    .select-wrapper {
-      position: relative;
-      display: inline-block;
-    }
-
-    .select-wrapper::after {
-      content: '▼';
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 12px;
-      color: #6b7280;
-      pointer-events: none;
-    }
-
-    .select-wrapper:hover::after {
-      color: #374151;
-    }
-
-    #size-input,
-    #size-comparison {
-      appearance: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      padding-right: 32px;
-    }
-
-    .title {
-      font-family: "Special Gothic Expanded One", sans-serif;
-      font-weight: 400;
-      font-style: normal;
-    }
-
-    .tag-badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.175rem 0.475rem;
-      margin: 0.125rem;
-      background: #e0e7ff;
-      color: #3730a3;
-      font-size: 0.875rem;
-      font-weight: 600;
-      max-width: 150px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      border: 2px solid #3730a3;
-    }
-
-    .dark .tag-badge {
-      background: #312e81;
-      color: #c7d2fe;
-      border-color: #4f46e5;
-    }
-
-    .tag-remove {
-      margin-left: 0.5rem;
-      cursor: pointer;
-      font-weight: bold;
-      color: #6366f1;
-    }
-
-    .tag-remove:hover {
-      color: #dc2626;
-    }
-
-    .tag-counter {
-      background: #6366f1;
-      color: white;
-      width: 1.5rem;
-      height: 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.75rem;
-      font-weight: 600;
-      margin-left: 0.5rem;
-      border: 2px solid #4f46e5;
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23666' opacity='0.2' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E")
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 160ms ease, color 160ms ease;
     }
 
-    .dark body {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23333' opacity='0.3' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E")
+    button,
+    input,
+    select {
+      color: inherit;
+      font: inherit;
     }
 
-    /* Dark mode scrollbar */
-    .dark ::-webkit-scrollbar-track {
-      background: #374151;
+    button,
+    select {
+      cursor: pointer;
     }
 
-    .dark ::-webkit-scrollbar-thumb {
-      background: #6366f1;
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
-    .dark ::-webkit-scrollbar-thumb:hover {
-      background: #4f46e5;
+    img {
+      display: block;
+      max-width: 100%;
     }
 
-    .checkbox-custom {
-      accent-color: #6366f1;
-      width: 1.125rem;
-      height: 1.125rem;
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
     }
 
-    .tag-select-options {
-      scrollbar-width: thin;
-      scrollbar-color: #d1d5db #f9fafb;
+    .shell {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
     }
 
-    .tag-select-options::-webkit-scrollbar {
-      width: 6px;
+    .site-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 42px 0 28px;
     }
 
-    .tag-select-options::-webkit-scrollbar-track {
-      background: #f9fafb;
+    .brand {
+      display: inline-flex;
+      flex-direction: column;
+      width: fit-content;
     }
 
-    .tag-select-options::-webkit-scrollbar-thumb {
-      background: #d1d5db;
+    .brand-name {
+      font-family: "Special Gothic Expanded One", Impact, sans-serif;
+      font-size: clamp(3.25rem, 8vw, 6.75rem);
+      font-weight: 400;
+      letter-spacing: -0.045em;
+      line-height: 0.76;
     }
 
-    .tag-select-options::-webkit-scrollbar-thumb:hover {
-      background: #9ca3af;
+    .brand-meta {
+      margin-top: 17px;
+      color: var(--muted);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 0.72rem;
+      font-weight: 650;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
     }
 
-    /* Enhanced input styling */
-    .search-input-container {
+    .theme-toggle {
+      display: grid;
+      flex: 0 0 auto;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: var(--surface);
+      font-size: 1.12rem;
+      line-height: 1;
+      transition: transform 160ms ease, border-color 160ms ease, background-color 160ms ease;
+    }
+
+    .theme-toggle:hover {
+      transform: rotate(10deg);
+      border-color: var(--line-strong);
+    }
+
+    .theme-toggle:focus-visible,
+    .clear-button:focus-visible,
+    .search-input:focus-visible,
+    .native-select:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--accent), transparent 35%);
+      outline-offset: 2px;
+    }
+
+    .search-panel {
+      position: sticky;
+      top: 12px;
+      z-index: 20;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      backdrop-filter: none;
+    }
+
+    .search-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+    }
+
+    .search-field {
       position: relative;
+      min-width: 0;
     }
 
-    .size-filter-group {
-      background: #f8fafc;
-      border: 2px solid #e2e8f0;
+    .search-field::before {
+      position: absolute;
+      top: 50%;
+      left: 17px;
+      width: 12px;
+      height: 12px;
+      border: 1.8px solid var(--muted);
+      border-radius: 50%;
+      content: "";
+      pointer-events: none;
+      transform: translateY(-60%);
     }
 
-    .size-filter-group:hover {
-      background: #f1f5f9;
-      border-color: #cbd5e1;
+    .search-field::after {
+      position: absolute;
+      top: calc(50% + 5px);
+      left: 28px;
+      width: 7px;
+      height: 1.8px;
+      border-radius: 2px;
+      background: var(--muted);
+      content: "";
+      pointer-events: none;
+      transform: rotate(45deg);
+      transform-origin: left center;
     }
 
+    .search-input {
+      width: 100%;
+      height: 54px;
+      padding: 0 58px 0 48px;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      outline: none;
+      background: var(--surface-raised);
+      font-size: 1.03rem;
+      transition: border-color 150ms ease, background-color 150ms ease;
+    }
 
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-      .size-filter-group {
-        flex-direction: column;
-        gap: 0.75rem;
-        align-items: stretch;
+    .search-input::placeholder {
+      color: var(--muted);
+    }
+
+    .search-input:hover,
+    .search-input:focus {
+      border-color: var(--line-strong);
+      background: var(--surface);
+    }
+
+    .key-hint {
+      position: absolute;
+      top: 50%;
+      right: 14px;
+      min-width: 28px;
+      padding: 4px 7px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--surface);
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.72rem;
+      text-align: center;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .clear-button {
+      height: 54px;
+      padding: 0 20px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 0.84rem;
+      font-weight: 700;
+      transition: border-color 150ms ease, color 150ms ease, background-color 150ms ease;
+    }
+
+    .clear-button:hover {
+      border-color: var(--line-strong);
+      background: var(--surface-raised);
+      color: var(--ink);
+    }
+
+    .filter-row {
+      display: grid;
+      grid-template-columns: minmax(280px, 1fr) auto;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .filter-control {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: center;
+      min-width: 0;
+      min-height: 50px;
+      padding-left: 15px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+    }
+
+    .filter-label {
+      margin-right: 13px;
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    .size-control {
+      grid-template-columns: auto auto;
+      padding-right: 5px;
+    }
+
+    .select-pair {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .native-select {
+      height: 38px;
+      padding: 0 29px 0 10px;
+      border: 0;
+      border-radius: 8px;
+      outline: none;
+      background-color: var(--surface-raised);
+      font-size: 0.82rem;
+      font-weight: 650;
+    }
+
+    #size-input {
+      max-width: 96px;
+    }
+
+    .tag-control {
+      --ss-primary-color: var(--ink);
+      --ss-bg-color: var(--surface);
+      --ss-font-color: var(--ink);
+      --ss-placeholder-color: var(--muted);
+      --ss-disabled-color: var(--surface-raised);
+      --ss-border-color: transparent;
+      --ss-focus-color: transparent;
+      --ss-main-height: 48px;
+      --ss-search-height: 44px;
+      --ss-option-height: 38px;
+      --ss-content-height: 280px;
+      --ss-spacing-l: 10px;
+      --ss-spacing-m: 6px;
+      --ss-spacing-s: 4px;
+      --ss-border-radius: 9px;
+      --ss-animation-timing: 0.14s;
+    }
+
+    .tag-control .ss-main {
+      min-width: 0;
+      border: 0;
+      background: transparent;
+    }
+
+    .tag-control .ss-main:focus {
+      box-shadow: none;
+    }
+
+    .tag-control .ss-main .ss-values {
+      flex-wrap: nowrap;
+    }
+
+    .tag-control .ss-main .ss-values .ss-value {
+      flex: 0 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--dropdown-highlight);
+      color: var(--ink);
+      font-size: 0.74rem;
+    }
+
+    .tag-control .ss-main .ss-values .ss-value .ss-value-text {
+      color: var(--ink);
+    }
+
+    .tag-control .ss-main .ss-values .ss-value .ss-value-delete {
+      border-color: color-mix(in srgb, var(--ink), transparent 75%);
+    }
+
+    .tag-control .ss-main .ss-values .ss-value .ss-value-delete svg path {
+      stroke: var(--ink);
+    }
+
+    .tag-control .ss-main .ss-values .tag-pill-overflow {
+      display: none;
+    }
+
+    .tag-overflow-count {
+      flex: 0 0 auto;
+      padding: 5px 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--dropdown-highlight);
+      color: var(--muted);
+      font-size: 0.74rem;
+      font-weight: 650;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .ss-content {
+      border-color: var(--line) !important;
+      background: var(--surface) !important;
+      box-shadow: var(--shadow);
+    }
+
+    .ss-content .ss-search input {
+      border-color: var(--line) !important;
+      background: var(--surface-raised) !important;
+      color: var(--ink) !important;
+    }
+
+    .ss-content .ss-list .ss-option {
+      color: var(--ink) !important;
+    }
+
+    .ss-content .ss-list .ss-option:hover,
+    .ss-content .ss-list .ss-option.ss-highlighted {
+      background: var(--dropdown-highlight-strong) !important;
+      color: var(--ink) !important;
+    }
+
+    .ss-content .ss-list .ss-option:not(.ss-disabled).ss-selected {
+      border-left: 3px solid var(--dropdown-highlight-edge) !important;
+      background: var(--dropdown-highlight) !important;
+      color: var(--ink) !important;
+    }
+
+    .results-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 54px;
+      padding: 18px 2px 10px;
+    }
+
+    .results-count {
+      margin: 0;
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .status-message {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 160px;
+      margin: 10px 0 24px;
+      border: 1px dashed var(--line-strong);
+      border-radius: 14px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      text-align: center;
+    }
+
+    .status-message[hidden] {
+      display: none;
+    }
+
+    .status-message.loading::before {
+      width: 14px;
+      height: 14px;
+      margin-right: 10px;
+      border: 2px solid var(--line-strong);
+      border-top-color: var(--ink);
+      border-radius: 50%;
+      content: "";
+      animation: spin 700ms linear infinite;
+    }
+
+    .status-message.error {
+      color: var(--danger);
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      padding-bottom: 34px;
+    }
+
+    .module-card {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: var(--surface);
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .module-card:hover {
+      z-index: 1;
+      border-color: var(--line-strong);
+      box-shadow: var(--shadow);
+      transform: translateY(-3px);
+    }
+
+    .module-card:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .card-topline {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 51px;
+      padding: 15px 16px 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .module-name {
+      min-width: 0;
+      margin: 0;
+      overflow: hidden;
+      font-size: 0.96rem;
+      font-weight: 760;
+      letter-spacing: -0.018em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .module-size {
+      flex: 0 0 auto;
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .module-visual {
+      --visual-height: 258px;
+      --module-max-height: 222px;
+      display: grid;
+      height: var(--visual-height);
+      padding: 18px;
+      place-items: center;
+      overflow: hidden;
+      background:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px),
+        var(--surface-raised);
+      background-size: 24px 24px;
+    }
+
+    .module-visual img {
+      width: auto;
+      max-width: 100%;
+      height: auto;
+      max-height: var(--module-max-height);
+      object-fit: contain;
+      filter: drop-shadow(0 12px 12px rgba(0, 0, 0, 0.16));
+      transition: transform 220ms ease;
+    }
+
+    .module-card:hover .module-visual img {
+      transform: scale(1.018);
+    }
+
+    .missing-image {
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+
+    .card-copy {
+      display: flex;
+      min-height: 154px;
+      flex: 1;
+      flex-direction: column;
+      padding: 15px 16px 16px;
+    }
+
+    .plugin-name {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 0.67rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .module-description {
+      display: -webkit-box;
+      margin: 0;
+      overflow: hidden;
+      color: var(--ink);
+      font-size: 0.84rem;
+      line-height: 1.5;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: auto;
+      padding-top: 17px;
+    }
+
+    .module-tags {
+      display: flex;
+      min-width: 0;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .module-tag {
+      max-width: 132px;
+      padding: 4px 7px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 0.63rem;
+      line-height: 1;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .view-mark {
+      flex: 0 0 auto;
+      color: var(--muted);
+      font-size: 1rem;
+      transition: color 160ms ease, transform 160ms ease;
+    }
+
+    .module-card:hover .view-mark {
+      color: var(--ink);
+      transform: translate(2px, -2px);
+    }
+
+    .load-more-trigger {
+      height: 1px;
+    }
+
+    @media (max-width: 900px) {
+      .results-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 680px) {
+      .shell {
+        width: min(100% - 24px, 520px);
       }
 
-      .size-filter-group input,
-      .size-filter-group select {
-        width: 100%;
+      .site-header {
+        padding: 30px 2px 22px;
       }
 
-      #results-container {
+      .brand-name {
+        font-size: clamp(3rem, 17vw, 5rem);
+      }
+
+      .brand-meta {
+        margin-top: 14px;
+        font-size: 0.62rem;
+      }
+
+      .search-panel {
+        position: relative;
+        top: auto;
+      }
+
+      .filter-row {
         grid-template-columns: 1fr;
-        gap: 1rem;
+      }
+
+      .size-control {
+        grid-template-columns: auto minmax(0, 1fr);
+      }
+
+      .select-pair {
+        justify-content: flex-end;
+      }
+
+      .results-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .module-visual {
+        --visual-height: 300px;
+        --module-max-height: 264px;
       }
     }
 
-    @media (max-width: 640px) {
-      .max-w-6xl {
-        margin: 0;
-        padding: 0.5rem;
+    @media (max-width: 420px) {
+      .site-header {
+        gap: 12px;
       }
 
-      .bg-gradient-to-r.from-slate-600 {
-        padding: 1.5rem 1rem;
+      .search-row {
+        grid-template-columns: 1fr;
       }
 
-      .bg-gradient-to-r.from-slate-600 h1 {
-        font-size: 2.5rem;
-        line-height: 1;
+      .clear-button {
+        height: 42px;
       }
 
-      .title {
-        font-size: 2.5rem !important;
+      .key-hint {
+        display: none;
       }
 
-      .bg-gradient-to-r.from-slate-600 p {
-        font-size: 0.875rem;
+      .search-input {
+        padding-right: 16px;
       }
 
-      .flex.flex-wrap.items-center.gap-4 {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 1rem;
+      .filter-control {
+        grid-template-columns: 1fr;
+        padding: 9px 10px 6px;
       }
 
-      .tag-select-container {
-        min-width: 100%;
+      .filter-label {
+        margin: 0 0 2px 4px;
       }
 
-      .mb-8 {
-        margin-bottom: 1rem;
+      .select-pair {
+        justify-content: stretch;
+      }
+
+      .native-select {
+        flex: 1;
+      }
+
+      #size-input {
+        max-width: none;
       }
     }
 
-    @media (max-width: 480px) {
-      .title {
-        font-size: 2rem !important;
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
       }
-    }
 
-    @media (max-width: 360px) {
-      .title {
-        font-size: 1.75rem !important;
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
       }
     }
   </style>
 </head>
 
-<body
-  class="font-inter m-0 p-0 text-gray-800 dark:text-gray-200 min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
-  <div class="max-w-6xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
-    <div class="overflow-hidden">
-      <div class="px-8 py-3">
-        <div class="relative text-center">
-          <button id="theme-toggle"
-            class="absolute top-0 right-0 p-1 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 border-2 border-gray-900 dark:border-gray-600"
-            title="Toggle dark mode">
-            <svg class="w-6 h-6 text-gray-900 dark:text-gray-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path class="sun-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
-              </path>
-              <path class="moon-icon hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-            </svg>
-          </button>
-          <a href="https://victorkashirin.github.io/thegrid/">
-            <h1 class="text-grey text-7xl font-bold tracking-tight title">The Grid
-              <span class="text-sm font-normal tracking-normal">by Cella</span>
-            </h1>
-            <h3 class="font-bold">for VCV Rack</h3>
-          </a>
+<body>
+  <header class="site-header shell">
+    <a class="brand" href="https://victorkashirin.github.io/thegrid/" aria-label="The Grid home">
+      <span class="brand-name">The Grid</span>
+      <span class="brand-meta">VCV Rack module finder · by Cella</span>
+    </a>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Use dark theme" title="Use dark theme">
+      <span aria-hidden="true">☾</span>
+    </button>
+  </header>
+
+  <main class="shell">
+    <section class="search-panel" aria-label="Module search and filters">
+      <div class="search-row">
+        <label class="search-field" for="search-input">
+          <span class="visually-hidden">Search modules</span>
+          <input id="search-input" class="search-input" type="search"
+            placeholder="Search modules, makers, or functions…" autocomplete="off" spellcheck="false">
+          <kbd class="key-hint" aria-hidden="true">/</kbd>
+        </label>
+        <button id="reset-button" class="clear-button" type="button">Clear filters</button>
+      </div>
+
+      <div class="filter-row">
+        <div class="filter-control tag-control">
+          <label class="filter-label" for="tag-input">Tags</label>
+          <select id="tag-input" multiple aria-label="Filter by tags"></select>
+        </div>
+
+        <div class="filter-control size-control">
+          <span class="filter-label">Width</span>
+          <div class="select-pair">
+            <label class="visually-hidden" for="size-comparison">Width comparison</label>
+            <select id="size-comparison" class="native-select">
+              <option value="max">Up to</option>
+              <option value="min">At least</option>
+              <option value="exact">Exactly</option>
+            </select>
+            <label class="visually-hidden" for="size-input">Module width in HP</label>
+            <select id="size-input" class="native-select">
+              <option value="">Any HP</option>
+            </select>
+          </div>
         </div>
       </div>
-      <div class="p-2">
-        <div class="flex flex-wrap items-center">
-          <div class="flex-1 min-w-0 relative">
-            <input type="text" id="search-input" placeholder="Search for modules..."
-              class="h-11 w-full p-2 pl-12 border-2 border-gray-900 dark:border-gray-600 text-base font-inter bg-gray-50 dark:bg-gray-800 dark:text-gray-200 focus:outline-none focus:border-slate-900 dark:focus:border-slate-500 focus:bg-white dark:focus:bg-gray-700 hover:border-gray-700 dark:hover:border-gray-500 hover:bg-white dark:hover:bg-gray-700">
-            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </div>
-          </div>
-          <div class="flex items-center">
-            <div class="select-wrapper">
-              <select id="size-input"
-                class="h-11 w-20 p-2.5 border-2 border-gray-900 dark:border-gray-600 text-sm font-inter bg-white dark:bg-gray-800 dark:text-gray-200 focus:outline-none focus:border-slate-900 dark:focus:border-slate-500 hover:border-gray-700 dark:hover:border-gray-500 -ml-px">
-              </select>
-            </div>
-            <div class="select-wrapper">
-              <select id="size-comparison"
-                class="h-11 p-2.5 border-2 border-gray-900 dark:border-gray-600 text-sm font-inter bg-white dark:bg-gray-800 dark:text-gray-200 focus:outline-none focus:border-slate-900 dark:focus:border-slate-500 hover:border-gray-700 dark:hover:border-gray-500 -ml-px">
-                <option value="max">Max</option>
-                <option value="min">Min</option>
-                <option value="exact">Exact</option>
-              </select>
-            </div>
-          </div>
-          <button id="reset-button"
-            class="h-11 px-6 py-2 border-2 border-gray-900 dark:border-gray-600 text-base font-inter bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-gray-700 dark:hover:border-gray-500 focus:outline-none focus:border-slate-900 dark:focus:border-slate-500 whitespace-nowrap font-semibold -ml-px">
-            Reset
-          </button>
-        </div>
-        <div class="mb-8">
-          <div class="tag-select-container relative inline-block min-w-[250px] w-auto" style="margin-top: -2px;">
-            <div
-              class="tag-select-header px-2 py-2 border-2 border-gray-900 dark:border-gray-600 text-base bg-white dark:bg-gray-800 cursor-pointer flex justify-between items-center hover:border-slate-900 dark:hover:border-slate-500 focus-within:border-slate-900 dark:focus-within:border-slate-500 h-11">
-              <div class="flex items-center flex-wrap gap-1 flex-1 min-w-0">
-                <span class="tag-select-text text-gray-700 dark:text-gray-200 font-semibold">Filter by Tags</span>
-                <div class="selected-tags-container hidden flex-wrap gap-1 mr-2"></div>
-              </div>
-            </div>
-            <div
-              class="tag-select-options absolute top-full left-0 min-w-full bg-white dark:bg-gray-800 border-2 border-gray-900 dark:border-gray-600 mt-2 max-h-72 overflow-y-auto z-20 hidden">
-              <div class="p-3 border-b border-gray-900 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
-                <p class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">Select Tags</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div id="results-count" class="mt-4 mb-6 text-sm font-semibold text-gray-600 dark:text-gray-400 px-1"></div>
-        <div id="status-message"
-          class="text-center p-6 bg-gray-100 dark:bg-gray-800 border-2 border-gray-900 dark:border-gray-600 mt-6 hidden">
-          Loading modules...
-        </div>
-        <div id="results-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-8 min-h-[100px]">
-        </div>
-        <div id="load-more-trigger" class="h-10 mt-6 w-full"></div>
-      </div>
+    </section>
+
+    <div class="results-meta">
+      <p id="results-count" class="results-count" aria-live="polite"></p>
     </div>
-  </div>
+
+    <div id="status-message" class="status-message loading" role="status" aria-live="polite">
+      Loading modules…
+    </div>
+
+    <section id="results-container" class="results-grid" aria-label="Module results"></section>
+    <div id="load-more-trigger" class="load-more-trigger" aria-hidden="true"></div>
+  </main>
 
   <script>
-    // Theme management - initialize before DOM content loaded
-    function initTheme() {
-      const savedTheme = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const theme = savedTheme || (prefersDark ? 'dark' : 'light');
-
-      if (theme === 'dark') {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-
-      return theme;
-    }
-
-    function toggleTheme() {
-      const isDark = document.documentElement.classList.contains('dark');
-      const newTheme = isDark ? 'light' : 'dark';
-
-      if (newTheme === 'dark') {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-
-      localStorage.setItem('theme', newTheme);
-      updateThemeIcon(newTheme);
-    }
-
-    function updateThemeIcon(theme) {
-      const sunIcon = document.querySelector('.sun-icon');
-      const moonIcon = document.querySelector('.moon-icon');
-
-      if (theme === 'dark') {
-        sunIcon.classList.add('hidden');
-        moonIcon.classList.remove('hidden');
-      } else {
-        sunIcon.classList.remove('hidden');
-        moonIcon.classList.add('hidden');
-      }
-    }
-
-    // Initialize theme immediately
-    const currentTheme = initTheme();
-
-    document.addEventListener('DOMContentLoaded', function () {
-      // Initialize theme icon
-      updateThemeIcon(currentTheme);
-
-      // Add theme toggle event listener
-      const themeToggle = document.getElementById('theme-toggle');
-      if (themeToggle) {
-        themeToggle.addEventListener('click', toggleTheme);
-      }
-      // Populate HP dropdown with values
-      const sizeInput = document.getElementById('size-input');
-      const hpValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 54, 56, 57, 58, 59, 60, 61, 62, 63, 65, 68, 70, 73, 74, 80, 81, 93];
-
-      // Add "Any" option first
-      const anyOption = document.createElement('option');
-      anyOption.value = '';
-      anyOption.textContent = 'HP';
-      sizeInput.appendChild(anyOption);
-
-      // Add HP value options
-      hpValues.forEach(hp => {
-        const option = document.createElement('option');
-        option.value = hp;
-        option.textContent = hp;
-        sizeInput.appendChild(option);
-      });
-
-      // Populate tag dropdown with values
-      const tagSelectOptions = document.querySelector('.tag-select-options');
-      const availableTags = ["Arpeggiator", "Attenuator", "Blank", "Chorus", "Clock generator", "Clock modulator", "Compressor", "Controller", "Delay", "Digital", "Distortion", "Drum", "Dual", "Dynamics", "Effect", "Envelope follower", "Envelope generator", "Equalizer", "Expander", "External", "Filter", "Flanger", "Function generator", "Granular", "Hardware clone", "Limiter", "Logic", "Low-frequency oscillator", "Low-pass gate", "MIDI", "Mixer", "Multiple", "Noise", "Oscillator", "Panning", "Phaser", "Physical modeling", "Polyphonic", "Quad", "Quantizer", "Random", "Recording", "Reverb", "Ring modulator", "Sample and hold", "Sampler", "Sequencer", "Slew limiter", "Switch", "Synth voice", "Tuner", "Utility", "Visual", "Vocoder", "Voltage-controlled amplifier", "Waveshaper"];
-
-      // Clear existing hardcoded tag options (keep the header)
-      const existingTagOptions = tagSelectOptions.querySelectorAll('.tag-option');
-      existingTagOptions.forEach(option => option.remove());
-
-      // Add tag options programmatically
-      availableTags.forEach(tag => {
-        const label = document.createElement('label');
-        label.className = 'tag-option p-3 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 mx-2';
-
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.value = tag;
-        checkbox.className = 'checkbox-custom mr-3';
-
-        const span = document.createElement('span');
-        span.className = 'text-gray-700 dark:text-gray-200 font-medium';
-        span.textContent = tag;
-
-        label.appendChild(checkbox);
-        label.appendChild(span);
-        tagSelectOptions.appendChild(label);
-      });
+    document.addEventListener('DOMContentLoaded', () => {
+      const AVAILABLE_TAGS = [
+        'Arpeggiator', 'Attenuator', 'Blank', 'Chorus', 'Clock generator', 'Clock modulator',
+        'Compressor', 'Controller', 'Delay', 'Digital', 'Distortion', 'Drum', 'Dual', 'Dynamics',
+        'Effect', 'Envelope follower', 'Envelope generator', 'Equalizer', 'Expander', 'External',
+        'Filter', 'Flanger', 'Function generator', 'Granular', 'Hardware clone', 'Limiter', 'Logic',
+        'Low-frequency oscillator', 'Low-pass gate', 'MIDI', 'Mixer', 'Multiple', 'Noise', 'Oscillator',
+        'Panning', 'Phaser', 'Physical modeling', 'Polyphonic', 'Quad', 'Quantizer', 'Random',
+        'Recording', 'Reverb', 'Ring modulator', 'Sample and hold', 'Sampler', 'Sequencer',
+        'Slew limiter', 'Switch', 'Synth voice', 'Tuner', 'Utility', 'Visual', 'Vocoder',
+        'Voltage-controlled amplifier', 'Waveshaper'
+      ];
+      const HP_VALUES = [
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+        21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+        41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 54, 56, 57, 58, 59, 60, 61, 62,
+        63, 65, 68, 70, 73, 74, 80, 81, 93
+      ];
+      const RESULTS_BATCH_SIZE = 30;
 
       const searchInput = document.getElementById('search-input');
+      const sizeInput = document.getElementById('size-input');
+      const sizeComparison = document.getElementById('size-comparison');
+      const tagInput = document.getElementById('tag-input');
+      const resetButton = document.getElementById('reset-button');
+      const themeToggle = document.getElementById('theme-toggle');
+      const themeColor = document.querySelector('meta[name="theme-color"]');
+      const resultsCount = document.getElementById('results-count');
       const resultsContainer = document.getElementById('results-container');
       const statusMessage = document.getElementById('status-message');
       const loadMoreTrigger = document.getElementById('load-more-trigger');
-      const tagSelectHeader = document.querySelector('.tag-select-header');
 
-      const RESULTS_BATCH_SIZE = 30; // Number of results to load initially and per scroll
+      let allModules = [];
+      let currentResultSet = [];
+      let selectedTags = [];
+      let displayedResults = 0;
+      let isLoading = false;
+      let observer;
+      let debounceTimer;
+      let tagSelect;
+      let tagValueLayoutFrame;
+      let tagValueResizeObserver;
 
-      let allModules = [];        // Stores all modules from JSON
-      let currentResultSet = [];  // Stores the current list being displayed (all or search results)
-      let numDisplayedResults = 0;// Counter for currently displayed items
-      let isLoading = false;      // Flag to prevent multiple simultaneous loads
-      let observer;               // IntersectionObserver instance
-      let lastSearchQuery = '';   // Store the last search query
-      let lastSizeFilter = {      // Store the last size filter
-        size: '',
-        comparison: 'min'
-      };
-      let selectedTags = [];      // Store selected tags
+      HP_VALUES.forEach((hp) => sizeInput.add(new Option(`${hp} HP`, hp)));
+      AVAILABLE_TAGS.forEach((tag) => tagInput.add(new Option(tag, tag)));
 
-      // --- Tag Dropdown Logic ---
+      function updateThemeControl() {
+        const isDark = document.documentElement.classList.contains('dark');
+        const label = isDark ? 'Use light theme' : 'Use dark theme';
+        themeToggle.querySelector('span').textContent = isDark ? '☼' : '☾';
+        themeToggle.setAttribute('aria-label', label);
+        themeToggle.title = label;
+        themeColor.content = isDark ? '#10110f' : '#f3f3ee';
+      }
 
-      // Toggle dropdown visibility
-      tagSelectHeader.addEventListener('click', function () {
-        const isOpen = tagSelectOptions.style.display === 'block';
-        tagSelectOptions.style.display = isOpen ? 'none' : 'block';
-        tagSelectHeader.classList.toggle('active', !isOpen);
+      updateThemeControl();
+
+      themeToggle.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        updateThemeControl();
       });
 
-      // Close dropdown when clicking outside
-      document.addEventListener('click', function (e) {
-        if (!e.target.closest('.tag-select-container')) {
-          tagSelectOptions.style.display = 'none';
-          tagSelectHeader.classList.remove('active');
+      function layoutSelectedTagPills() {
+        const valuesContainer = tagInput.parentElement.querySelector('.ss-main .ss-values');
+        if (!valuesContainer) return;
+
+        valuesContainer.querySelector('.tag-overflow-count')?.remove();
+
+        const pills = Array.from(
+          valuesContainer.querySelectorAll('.ss-value:not(.ss-value-out)')
+        );
+        pills.forEach((pill) => pill.classList.remove('tag-pill-overflow'));
+
+        if (pills.length < 2) return;
+
+        const styles = getComputedStyle(valuesContainer);
+        const gap = parseFloat(styles.columnGap) || 0;
+        const pillsWidth = pills.reduce((width, pill) => width + pill.offsetWidth, 0)
+          + gap * (pills.length - 1);
+
+        if (pillsWidth <= valuesContainer.clientWidth + 1) return;
+
+        const overflowCount = document.createElement('span');
+        overflowCount.className = 'tag-overflow-count';
+        overflowCount.textContent = `+${pills.length}`;
+        valuesContainer.appendChild(overflowCount);
+
+        let occupiedWidth = overflowCount.offsetWidth;
+        let visibleCount = 0;
+
+        for (const pill of pills) {
+          const nextWidth = occupiedWidth + gap + pill.offsetWidth;
+          if (nextWidth > valuesContainer.clientWidth) break;
+          occupiedWidth = nextWidth;
+          visibleCount += 1;
         }
-      });
 
-      // Handle tag checkbox changes (using event delegation for dynamically created elements)
-      tagSelectOptions.addEventListener('change', function (e) {
-        if (e.target.type === 'checkbox' && e.target.closest('.tag-option')) {
-          updateSelectedTags();
-          performSearch(searchInput.value.trim());
-        }
-      });
+        pills.slice(visibleCount).forEach((pill) => pill.classList.add('tag-pill-overflow'));
 
-      function updateSelectedTags() {
-        selectedTags = [];
-        const tagCheckboxes = document.querySelectorAll('.tag-option input[type="checkbox"]');
-        tagCheckboxes.forEach(checkbox => {
-          if (checkbox.checked) {
-            selectedTags.push(checkbox.value);
+        const hiddenCount = pills.length - visibleCount;
+        overflowCount.textContent = `+${hiddenCount}`;
+        overflowCount.title = `${hiddenCount} more selected ${hiddenCount === 1 ? 'tag' : 'tags'}`;
+        overflowCount.setAttribute('aria-label', overflowCount.title);
+      }
+
+      function scheduleTagPillLayout() {
+        cancelAnimationFrame(tagValueLayoutFrame);
+        tagValueLayoutFrame = requestAnimationFrame(layoutSelectedTagPills);
+      }
+
+      if (window.SlimSelect) {
+        tagSelect = new SlimSelect({
+          select: tagInput,
+          settings: {
+            ariaLabel: 'Filter by tags',
+            placeholderText: 'All tags',
+            searchPlaceholder: 'Find a tag…',
+            searchText: 'No matching tags',
+            closeOnSelect: false,
+            allowDeselect: true,
+            hideSelected: false,
+            maxValuesShown: AVAILABLE_TAGS.length,
+            modal: 'mobile',
+            modalTitle: 'Filter by tags'
+          },
+          events: {
+            afterChange: (values) => {
+              selectedTags = values.map((option) => option.value);
+              scheduleTagPillLayout();
+              performSearch(searchInput.value.trim());
+            }
           }
         });
 
-        const tagSelectText = document.querySelector('.tag-select-text');
-        const selectedTagsContainer = document.querySelector('.selected-tags-container');
-
-        // Update the header display based on selection
-        if (selectedTags.length === 0) {
-          tagSelectText.textContent = 'Filter by Tags';
-          selectedTagsContainer.classList.add('hidden');
-          selectedTagsContainer.innerHTML = '';
-        } else {
-          // tagSelectText.textContent = selectedTags.length === 1 ? '1 tag selected' : `${selectedTags.length} tags selected`;
-          tagSelectText.textContent = '';
-          selectedTagsContainer.classList.remove('hidden');
-
-          // Create tag badges
-          selectedTagsContainer.innerHTML = selectedTags.map(tag => `
-            <span class="tag-badge">
-              ${tag}
-              <span class="tag-remove" data-tag="${tag}">×</span>
-            </span>
-          `).join('');
-
-          // Add click handlers to remove buttons
-          selectedTagsContainer.querySelectorAll('.tag-remove').forEach(removeBtn => {
-            removeBtn.addEventListener('click', function (e) {
-              e.stopPropagation();
-              const tagToRemove = this.getAttribute('data-tag');
-              const tagCheckboxes = document.querySelectorAll('.tag-option input[type="checkbox"]');
-              const checkbox = Array.from(tagCheckboxes).find(cb => cb.value === tagToRemove);
-              if (checkbox) {
-                checkbox.checked = false;
-                updateSelectedTags();
-                performSearch(searchInput.value.trim());
-              }
-            });
-          });
+        const tagSelectMain = tagInput.parentElement.querySelector('.ss-main');
+        if (tagSelectMain && 'ResizeObserver' in window) {
+          tagValueResizeObserver = new ResizeObserver(scheduleTagPillLayout);
+          tagValueResizeObserver.observe(tagSelectMain);
         }
+        scheduleTagPillLayout();
+      } else {
+        tagInput.addEventListener('change', () => {
+          selectedTags = Array.from(tagInput.selectedOptions, (option) => option.value);
+          performSearch(searchInput.value.trim());
+        });
       }
 
-      // --- Utility Functions ---
-
-      function showStatus(message, isError = false) {
-        statusMessage.innerHTML = isError ?
-          `<div class="flex items-center justify-center">
-            <svg class="w-5 h-5 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <span class="text-red-600 font-medium">${message}</span>
-          </div>` :
-          `<div class="flex items-center justify-center">
-            <div class="h-5 w-5 border-2 border-slate-600 border-t-transparent mr-3"></div>
-            <span class="text-gray-600 font-medium">${message}</span>
-          </div>`;
-        statusMessage.className = `text-center p-6 bg-gray-100 dark:bg-gray-800 border-2 border-gray-900 mt-6 block`;
+      function showStatus(message, type = 'loading') {
+        statusMessage.textContent = message;
+        statusMessage.className = `status-message ${type}`;
+        statusMessage.hidden = false;
       }
 
       function hideStatus() {
-        statusMessage.className = 'text-center p-6 bg-gray-100 border-2 border-gray-900 mt-6 hidden';
+        statusMessage.hidden = true;
       }
-
-      // --- Data Fetching ---
-
-      function fetchJsonData(filePath) {
-        isLoading = true;
-        showStatus('Loading modules...');
-        hideLoadMoreTrigger(); // Hide trigger while loading initial data
-
-        // Add cache-busting parameter to prevent caching
-        const timestamp = new Date().getTime();
-        const urlWithCacheBuster = `${filePath}?t=${timestamp}`;
-
-        return fetch(urlWithCacheBuster, {
-          method: 'GET',
-          headers: {
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-          }
-        })
-          .then(response => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-          })
-          .then(jsonData => {
-            // Transform the new format into the expected list of dictionaries
-            if (jsonData.headers && Array.isArray(jsonData.data)) {
-              // New format detected - transform it
-              return jsonData.data.map(row => {
-                const obj = {};
-                jsonData.headers.forEach((key, index) => {
-                  obj[key] = row[index];
-                });
-                return obj;
-              });
-            }
-            // If it's already in the old format (array of objects), return as is
-            return jsonData;
-          })
-          .catch(error => {
-            console.error('Error fetching JSON:', error);
-            showStatus('Failed to load module data. Please try refreshing.', true);
-            return null; // Indicate failure
-          })
-          .finally(() => {
-            isLoading = false;
-            // Status will be updated by the calling function
-          });
-      }
-
-      // --- Display Logic ---
-
-      function createResultCard(item) {
-        const moduleData = item.item ? item.item : item;
-        const card = document.createElement('a');
-        card.href = `https://library.vcvrack.com/${moduleData.plugin_slug}/${moduleData.module_slug}`;
-        card.target = '_blank';
-        card.rel = 'noopener noreferrer';
-        card.className = 'bg-white dark:bg-gray-800 border-2 border-gray-900 dark:border-gray-600 flex flex-col items-center text-center no-underline text-inherit group overflow-hidden mb-2';
-        // Use item.item for results, item directly for initial load
-
-        const score = item.score; // Get the score if it exists (from result)
-        const imageUrl = `images/${moduleData.plugin_slug}/${moduleData.module_slug}.webp`;
-
-        let scoreHtml = '';
-        if (score !== undefined) {
-          // Format score to 3 decimal places
-          scoreHtml = `<p class="text-xs text-gray-500 m-0 mb-1">Score: ${score.toFixed(8)}</p>`;
-        }
-
-        card.innerHTML = `
-                    <div class="w-full border-b-2 border-gray-900 dark:border-gray-600 text-gray-900 dark:text-gray-100 group-hover:text-slate-600 dark:group-hover:text-slate-400 font-bold ">
-                      ${moduleData.module_name}
-                      </div>
-                    <div class="w-full h-64 mt-6 mb-4 flex items-center justify-center bg-white dark:bg-gray-800">
-                      <img src="${imageUrl}" alt="${moduleData.module_name}" loading="lazy" class="max-w-full max-h-full object-contain">
-                    </div>
-                    <div class="flex-1 flex flex-col justify-between p-2 mb-2">
-                      <div>
-                        <p class="m-0 mb-2 text-slate-700 dark:text-slate-300 text-sm font-semibold px-2 py-1 inline-block">${moduleData.plugin_name}</p>
-                        <p class="m-0 mb-3 text-gray-700 dark:text-gray-300 text-sm leading-relaxed">${moduleData.description || ''}</p>
-                      </div>
-                      <div class="mt-auto">
-                        <div class="inline-flex items-center opacity-0 group-hover:opacity-100 text-slate-600 dark:text-slate-400 text-sm font-semibold group-hover:text-slate-700 dark:group-hover:text-slate-300">
-                          <span>View in library</span>
-                          <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                          </svg>
-                        </div>
-                      </div>
-                    </div>
-                `;
-        // Handle missing images gracefully
-        const img = card.querySelector('img');
-        img.onerror = () => {
-          img.style.display = 'none'; // Hide broken image icon
-          // Optionally add a placeholder or text
-          const placeholder = document.createElement('div');
-          placeholder.innerHTML = '<div class="flex items-center justify-center h-32 bg-gray-100 dark:bg-gray-600"><span class="text-gray-400 dark:text-gray-300 text-sm font-medium">[No Image]</span></div>';
-          const imageContainer = card.querySelector('.w-full.h-64');
-          if (imageContainer) {
-            imageContainer.appendChild(placeholder);
-          }
-        };
-        return card;
-      }
-
-      function displayBatch() {
-        if (isLoading) return; // Don't load if already loading
-        isLoading = true;
-
-        const fragment = document.createDocumentFragment();
-        const nextBatchEnd = Math.min(numDisplayedResults + RESULTS_BATCH_SIZE, currentResultSet.length);
-
-        for (let i = numDisplayedResults; i < nextBatchEnd; i++) {
-          fragment.appendChild(createResultCard(currentResultSet[i]));
-        }
-
-        resultsContainer.appendChild(fragment);
-        numDisplayedResults = nextBatchEnd;
-
-        // Hide trigger and disconnect observer if all items are displayed
-        if (numDisplayedResults >= currentResultSet.length) {
-          hideLoadMoreTrigger();
-          if (observer) {
-            observer.disconnect();
-          }
-        } else {
-          showLoadMoreTrigger(); // Ensure trigger is visible if more items exist
-        }
-
-        // Short delay to allow rendering before allowing next load
-        setTimeout(() => {
-          isLoading = false;
-        }, 100);
-      }
-
-      function resetAndDisplayFirstBatch(resultSet) {
-        currentResultSet = resultSet;
-        resultsContainer.innerHTML = ''; // Clear previous results
-        numDisplayedResults = 0;
-        hideStatus(); // Clear status message initially
-
-        // Update results count
-        const resultsCount = document.getElementById('results-count');
-        resultsCount.textContent = `Found ${resultSet.length} module${resultSet.length !== 1 ? 's' : ''}`;
-
-        if (observer) {
-          observer.disconnect(); // Disconnect previous observer if exists
-        }
-
-        if (currentResultSet.length === 0) {
-          showStatus('No matching modules found.');
-          hideLoadMoreTrigger();
-        } else {
-          displayBatch(); // Display the first batch
-          // Only setup observer if there are more results to load
-          if (numDisplayedResults < currentResultSet.length) {
-            setupIntersectionObserver();
-            showLoadMoreTrigger();
-          } else {
-            hideLoadMoreTrigger();
-          }
-        }
-      }
-
-      // --- Search Logic ---
-
-      function filterBySize(modules) {
-        const sizeInput = document.getElementById('size-input');
-        const sizeComparison = document.getElementById('size-comparison');
-        const size = sizeInput.value.trim();
-        const comparison = sizeComparison.value;
-
-        if (!size) return modules; // If no size specified, return all modules
-
-        const sizeNum = parseInt(size);
-        return modules.filter(module => {
-          const moduleSize = parseInt(module.size) || 0;
-          switch (comparison) {
-            case 'min':
-              return moduleSize >= sizeNum;
-            case 'max':
-              return moduleSize <= sizeNum;
-            case 'exact':
-              return moduleSize === sizeNum;
-            default:
-              return true;
-          }
-        });
-      }
-
-      function filterByTags(modules) {
-        if (selectedTags.length === 0) return modules; // If no tags selected, return all modules
-
-        return modules.filter(module => {
-          if (!module.tags) return false;
-
-          // Check if module has any of the selected tags
-          let moduleTags;
-          if (Array.isArray(module.tags)) {
-            moduleTags = module.tags.map(tag => tag.trim());
-          } else if (typeof module.tags === 'string') {
-            moduleTags = module.tags.split(',').map(tag => tag.trim());
-          } else {
-            return false;
-          }
-          return selectedTags.every(tag => moduleTags.includes(tag));
-        });
-      }
-
-      // Helper functions for efficient filtering of search results
-      function matchesSizeFilter(module) {
-        const sizeInput = document.getElementById('size-input');
-        const sizeComparison = document.getElementById('size-comparison');
-        const size = sizeInput.value.trim();
-        const comparison = sizeComparison.value;
-
-        if (!size) return true; // If no size specified, matches all
-
-        const sizeNum = parseInt(size);
-        const moduleSize = parseInt(module.size) || 0;
-
-        switch (comparison) {
-          case 'min':
-            return moduleSize >= sizeNum;
-          case 'max':
-            return moduleSize <= sizeNum;
-          case 'exact':
-            return moduleSize === sizeNum;
-          default:
-            return true;
-        }
-      }
-
-      function matchesTagFilter(module) {
-        if (selectedTags.length === 0) return true; // If no tags selected, matches all
-
-        if (!module.tags) return false;
-
-        let moduleTags;
-        if (Array.isArray(module.tags)) {
-          moduleTags = module.tags.map(tag => tag.trim());
-        } else if (typeof module.tags === 'string') {
-          moduleTags = module.tags.split(',').map(tag => tag.trim());
-        } else {
-          return false;
-        }
-        return selectedTags.every(tag => moduleTags.includes(tag));
-      }
-
-      function performSearch(query) {
-
-        // Store current filter values
-        lastSearchQuery = query;
-        lastSizeFilter = {
-          size: document.getElementById('size-input').value.trim(),
-          comparison: document.getElementById('size-comparison').value
-        };
-
-        if (query === '') {
-          // If query is empty, apply filters directly and show results
-          let filteredModules = filterBySize(allModules);
-          filteredModules = filterByTags(filteredModules);
-          resetAndDisplayFirstBatch(filteredModules);
-        } else {
-          // Use fuzzy search, then filter results
-          const searchResults = fuzzySearch(allModules, query);
-
-          // Apply size and tag filters to search results
-          let filteredResults = searchResults.filter(result => {
-            const module = result.item;
-            return matchesSizeFilter(module) && matchesTagFilter(module);
-          });
-
-          resetAndDisplayFirstBatch(filteredResults);
-        }
-      }
-
-      function resetFilters() {
-        // Clear search input
-        searchInput.value = '';
-
-        // Clear size input
-        document.getElementById('size-input').value = '';
-
-        // Reset comparison to default
-        document.getElementById('size-comparison').value = 'max';
-
-        // Uncheck all tag checkboxes
-        const tagCheckboxes = document.querySelectorAll('.tag-option input[type="checkbox"]');
-        tagCheckboxes.forEach(checkbox => {
-          checkbox.checked = false;
-        });
-        updateSelectedTags();
-
-        // Reset stored values
-        lastSearchQuery = '';
-        lastSizeFilter = {
-          size: '',
-          comparison: 'max'
-        };
-        selectedTags = [];
-
-        // Show all modules
-        resetAndDisplayFirstBatch(allModules);
-      }
-
-      // --- Intersection Observer Logic ---
 
       function hideLoadMoreTrigger() {
         loadMoreTrigger.style.display = 'none';
       }
+
       function showLoadMoreTrigger() {
         loadMoreTrigger.style.display = 'block';
       }
 
-      function handleIntersection(entries) {
-        // Use entries[0] as we observe only one element
-        if (entries[0].isIntersecting && !isLoading && numDisplayedResults < currentResultSet.length) {
-          // console.log('Loading more...'); // For debugging
-          displayBatch(); // Load the next batch of results
+      function normalizeTags(tags) {
+        if (Array.isArray(tags)) return tags.map((tag) => tag.trim());
+        if (typeof tags === 'string') return tags.split(',').map((tag) => tag.trim());
+        return [];
+      }
+
+      function createResultCard(item) {
+        const moduleData = item.item || item;
+        const card = document.createElement('a');
+        const safePluginSlug = encodeURIComponent(moduleData.plugin_slug);
+        const safeModuleSlug = encodeURIComponent(moduleData.module_slug);
+
+        card.className = 'module-card';
+        card.href = `https://library.vcvrack.com/${safePluginSlug}/${safeModuleSlug}`;
+        card.target = '_blank';
+        card.rel = 'noopener noreferrer';
+        card.setAttribute('aria-label', `${moduleData.module_name} by ${moduleData.plugin_name} — open in VCV Library`);
+
+        const topLine = document.createElement('div');
+        topLine.className = 'card-topline';
+
+        const moduleName = document.createElement('h2');
+        moduleName.className = 'module-name';
+        moduleName.textContent = moduleData.module_name;
+
+        const moduleSize = document.createElement('span');
+        moduleSize.className = 'module-size';
+        moduleSize.textContent = moduleData.size ? `${moduleData.size} HP` : '— HP';
+
+        topLine.append(moduleName, moduleSize);
+
+        const visual = document.createElement('div');
+        visual.className = 'module-visual';
+
+        const image = document.createElement('img');
+        image.src = `images/${safePluginSlug}/${safeModuleSlug}.webp`;
+        image.alt = `${moduleData.module_name} module panel`;
+        image.loading = 'lazy';
+        image.decoding = 'async';
+        image.addEventListener('error', () => {
+          image.remove();
+          const missing = document.createElement('span');
+          missing.className = 'missing-image';
+          missing.textContent = 'Image unavailable';
+          visual.appendChild(missing);
+        }, { once: true });
+
+        visual.appendChild(image);
+
+        const copy = document.createElement('div');
+        copy.className = 'card-copy';
+
+        const pluginName = document.createElement('p');
+        pluginName.className = 'plugin-name';
+        pluginName.textContent = moduleData.plugin_name;
+
+        const description = document.createElement('p');
+        description.className = 'module-description';
+        description.textContent = moduleData.description || 'No description provided.';
+
+        const footer = document.createElement('div');
+        footer.className = 'card-footer';
+
+        const tags = document.createElement('div');
+        tags.className = 'module-tags';
+        normalizeTags(moduleData.tags).slice(0, 3).forEach((tag) => {
+          const badge = document.createElement('span');
+          badge.className = 'module-tag';
+          badge.textContent = tag;
+          tags.appendChild(badge);
+        });
+
+        const viewMark = document.createElement('span');
+        viewMark.className = 'view-mark';
+        viewMark.setAttribute('aria-hidden', 'true');
+        viewMark.textContent = '↗';
+
+        footer.append(tags, viewMark);
+        copy.append(pluginName, description, footer);
+        card.append(topLine, visual, copy);
+        return card;
+      }
+
+      function displayBatch() {
+        if (isLoading) return;
+        isLoading = true;
+
+        const fragment = document.createDocumentFragment();
+        const batchEnd = Math.min(displayedResults + RESULTS_BATCH_SIZE, currentResultSet.length);
+
+        for (let index = displayedResults; index < batchEnd; index += 1) {
+          fragment.appendChild(createResultCard(currentResultSet[index]));
         }
+
+        resultsContainer.appendChild(fragment);
+        displayedResults = batchEnd;
+
+        if (displayedResults >= currentResultSet.length) {
+          hideLoadMoreTrigger();
+          observer?.disconnect();
+        } else {
+          showLoadMoreTrigger();
+        }
+
+        requestAnimationFrame(() => {
+          isLoading = false;
+        });
       }
 
       function setupIntersectionObserver() {
-        // Ensure previous observer is disconnected before creating a new one
-        if (observer) {
-          observer.disconnect();
-        }
-
-        const options = {
-          root: null, // Use the viewport as the root
-          rootMargin: '0px',
-          threshold: 0.1 // Trigger when 10% of the target is visible
-        };
-        observer = new IntersectionObserver(handleIntersection, options);
-        observer.observe(loadMoreTrigger); // Start observing the trigger element
+        observer?.disconnect();
+        observer = new IntersectionObserver((entries) => {
+          if (entries[0].isIntersecting && !isLoading && displayedResults < currentResultSet.length) {
+            displayBatch();
+          }
+        }, { rootMargin: '240px 0px', threshold: 0 });
+        observer.observe(loadMoreTrigger);
       }
 
-      // --- Initialization ---
+      function showResults(resultSet) {
+        currentResultSet = resultSet;
+        displayedResults = 0;
+        isLoading = false;
+        resultsContainer.replaceChildren();
+        observer?.disconnect();
+        hideStatus();
 
-      // Load data and initialize
-      fetchJsonData('search_file.json') // Updated to use the new file
-        .then(jsonData => {
-          if (!jsonData) return; // Stop if fetching failed
+        resultsCount.textContent = `${resultSet.length.toLocaleString()} module${resultSet.length === 1 ? '' : 's'}`;
 
-          allModules = jsonData;
+        if (resultSet.length === 0) {
+          showStatus('No modules match those filters.', 'empty');
+          hideLoadMoreTrigger();
+          return;
+        }
 
-          // Sort all modules by timestamp in descending order once after loading
-          allModules.sort((a, b) => {
-            // Handle missing timestamps by treating them as oldest
-            const timestampA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
-            const timestampB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
-            return timestampB - timestampA; // Descending order
+        displayBatch();
+        if (resultSet.length > RESULTS_BATCH_SIZE) setupIntersectionObserver();
+      }
+
+      function matchesFilters(moduleData) {
+        const requestedSize = Number.parseInt(sizeInput.value, 10);
+        const moduleSize = Number.parseInt(moduleData.size, 10) || 0;
+
+        if (Number.isFinite(requestedSize)) {
+          if (sizeComparison.value === 'min' && moduleSize < requestedSize) return false;
+          if (sizeComparison.value === 'max' && moduleSize > requestedSize) return false;
+          if (sizeComparison.value === 'exact' && moduleSize !== requestedSize) return false;
+        }
+
+        if (selectedTags.length > 0) {
+          const moduleTags = normalizeTags(moduleData.tags);
+          if (!selectedTags.every((tag) => moduleTags.includes(tag))) return false;
+        }
+
+        return true;
+      }
+
+      function performSearch(query) {
+        const source = query ? fuzzySearch(allModules, query) : allModules;
+        const filtered = source.filter((result) => matchesFilters(result.item || result));
+        showResults(filtered);
+      }
+
+      function resetFilters() {
+        searchInput.value = '';
+        sizeInput.value = '';
+        sizeComparison.value = 'max';
+        selectedTags = [];
+
+        if (tagSelect) {
+          tagSelect.setSelected([]);
+        } else {
+          Array.from(tagInput.options).forEach((option) => {
+            option.selected = false;
           });
+        }
+
+        showResults(allModules);
+        searchInput.focus();
+      }
+
+      searchInput.addEventListener('input', () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => performSearch(searchInput.value.trim()), 180);
+      });
+
+      sizeInput.addEventListener('change', () => performSearch(searchInput.value.trim()));
+      sizeComparison.addEventListener('change', () => performSearch(searchInput.value.trim()));
+      resetButton.addEventListener('click', resetFilters);
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === '/' && !event.metaKey && !event.ctrlKey && !event.altKey &&
+          !['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+          event.preventDefault();
+          searchInput.focus();
+        }
+      });
+
+      hideLoadMoreTrigger();
+      showStatus('Loading modules…');
+
+      fetch(`search_file.json?t=${Date.now()}`, {
+        headers: { 'Cache-Control': 'no-cache' }
+      })
+        .then((response) => {
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          return response.json();
+        })
+        .then((jsonData) => {
+          if (jsonData.headers && Array.isArray(jsonData.data)) {
+            allModules = jsonData.data.map((row) => Object.fromEntries(
+              jsonData.headers.map((key, index) => [key, row[index]])
+            ));
+          } else {
+            allModules = jsonData;
+          }
+
+          allModules.sort((first, second) => (Number(second.timestamp) || 0) - (Number(first.timestamp) || 0));
 
           if (allModules.length === 0) {
-            showStatus('No modules found in the data source.', true);
-            hideLoadMoreTrigger();
+            resultsCount.textContent = '0 modules';
+            showStatus('No modules found in the data source.', 'error');
             return;
           }
 
-          // Initial display (first batch of all modules)
-          resetAndDisplayFirstBatch(allModules);
-          // Status is hidden within resetAndDisplayFirstBatch if successful
-
-        }); // No .finally here, status handled within functions
-
-      // Event listeners for search and filter inputs
-      let debounceTimer;
-      searchInput.addEventListener('input', function () {
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => {
-          performSearch(this.value.trim());
-        }, 250);
-      });
-
-      document.getElementById('size-input').addEventListener('input', function () {
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => {
-          performSearch(searchInput.value.trim());
-        }, 250);
-      });
-
-      document.getElementById('size-comparison').addEventListener('change', function () {
-        performSearch(searchInput.value.trim());
-      });
-
-      // Add reset button event listener
-      document.getElementById('reset-button').addEventListener('click', resetFilters);
-
+          showResults(allModules);
+        })
+        .catch((error) => {
+          console.error('Unable to load module data:', error);
+          resultsCount.textContent = 'Unavailable';
+          showStatus('Module data could not be loaded. Please refresh and try again.', 'error');
+        });
     });
   </script>
 </body>
